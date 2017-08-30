@@ -21,7 +21,6 @@ public class EvoAI extends JFrame {
 	private void initUI() {
 		setLayout(new FlowLayout());
 		
-		Board board = new Board(this);
 		
 		CameraPanel cameraPanel = new CameraPanel(this);
 		add(cameraPanel);
