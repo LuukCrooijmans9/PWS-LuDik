@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import com.simplemove.Board;
-import com.simplemove.InfoPanel;
 
 public class EvoAI extends JFrame {
 	
@@ -23,12 +21,16 @@ public class EvoAI extends JFrame {
 	private void initUI() {
 		setLayout(new FlowLayout());
 		
-		Board board = new Board();
-		add(board);
-
-		InfoPanel infoPanel = new InfoPanel(board);
+		Board board = new Board(this);
+		
+		CameraPanel cameraPanel = new CameraPanel(this);
+		add(cameraPanel);
+		
+		InfoPanel infoPanel = new InfoPanel(this);
 		add(infoPanel);
 		
+		ActionPanel actionPanel = new ActionPanel(this);
+		add(actionPanel);
 				
 		setSize(2000, 2000);
 		
