@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 	private static final int BWidth = 500;
 	private static final int BHeight = 500;
     
-	private static int tileSize = 50;
+	private static int tileSize = 5;
 	
 	InfoPanel infoPanel;
 	
@@ -50,6 +50,10 @@ import javax.swing.JPanel;
 		
 	}
 	
+	  public void start() {
+			timer = new Thread(this);
+			timer.start();
+		}
 	
 
 	@Override
@@ -65,12 +69,22 @@ import javax.swing.JPanel;
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		
-		for (int i = 0; i < 10; i++) {
-			for (int k = 0; k <10; k++) {
+		for (int i = 0; i < 100; i++) {
+			for (int k = 0; k <100; k++) {
 				
-				g2d.setColor(new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
-				
+//				g2d.setColor(new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
+				g2d.setColor(new Color(
+						(float) ImprovedNoise.noise((i + 0.5) * tileSize, (k + 0.5) * tileSize, Math.random()) / 2f + 0.5f, 
+						0, 
+						0,
+						1)); 
+				if (ImprovedNoise.noise((i + 0.5) * tileSize, (k + 0.5) * tileSize, Math.random()) > 1) {
+					System.out.println(ImprovedNoise.noise((i + 0.5) * tileSize, (k + 0.5) * tileSize, Math.random()));
+				}
 				g2d.fillRect(i * tileSize, k * tileSize, tileSize, tileSize);
+				g2d.setColor(Color.BLUE);
+
+//				g2d.drawRect(i * tileSize, k * tileSize, tileSize, tileSize);
 			}
 		}
 		

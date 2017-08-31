@@ -194,7 +194,7 @@ import java.awt.*;
 		startBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				
+				board.start();
 			}
 		});
 		
