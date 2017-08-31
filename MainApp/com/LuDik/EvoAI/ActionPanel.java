@@ -55,8 +55,8 @@ public class ActionPanel extends JPanel {
 		startBoardBtn.addActionListener(
 				event -> board = new Board(
 						Integer.valueOf(boardTileSizeTF.getText()), 
-						Integer.valueOf(boardMapSizeInTilesTF.getText())));
-						true
+						Integer.valueOf(boardMapSizeInTilesTF.getText(), 
+						true));
 
 	}
 }
