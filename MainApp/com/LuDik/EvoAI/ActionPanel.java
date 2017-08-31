@@ -30,7 +30,7 @@ public class ActionPanel extends JPanel {
 	
 	private Button startBoardBtn;
 	private TextField boardTileSizeTF;
-	private TextField boardTileDimensionsTF;
+	private TextField boardMapSizeInTilesTF;
 	
 	public ActionPanel(EvoAI parent) {
 		initActionPanel(parent);
@@ -46,8 +46,8 @@ public class ActionPanel extends JPanel {
 		boardTileSizeTF = new TextField("boardTileSize: " );
 		add(boardTileSizeTF);
 				
-		boardTileDimensionsTF = new TextField("boardTileDimensions: " );
-		add(boardTileDimensionsTF);
+		boardMapSizeInTilesTF = new TextField("boardMapSizeInTiles: " );
+		add(boardMapSizeInTilesTF);
 		
 		startBoardBtn = new Button("Start board");
 		add(startBoardBtn);
@@ -55,8 +55,8 @@ public class ActionPanel extends JPanel {
 		startBoardBtn.addActionListener(
 				event -> board = new Board(
 						Integer.valueOf(boardTileSizeTF.getText()), 
-						Integer.valueOf(boardTileDimensionsTF.getText())));
-		
+						Integer.valueOf(boardMapSizeInTilesTF.getText())));
+						true
 
 	}
 }

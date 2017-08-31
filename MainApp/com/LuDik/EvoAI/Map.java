@@ -28,8 +28,6 @@ public class Map {
 					
 					if (randomValue >= 0) {
 						tiles[i][k] = new LandTile();
-					}else {
-						tiles[i][k] = new WaterTile90
 					}
 				}
 				
