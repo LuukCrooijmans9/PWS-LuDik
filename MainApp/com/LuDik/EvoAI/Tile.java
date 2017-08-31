@@ -1,5 +1,17 @@
 package com.LuDik.EvoAI;
 
-public abstract class Tile {
+import java.awt.geom.Rectangle2D;
 
+public abstract class Tile{
+	int x;
+	int y;
+	int size;
+	
+	
+	
+	float[] color = new float[3];
+	
+	public Rectangle2D getTileRectangle() {
+		
+	}
 }
