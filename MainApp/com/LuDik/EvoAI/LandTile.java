@@ -10,5 +10,4 @@ public class LandTile extends Tile {
 			this.foodValue = this.foodValue + this.fertility * GlobalFertilityBonus
 		}
 	}
-	
 }
