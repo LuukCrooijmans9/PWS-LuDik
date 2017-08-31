@@ -77,7 +77,7 @@ import java.awt.*;
 		maxSpeed = new TextField("maxSpeed: " + Creature.getMaxSpeed());
 		add(maxSpeed);
 		
-		totalCreatures = new TextField("totalCreatures: " + startableBoard.getTotalCreatures());
+		totalCreatures = new TextField("totalCreatures: " );
 		add(totalCreatures);
 		
 		crtrSize = new TextField("crtrSize: " + Creature.getCrtrSize());
@@ -134,46 +134,46 @@ import java.awt.*;
 			}
 		});
 		
-		totalCreatures.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				try {
-					startableBoard.setTotalCreatures((int) Double.parseDouble(totalCreatures.getText()));
-					totalCreatures.setText("totalCreatures: " + startableBoard.getTotalCreatures());
-					startableBoard.initBoard();
-				} catch (Exception e) {
-					totalCreatures.setText("totalCreatures: " + startableBoard.getTotalCreatures());
-				}
-			}
-		});
+//		totalCreatures.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent evt) {
+//				try {
+//					startableBoard.setTotalCreatures((int) Double.parseDouble(totalCreatures.getText()));
+//					totalCreatures.setText("totalCreatures: " + startableBoard.getTotalCreatures());
+//					startableBoard.initBoard();
+//				} catch (Exception e) {
+//					totalCreatures.setText("totalCreatures: " + startableBoard.getTotalCreatures());
+//				}
+//			}
+//		});
 
-		crtrSize.addActionListener(new ActionListener() {
-			@Override
-			  void actionPerformed(ActionEvent evt) {
-				try {
-					Creature.setCrtrSize((int) Double.parseDouble(crtrSize.getText()));
-					crtrSize.setText("crtrSize: " + Creature.getCrtrSize());
-					startableBoard.initBoard();
-
-				} catch (Exception e) {
-					crtrSize.setText("crtrSize: " + Creature.getCrtrSize());
-				}
-			}
-		});
+//		crtrSize.addActionListener(new ActionListener() {
+//			@Override
+//			  void actionPerformed(ActionEvent evt) {
+//				try {
+//					Creature.setCrtrSize((int) Double.parseDouble(crtrSize.getText()));
+//					crtrSize.setText("crtrSize: " + Creature.getCrtrSize());
+//					startableBoard.initBoard();
+//
+//				} catch (Exception e) {
+//					crtrSize.setText("crtrSize: " + Creature.getCrtrSize());
+//				}
+//			}
+//		});
 		
-		delay.addActionListener(new ActionListener() {
-			@Override
-			  void actionPerformed(ActionEvent evt) {
-				try {
-					board.setDelay((int) Double.parseDouble(delay.getText()));
-					delay.setText("delay: " + board.getDelay());
-					startableBoard.initBoard();
-					
-				} catch (Exception e) {
-					delay.setText("delay: " + board.getDelay());
-				}
-			}
-		});
+//		delay.addActionListener(new ActionListener() {
+//			@Override
+//			  void actionPerformed(ActionEvent evt) {
+//				try {
+//					board.setDelay((int) Double.parseDouble(delay.getText()));
+//					delay.setText("delay: " + board.getDelay());
+//					startableBoard.initBoard();
+//					
+//				} catch (Exception e) {
+//					delay.setText("delay: " + board.getDelay());
+//				}
+//			}
+//		});
 		
 		disableTurningSpeedBtn.addActionListener(new ActionListener() {
 			@Override
@@ -194,7 +194,7 @@ import java.awt.*;
 		startBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				board.start();
+				
 			}
 		});
 		

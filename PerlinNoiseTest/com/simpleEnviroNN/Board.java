@@ -21,7 +21,9 @@ import javax.swing.JPanel;
 	
 	private static final int BWidth = 500;
 	private static final int BHeight = 500;
-
+    
+	private static int tileSize = 50;
+	
 	InfoPanel infoPanel;
 	
 	private Thread timer;
@@ -36,7 +38,7 @@ import javax.swing.JPanel;
 //			(double) BWidth - 1, (double) BHeight - 1);
 	
 
-	  Board() {
+	 public Board() {
 
 		initBoard();
 	}
@@ -48,45 +50,13 @@ import javax.swing.JPanel;
 		
 	}
 	
-	private ArrayList<double[]> getStartPositions(int width, int height) {
-		double crtrSize = Creature.getCrtrSize(); 
-		double widthMax = (int) (width / crtrSize);
-		double heightMax = (int) (height / crtrSize);
-		
-		int maxCreatures = (int) (widthMax * heightMax);
-		
-		if (totalCreatures > maxCreatures || totalCreatures <= 0) {
-			totalCreatures = maxCreatures;
-		}
-		
-		System.out.println("widthMax" + widthMax);
-		System.out.println("heightMax" + heightMax);
-		
-		ArrayList<double[]> startPositions = new ArrayList<double[]>();
-//		double[] tempCont = new double[2];
-		
-		
-		for (int i = 0; i < widthMax; i++) {
-			for (int k = 0; k < heightMax; k++) {
-//				tempCont[0] = (((double)i) + 0.5d) * crtrSize;
-//				tempCont[1] = (((double)k) + 0.5d) * crtrSize;
-//				System.out.println("tempcont x at k and i= " + k + ","+ i + ","+ tempCont[0]);
-//				System.out.println("tempcont y at k and i= " + k + ","+ i + ","+ tempCont[1]);
-
-				startPositions.add(new double[]{ (((double)i) + 0.5d) * crtrSize, (((double)k) + 0.5d) * crtrSize});
-				
-				
-//				System.out.println("startPositions" + startPositions);
-			}
-		}
-		
-		
-		return startPositions;
-	}
+	
 
 	@Override
-	  void paintComponent(Graphics g) {
+	 public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		
 		
 		doDrawing(g);
 		
@@ -95,7 +65,14 @@ import javax.swing.JPanel;
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		
-
+		for (int i = 0; i < 10; i++) {
+			for (int k = 0; k <10; k++) {
+				
+				g2d.setColor(new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1));
+				
+				g2d.fillRect(i * tileSize, k * tileSize, tileSize, tileSize);
+			}
+		}
 		
 //		Area a1 = new Area(biggestRect);
 		
@@ -105,23 +82,10 @@ import javax.swing.JPanel;
 		
 	}
 
-	private void cycle() {
-		
-		for (Creature crtr : allCreatures) {
-			crtr.notifyTimePassed(DELAY);
-		}
-		
-		infoPanel.notifyTimePassed();
-
-	}
-
-	  void start() {
-		timer = new Thread(this);
-		timer.start();
-	}
+	
 
 	@Override
-	  void run() {
+	 public  void run() {
 
 		long beforeTime, timeDiff, sleep;
 		
@@ -131,7 +95,7 @@ import javax.swing.JPanel;
 
 		while (true) {
 
-			cycle();
+			
 			
 			if (graphicalMode) {
 				repaint();
@@ -171,17 +135,7 @@ import javax.swing.JPanel;
 		return BWidth;
 	}
 	
-	  ArrayList<Creature> getAllCreatures() {
-		return allCreatures;
-	}
-
-	  int getTotalCreatures() {
-		return totalCreatures;
-	}
-
-	  void setTotalCreatures(int totalCreatures) {
-		this.totalCreatures = totalCreatures;
-	}
+	
 
 	  long getStep() {
 		return step;
