@@ -41,7 +41,7 @@ public class EvoAI extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
