@@ -63,6 +63,7 @@ public class ActionPanel extends JPanel {
 					board = new Board(
 							Configuration.DEFAULTTILESIZE,
 							Configuration.DEFAULTMAPSIZEINTILES,
+							Configuration.DEFAULT_SEED,
 							mainFrame
 							);
 					startBoardBtn.setLabel("Taking default values...");
