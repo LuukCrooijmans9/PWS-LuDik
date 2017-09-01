@@ -12,7 +12,12 @@ public class EvoAI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	private CameraPanel cameraPanel;
+	private InfoPanel infoPanel;
+	private ActionPanel actionPanel;
+	
+	
 	public EvoAI() {
 		initUI();
 		
@@ -22,14 +27,15 @@ public class EvoAI extends JFrame {
 		setLayout(new FlowLayout());
 		
 		
-//		CameraPanel cameraPanel = new CameraPanel(this);
-//		add(cameraPanel);
+		cameraPanel = new CameraPanel(this);
+		
 		
 //		InfoPanel infoPanel = new InfoPanel(this);
 //		add(infoPanel);
 		
-		ActionPanel actionPanel = new ActionPanel(this);
+		actionPanel = new ActionPanel(this);
 		add(actionPanel);
+		add(cameraPanel);
 				
 		setSize(2000, 2000);
 		
@@ -50,6 +56,18 @@ public class EvoAI extends JFrame {
 				new EvoAI().setVisible(true); 
 			}
 		});
+	}
+
+	public CameraPanel getCameraPanel() {
+		return cameraPanel;
+	}
+
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
+
+	public ActionPanel getActionPanel() {
+		return actionPanel;
 	}
 	
 }

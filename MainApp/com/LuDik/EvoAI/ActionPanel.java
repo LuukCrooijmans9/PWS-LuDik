@@ -24,8 +24,8 @@ public class ActionPanel extends JPanel {
 	private Board board;
 	private Timer timer;
 	
-	private int APHeight ; // hoogte van camerapanel
-	private final int APWidth  = 200;
+	private static int APHeight;
+	private static final int APWidth  = 400;
 	
 	private Button startBoardBtn;
 	private TextField boardTileSizeTF;
@@ -36,6 +36,7 @@ public class ActionPanel extends JPanel {
 	}
 	
 	private void initActionPanel(EvoAI parent) {
+		APHeight = parent.getCameraPanel().getCPHEIGHT();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(APWidth, APHeight));
