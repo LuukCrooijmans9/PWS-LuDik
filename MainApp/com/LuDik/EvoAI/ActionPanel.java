@@ -53,9 +53,9 @@ public class ActionPanel extends JPanel {
 		add(startBoardBtn);
 		
 		startBoardBtn.addActionListener(
-				event -> board = new Board(
+				event -> board = new com.LuDik.EvoAI.Board(
 						Integer.valueOf(boardTileSizeTF.getText()), 
-						Integer.valueOf(boardMapSizeInTilesTF.getText(), 
+						Integer.valueOf(boardMapSizeInTilesTF.getText()), 
 						true));
 
 	}
