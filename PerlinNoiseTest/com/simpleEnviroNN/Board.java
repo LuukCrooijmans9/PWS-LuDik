@@ -26,7 +26,7 @@ class Board extends JPanel implements Runnable {
 	InfoPanel infoPanel;
 
 	private Thread timer;
-	private long DELAY = 0;
+	private long DELAY = 200;
 
 	private boolean graphicalMode = true;
 	private long step;
@@ -63,16 +63,19 @@ class Board extends JPanel implements Runnable {
 		Graphics2D g2d = (Graphics2D) g;
 
 		changeOverTime = changeOverTime + 0.01;
-
+		double seed = Math.random() * 255;
 		for (int i = 0; i < 100; i++) {
 			for (int k = 0; k < 100; k++) {
-
-				float perlin = (float) 10 * ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness,
-						(float) Math.random() * smoothness * changeOverTime));
+				
+				
+				float perlin = (float) 5f * ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness,
+						seed));
 				perlin = (float) (1 / (2 + Math.expm1(-perlin)));
-				System.out.println(perlin);
+				if (k + i * 100 == 5625) {
+					System.out.println(perlin);
+				}
 				g2d.setColor(new Color(perlin, 0f, 0f));
-
+				
 				// System.out.println(ImprovedNoise.noise(i, k, math.random));
 				// g2d.setColor(new Color((float) ImprovedNoise.noise((i * 0.01) * smoothness,
 				// (k * 0.01) * smoothness, Math.random()) / 2f + 0.5f, 0, 0, 1));
