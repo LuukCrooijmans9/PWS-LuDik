@@ -6,10 +6,10 @@ public class Configuration {
 	
 	public static int tileSize, mapSizeInTiles;
 	
-	public static final int DEFAULTTILESIZE = 40, DEFAULTMAPSIZEINTILES = 25; 
+	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 25; 
 	
 	// globalFertility bepaalt
-	public static double globalFertility, globalMaxFood;
+	public static double globalFertility = 1, globalMaxFood = 1;
 	
 	
 	

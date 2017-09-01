@@ -12,7 +12,7 @@ public class LandTile extends Tile {
 		
 		fertility = frtlty;
 		foodValue = (float) (fertility * Configuration.globalFertility * Configuration.globalMaxFood);
-		tileColor = new Color(fertility, foodValue, 0);
+		tileColor = new Color((float) fertility, foodValue, 0f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
 
 		

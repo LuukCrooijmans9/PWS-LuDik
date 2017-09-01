@@ -40,10 +40,10 @@ public class ActionPanel extends JPanel {
 
 		mainFrame = parent;
 
-		boardTileSizeTF = new TextField("boardTileSize: ");
+		boardTileSizeTF = new TextField("boardTileSize: " + Configuration.DEFAULT_TILE_SIZE);
 		add(boardTileSizeTF);
 
-		boardMapSizeInTilesTF = new TextField("boardMapSizeInTiles: ");
+		boardMapSizeInTilesTF = new TextField("boardMapSizeInTiles: " + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
 		add(boardMapSizeInTilesTF);
 
 		startBoardBtn = new Button("Start board");
@@ -61,8 +61,8 @@ public class ActionPanel extends JPanel {
 					
 				} catch (NumberFormatException e) {
 					board = new Board(
-							Configuration.DEFAULTTILESIZE,
-							Configuration.DEFAULTMAPSIZEINTILES,
+							Configuration.DEFAULT_TILE_SIZE,
+							Configuration.DEFAULT_MAP_SIZE_IN_TILES,
 							mainFrame
 							);
 					startBoardBtn.setLabel("Taking default values...");
