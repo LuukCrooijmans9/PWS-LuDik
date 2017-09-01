@@ -10,9 +10,21 @@ public class Board {
 	private Map map;
 	
 	
-	public Board(Integer tileSize, Integer mapSize, boolean isTrueRandom) {
-		map = new Map(tileSize, mapSize, isTrueRandom);
+	public Board(Integer tileSize, Integer mapSize, EvoAI evoAI) {
+		evoAI.setBoard(this);
 		
+		map = new Map(tileSize, mapSize);
+		
+	}
+
+
+	public Map getMap() {
+		return map;
+	}
+
+
+	public void setMap(Map map) {
+		this.map = map;
 	}
 	
 	

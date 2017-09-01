@@ -16,6 +16,7 @@ public class EvoAI extends JFrame {
 	private CameraPanel cameraPanel;
 	private InfoPanel infoPanel;
 	private ActionPanel actionPanel;
+	private Board board;
 	
 	
 	public EvoAI() {
@@ -68,6 +69,14 @@ public class EvoAI extends JFrame {
 
 	public ActionPanel getActionPanel() {
 		return actionPanel;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 	
 }

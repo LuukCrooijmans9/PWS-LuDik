@@ -12,10 +12,10 @@ public class CameraPanel extends JPanel {
 	private static final int CPWIDTH = 1000;
 	private static final int CPHEIGHT = 1000;
 	
-	private EvoAI parent;
+	private EvoAI mainFrame;
 	
-	public CameraPanel(EvoAI obj) {
-		parent = obj;
+	public CameraPanel(EvoAI parent) {
+		mainFrame = parent;
 		setBackground(Color.WHITE);
 		
 		setPreferredSize(new Dimension(CPWIDTH, CPHEIGHT));
@@ -33,7 +33,14 @@ public class CameraPanel extends JPanel {
 	
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		mainFrame.getBoard().getMap().drawMap(g2d);
+		
 	}
+	
+	public void update() {
+		repaint();
+	}
+	
 
 	public static int getCPWIDTH() {
 		return CPWIDTH;
