@@ -1,13 +1,31 @@
 package com.LuDik.EvoAI;
 
+import java.awt.Color;
+import java.awt.geom.Rectangle2D;
+
 public class LandTile extends Tile {
-	float fertility;
-	float foodValue;
+	private float fertility, foodValue;
 	
-	public static void calculateNextFood(GlobalFertilityBonus) {
-		globalFertilityBonus = this.globalFertilityBonus
-		if(this.foodValue) {
-			this.foodValue = this.foodValue + this.fertility * GlobalFertilityBonus
+	
+	
+	public LandTile(int upperLeftCornerX, int upperLeftCornerY, float frtlty) {
+		
+		fertility = frtlty;
+		foodValue = (float) (fertility * Configuration.globalFertility * Configuration.globalMaxFood);
+		tileColor = new Color(fertility, foodValue, 0);
+		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
+
+		
+	}
+	
+	
+	
+	public void calculateNextFood() {
+		
+		if(foodValue < fertility * Configuration.globalFertility * Configuration.globalMaxFood) {
+			foodValue = (float) (foodValue + fertility * Configuration.globalFertility);
+		} if (foodValue > fertility * Configuration.globalFertility * Configuration.globalMaxFood) {
+			foodValue = (float) (fertility * Configuration.globalFertility * Configuration.globalMaxFood);
 		}
 	}
 }

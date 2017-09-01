@@ -10,8 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import com.simplemove.Board;
-import com.simplemove.Creature;
+
 
 public class ActionPanel extends JPanel {
 	
@@ -53,7 +52,7 @@ public class ActionPanel extends JPanel {
 		add(startBoardBtn);
 		
 		startBoardBtn.addActionListener(
-				event -> board = new com.LuDik.EvoAI.Board(
+				event -> board = new Board(
 						Integer.valueOf(boardTileSizeTF.getText()), 
 						Integer.valueOf(boardMapSizeInTilesTF.getText()), 
 						true));

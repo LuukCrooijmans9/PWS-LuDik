@@ -2,12 +2,12 @@ package com.LuDik.EvoAI;
 
 public class Configuration {
 	
-	static double  crtrSize;
+	public static double  crtrSize;
 	
-	static int tileSize;
+	public static int tileSize;
 	
-	
-	static double globalFertility;
+	// globalFertility bepaalt
+	public static double globalFertility, globalMaxFood;
 	
 	
 	
