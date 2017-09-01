@@ -10,53 +10,74 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import com.simplemove.Board;
-import com.simplemove.Creature;
-
 public class ActionPanel extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-//	UI containers:
+
+	// UI containers:
 	private EvoAI mainFrame;
 	private CameraPanel cameraPanel;
-	
-	
+
 	private Board board;
 	private Timer timer;
-	
-	private int APHeight ; // hoogte van camerapanel
-	private final int APWidth  = 200;
-	
+
+	private static int APHeight;
+	private static final int APWidth = 400;
+
 	private Button startBoardBtn;
 	private TextField boardTileSizeTF;
 	private TextField boardMapSizeInTilesTF;
-	
+
 	public ActionPanel(EvoAI parent) {
 		initActionPanel(parent);
 	}
-	
+
 	private void initActionPanel(EvoAI parent) {
+		APHeight = parent.getCameraPanel().getCPHEIGHT();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(APWidth, APHeight));
-		
+
 		mainFrame = parent;
-		
-		boardTileSizeTF = new TextField("boardTileSize: " );
+
+		boardTileSizeTF = new TextField("boardTileSize: " + Configuration.DEFAULT_TILE_SIZE);
 		add(boardTileSizeTF);
-				
-		boardMapSizeInTilesTF = new TextField("boardMapSizeInTiles: " );
+
+		boardMapSizeInTilesTF = new TextField("boardMapSizeInTiles: " + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
 		add(boardMapSizeInTilesTF);
-		
+
 		startBoardBtn = new Button("Start board");
 		add(startBoardBtn);
-		
-		startBoardBtn.addActionListener(
-				event -> board = new Board(
-						Integer.valueOf(boardTileSizeTF.getText()), 
-						Integer.valueOf(boardMapSizeInTilesTF.getText(), 
-						true));
 
+		startBoardBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				try {
+					board = new Board(
+							Integer.valueOf(boardTileSizeTF.getText()),
+							Integer.valueOf(boardMapSizeInTilesTF.getText()),
+							Configuration.DEFAULT_SEED,
+							mainFrame
+							);
+					
+				} catch (NumberFormatException e) {
+					board = new Board(
+							Configuration.DEFAULT_TILE_SIZE,
+							Configuration.DEFAULT_MAP_SIZE_IN_TILES,
+							Configuration.DEFAULT_SEED,
+							mainFrame
+							);
+					startBoardBtn.setLabel("Taking default values...");
+
+				} 
+				boardTileSizeTF.setText("boardTileSize: " + Configuration.tileSize);
+				boardMapSizeInTilesTF.setText("boardMapSizeInTiles: " + Configuration.mapSizeInTiles);
+				boardTileSizeTF.setEditable(false);
+				boardMapSizeInTilesTF.setEditable(false);
+				startBoardBtn.setEnabled(false);
+				
+				mainFrame.getCameraPanel().update();
+			};
+		});
 	}
 }
