@@ -22,11 +22,11 @@ public class EvoAI extends JFrame {
 		setLayout(new FlowLayout());
 		
 		
-		CameraPanel cameraPanel = new CameraPanel(this);
-		add(cameraPanel);
+//		CameraPanel cameraPanel = new CameraPanel(this);
+//		add(cameraPanel);
 		
-		InfoPanel infoPanel = new InfoPanel(this);
-		add(infoPanel);
+//		InfoPanel infoPanel = new InfoPanel(this);
+//		add(infoPanel);
 		
 		ActionPanel actionPanel = new ActionPanel(this);
 		add(actionPanel);
