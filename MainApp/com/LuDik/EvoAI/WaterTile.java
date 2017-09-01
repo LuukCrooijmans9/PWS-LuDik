@@ -7,7 +7,7 @@ public class WaterTile extends Tile {
 	
 	public WaterTile(int upperLeftCornerX, int upperLeftCornerY) {
 		
-		tileColor = new Color(0, 0, 1);
+		tileColor = new Color(0f, 0f, 1f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
 	}
 }
