@@ -63,7 +63,7 @@ public class Map {
 				
 				perlin = (float) 5f * ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness, seed));
 				perlin = (float) (1 / (2 + Math.expm1(-perlin)));
-				perlinSeededValue =(perlin * 1.333) - 0.333;
+				perlinSeededValue =(perlin * (4d/3d)) - (1d/3d);
 				
 				if (perlinSeededValue >= 0) {
 					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) perlinSeededValue);
