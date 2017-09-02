@@ -24,7 +24,7 @@ public class Board {
 
 	} 
 	
-	public Board(Integer tileSize, Integer mapSize, double seed, EvoAI evoAI, double smoothness) {
+	public Board(Integer tileSize, Integer mapSize, double seed,  double smoothness, EvoAI evoAI) {
 		evoAI.setBoard(this);
 
 		map = new Map(tileSize, mapSize, seed, smoothness);
