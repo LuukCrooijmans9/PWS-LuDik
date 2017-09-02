@@ -27,6 +27,7 @@ public class ActionPanel extends JPanel {
 	private Button startBoardBtn;
 	private TextField boardTileSizeTF;
 	private TextField boardMapSizeInTilesTF;
+	private TextField smoothnessTF;
 
 	public ActionPanel(EvoAI parent) {
 		initActionPanel(parent);
@@ -40,11 +41,14 @@ public class ActionPanel extends JPanel {
 
 		mainFrame = parent;
 
-		boardTileSizeTF = new TextField("boardTileSize: " + Configuration.DEFAULT_TILE_SIZE);
+		boardTileSizeTF = new TextField("" + Configuration.DEFAULT_TILE_SIZE);
 		add(boardTileSizeTF);
 
-		boardMapSizeInTilesTF = new TextField("boardMapSizeInTiles: " + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
+		boardMapSizeInTilesTF = new TextField("" + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
 		add(boardMapSizeInTilesTF);
+		
+		smoothnessTF = new TextField("" + Configuration.smoothness);
+		add(smoothnessTF);
 
 		startBoardBtn = new Button("Start board");
 		add(startBoardBtn);
@@ -70,11 +74,11 @@ public class ActionPanel extends JPanel {
 					startBoardBtn.setLabel("Taking default values...");
 
 				} 
-				boardTileSizeTF.setText("boardTileSize: " + Configuration.tileSize);
-				boardMapSizeInTilesTF.setText("boardMapSizeInTiles: " + Configuration.mapSizeInTiles);
-				boardTileSizeTF.setEditable(false);
-				boardMapSizeInTilesTF.setEditable(false);
-				startBoardBtn.setEnabled(false);
+				boardTileSizeTF.setText(Integer.toString(Configuration.tileSize));
+				boardMapSizeInTilesTF.setText(Integer.toString(Configuration.mapSizeInTiles));
+//				boardTileSizeTF.setEditable(false);
+//				boardMapSizeInTilesTF.setEditable(false);
+//				startBoardBtn.setEnabled(false);
 				
 				mainFrame.getCameraPanel().update();
 			};
