@@ -50,7 +50,7 @@ public class Map {
 		Configuration.mapSizeInTiles = mapSizeInTiles;
 		tiles = new Tile[mapSize][mapSize];
 		
-		smoothness = Configuration.smoothness;
+		smoothness = Configuration.DEFAULT_SMOOTHNESS;
 		
 		
 		

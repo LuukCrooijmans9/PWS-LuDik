@@ -47,7 +47,7 @@ public class ActionPanel extends JPanel {
 		boardMapSizeInTilesTF = new TextField("" + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
 		add(boardMapSizeInTilesTF);
 		
-		smoothnessTF = new TextField("" + Configuration.smoothness);
+		smoothnessTF = new TextField("" + Configuration.DEFAULT_SMOOTHNESS);
 		add(smoothnessTF);
 
 		startBoardBtn = new Button("Start board");
