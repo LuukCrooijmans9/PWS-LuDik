@@ -74,8 +74,8 @@ public class ActionPanel extends JPanel {
 					startBoardBtn.setLabel("Taking default values...");
 
 				} 
-				boardTileSizeTF.setText(Integer.toString(Configuration.tileSize));
-				boardMapSizeInTilesTF.setText(Integer.toString(Configuration.mapSizeInTiles));
+				boardTileSizeTF.setText("" + Configuration.tileSize);
+				boardMapSizeInTilesTF.setText("" + Configuration.mapSizeInTiles);
 //				boardTileSizeTF.setEditable(false);
 //				boardMapSizeInTilesTF.setEditable(false);
 //				startBoardBtn.setEnabled(false);
