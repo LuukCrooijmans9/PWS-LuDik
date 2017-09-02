@@ -26,12 +26,14 @@ public class CameraPanel extends JPanel {
 	private double translationY;
 	private double scale = 1;
 	
-	private static final double SCROLL_SPEED = 10;
-	private static final double ZOOM_SPEED = 0.1;
+	// TODO schrijf de hele translation en scale operatie om met behulp van xpos en ypos
+	
+	private static final double SCROLL_SPEED = 20;
+	private static final double ZOOM_SPEED = 1.1;
 	
 	public CameraPanel(EvoAI parent) {
 		mainFrame = parent;
-		setBackground(Color.WHITE);
+		setBackground(Color.white);
 
 		setPreferredSize(new Dimension(CPWIDTH, CPHEIGHT));
 		setFocusable(true);
@@ -50,7 +52,8 @@ public class CameraPanel extends JPanel {
 
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.translate(translationX, translationY);
+		g2d.translate(translationX + ((CPWIDTH/2) * (1 - scale)), translationY + ((CPWIDTH/2) * (1 - scale)));
+
 		g2d.scale(scale, scale);
 
 		if (mainFrame.getBoard() != null) {
@@ -94,22 +97,44 @@ public class CameraPanel extends JPanel {
 			switch (keyCode) {
 
 			case KeyEvent.VK_LEFT:
-				translationX += SCROLL_SPEED;
+				if (translationX <= scale * CPWIDTH/2) {
+					translationX += SCROLL_SPEED;
+				}
 				repaint();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				translationX -= SCROLL_SPEED;
+				if (translationX >= -scale * CPWIDTH/2) {
+					translationX -= SCROLL_SPEED;
+				}
 				repaint();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				translationY -= SCROLL_SPEED;
+				if (translationY >= -scale * CPWIDTH/2) {
+					translationY -= SCROLL_SPEED;
+				}
 				repaint();
 				break;
 
 			case KeyEvent.VK_UP:
-				translationY += SCROLL_SPEED;
+				if (translationY <= scale * CPWIDTH/2) {
+					translationY += SCROLL_SPEED;
+				}
+				repaint();
+				break;
+				
+			case KeyEvent.VK_ADD:
+				if (translationY >= -scale * CPWIDTH/2 || translationX >= -scale * CPWIDTH/2) {
+					scale *= ZOOM_SPEED;
+				}
+				repaint();
+				break;
+				
+			case KeyEvent.VK_SUBTRACT:
+				if (translationY <= scale * CPWIDTH/2 || translationX >= -scale * CPWIDTH/2) {
+					scale /= ZOOM_SPEED;
+				}
 				repaint();
 				break;
 			}
