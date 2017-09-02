@@ -79,7 +79,7 @@ public class Map {
 			if (seed <= 0) {
 				seed = Math.random() * 255d;
 			}
-			
+
 			tileSize = tSize;
 			Configuration.tileSize = tileSize;
 			
@@ -87,7 +87,7 @@ public class Map {
 			Configuration.mapSizeInTiles = mapSizeInTiles;
 			tiles = new Tile[mapSize][mapSize];
 			
-			smoothness = Configuration.DEFAULT_SMOOTHNESS;
+			smoothness = smthnss;
 			
 			
 			
