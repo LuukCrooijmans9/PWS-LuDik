@@ -61,6 +61,7 @@ public class ActionPanel extends JPanel {
 							Integer.valueOf(boardTileSizeTF.getText()),
 							Integer.valueOf(boardMapSizeInTilesTF.getText()),
 							Configuration.DEFAULT_SEED,
+							Double.valueOf(smoothnessTF.getText()),
 							mainFrame
 							);
 					
