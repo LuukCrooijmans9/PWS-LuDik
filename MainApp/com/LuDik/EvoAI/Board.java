@@ -22,6 +22,13 @@ public class Board {
 
 		map = new Map(tileSize, mapSize, seed);
 
+	} 
+	
+	public Board(Integer tileSize, Integer mapSize, double seed, EvoAI evoAI, double smoothness) {
+		evoAI.setBoard(this);
+
+		map = new Map(tileSize, mapSize, seed, smoothness);
+
 	}
 
 	public Map getMap() {
