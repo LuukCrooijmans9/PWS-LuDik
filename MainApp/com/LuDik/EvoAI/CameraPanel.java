@@ -33,8 +33,10 @@ public class CameraPanel extends JPanel {
 	
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		mainFrame.getBoard().getMap().drawMap(g2d);
 		
+		if (mainFrame.getBoard() != null){
+			mainFrame.getBoard().getMap().drawMap(g2d);
+		}
 	}
 	
 	public void update() {
