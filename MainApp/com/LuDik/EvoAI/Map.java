@@ -7,7 +7,7 @@ public class Map {
 
 	int mapSize;
 	int tileSize;
-	static Tile[][] tiles;
+	Tile[][] tiles;
 	double smoothness;
 
 	public Map(int tSize, int mapSizeInTiles) {
@@ -113,6 +113,14 @@ public class Map {
 			
 
 	}
+
+	public Tile[][] getTiles() {
+			return tiles;
+		}
+
+		public void setTiles(Tile[][] tiles) {
+			Map.tiles = tiles;
+		}
 
 	public void drawMap(Graphics2D g2d) {
 		for (Tile[] tileArray : tiles) {
