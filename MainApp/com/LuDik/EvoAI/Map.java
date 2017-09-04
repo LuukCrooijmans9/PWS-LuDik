@@ -7,7 +7,7 @@ public class Map {
 
 	int mapSize;
 	int tileSize;
-	Tile[][] tiles;
+	static Tile[][] tiles;
 	double smoothness;
 
 	public Map(int tSize, int mapSizeInTiles) {
