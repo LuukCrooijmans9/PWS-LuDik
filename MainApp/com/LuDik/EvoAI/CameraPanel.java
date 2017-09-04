@@ -29,6 +29,7 @@ public class CameraPanel extends JPanel {
 	private double scale = 1;
 	
 	private AffineTransform at = new AffineTransform();
+	private AffineTransform middleTransform = new AffineTransform();
 	
 	// TODO schrijf de hele translation en scale operatie om met behulp van xpos en ypos
 	
@@ -77,7 +78,10 @@ public class CameraPanel extends JPanel {
 		
 		if (mainFrame.getBoard() != null) {
 			mainFrame.getBoard().getMap().drawMap(g2d);
+			mainFrame.getBoard().getMap().getTiles()[0][0];
 		}
+		
+		
 		
 		g2d.setTransform(saveXform);
 		
@@ -89,9 +93,9 @@ public class CameraPanel extends JPanel {
 	
 	private void moveCamera(int amplitudeX, int amplitudeY) {
 		at.translate(amplitudeX * SCROLL_SPEED, amplitudeY * SCROLL_SPEED);
-		cameraX += amplitudeX;
-		cameraY += amplitudeY;
-		
+		cameraX += amplitudeX * SCROLL_SPEED;
+		cameraY += amplitudeY * SCROLL_SPEED;
+		System.out.println("cameraX" + cameraX + "cameraY" + cameraY);
 	}
 	
 	private void zoomCamera(boolean zoomIn) {
@@ -103,9 +107,13 @@ public class CameraPanel extends JPanel {
 			currentScale = ZOOM_SPEED_OUT;
 		}
 		
-		at.translate(-100D, -100D);
+		at.translate(-cameraX * currentScale, -cameraY * currentScale);
 		at.scale(currentScale, currentScale);
-		at.translate(100D, 100D);
+		at.translate(cameraX / currentScale, cameraY / currentScale);
+
+//		middleTransform.translate(100D, 100D);
+//		at.concatenate(middleTransform);
+		
 		scale *= currentScale;
 		
 		Rectangle2D rect = new Rectangle2D.Double(100d, 100d, 10d, 10d);
