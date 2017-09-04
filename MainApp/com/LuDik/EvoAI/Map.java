@@ -5,10 +5,10 @@ import java.awt.Graphics2D;
 
 public class Map {
 
-	int mapSize;
-	int tileSize;
-	Tile[][] tiles;
-	double smoothness;
+	private int mapSize;
+	private int tileSize;
+	private Tile[][] tiles;
+	private double smoothness;
 
 	public Map(int tSize, int mapSizeInTiles) {
 
@@ -119,7 +119,7 @@ public class Map {
 		}
 
 		public void setTiles(Tile[][] tiles) {
-			Map.tiles = tiles;
+			tiles = tiles;
 		}
 
 	public void drawMap(Graphics2D g2d) {
