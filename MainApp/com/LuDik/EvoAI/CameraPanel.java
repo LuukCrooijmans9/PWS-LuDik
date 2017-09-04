@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
@@ -22,14 +24,17 @@ public class CameraPanel extends JPanel {
 
 	private EvoAI mainFrame;
 
-	private double translationX;
-	private double translationY;
+	private double cameraX = (CPWIDTH/2);
+	private double cameraY = (CPWIDTH/2);
 	private double scale = 1;
+	
+	private AffineTransform at = new AffineTransform();
 	
 	// TODO schrijf de hele translation en scale operatie om met behulp van xpos en ypos
 	
 	private static final double SCROLL_SPEED = 20;
-	private static final double ZOOM_SPEED = 1.1;
+	private static final double ZOOM_SPEED_IN = 1.1;
+	private static final double ZOOM_SPEED_OUT = 1d/1.1;
 	
 	public CameraPanel(EvoAI parent) {
 		mainFrame = parent;
@@ -52,16 +57,65 @@ public class CameraPanel extends JPanel {
 
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.translate(translationX + ((CPWIDTH/2) * (1 - scale)), translationY + ((CPWIDTH/2) * (1 - scale)));
+		
+		AffineTransform saveXform = g2d.getTransform();
+		
+		
+//		at.translate(cameraX + (cameraX * (1d - scale)), cameraY + (cameraY * (1d - scale)));
+//		at.scale(scale, scale);
+		
+		g2d.transform(at);
+		
+//		g2d.translate(cameraX + (cameraX * (1d - scale)), cameraY + (cameraY * (1d - scale)));
 
-		g2d.scale(scale, scale);
+//		g2d.scale(scale, scale);
+//		g2d.translate(-(CPWIDTH/2), -(CPWIDTH/2));
 
+		
+		
+		
+		
 		if (mainFrame.getBoard() != null) {
 			mainFrame.getBoard().getMap().drawMap(g2d);
 		}
-
+		
+		g2d.setTransform(saveXform);
+		
+		g2d.setColor(Color.green);
+		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
+		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
+		
 	}
 	
+	private void moveCamera(int amplitudeX, int amplitudeY) {
+		at.translate(amplitudeX * SCROLL_SPEED, amplitudeY * SCROLL_SPEED);
+		cameraX += amplitudeX;
+		cameraY += amplitudeY;
+		
+	}
+	
+	private void zoomCamera(boolean zoomIn) {
+		double currentScale;
+		
+		if (zoomIn) {
+			currentScale = ZOOM_SPEED_IN;
+		} else {
+			currentScale = ZOOM_SPEED_OUT;
+		}
+		
+		at.translate(-100D, -100D);
+		at.scale(currentScale, currentScale);
+		at.translate(100D, 100D);
+		scale *= currentScale;
+		
+		Rectangle2D rect = new Rectangle2D.Double(100d, 100d, 10d, 10d);
+		
+		Shape shape = at.createTransformedShape(rect);
+		
+		System.out.println("shape" + shape.getBounds2D());
+		System.out.println("scale" + scale);
+		
+	}
 	
 	class MouseInputHandler extends MouseAdapter {
 		@Override
@@ -76,14 +130,14 @@ public class CameraPanel extends JPanel {
 			System.out.println("mouseEntered");
 		}
 		
-		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
+		
+		public void mouseDown(MouseWheelEvent e) {
 			System.out.println("mouseScrolled");
-			if (e.getWheelRotation() > 0) {
-				scale += ZOOM_SPEED;
-			} else {
-				scale -= ZOOM_SPEED;
-			}
+//			if (e.getWheelRotation() > 0) {
+//				scale += ZOOM_SPEED;
+//			} else {
+//				scale -= ZOOM_SPEED;
+//			}
 			repaint();
 		}
 	}
@@ -97,44 +151,37 @@ public class CameraPanel extends JPanel {
 			switch (keyCode) {
 
 			case KeyEvent.VK_LEFT:
-				if (translationX <= scale * CPWIDTH/2) {
-					translationX += SCROLL_SPEED;
-				}
+				moveCamera(1, 0);
 				repaint();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				if (translationX >= -scale * CPWIDTH/2) {
-					translationX -= SCROLL_SPEED;
-				}
+				moveCamera(-1, 0);
+				
 				repaint();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				if (translationY >= -scale * CPWIDTH/2) {
-					translationY -= SCROLL_SPEED;
-				}
+				moveCamera(0, -1);
+				
 				repaint();
 				break;
 
 			case KeyEvent.VK_UP:
-				if (translationY <= scale * CPWIDTH/2) {
-					translationY += SCROLL_SPEED;
-				}
+				moveCamera(0, 1);
+				
 				repaint();
 				break;
 				
 			case KeyEvent.VK_ADD:
-				if (translationY >= -scale * CPWIDTH/2 || translationX >= -scale * CPWIDTH/2) {
-					scale *= ZOOM_SPEED;
-				}
+				zoomCamera(true);
+				
 				repaint();
 				break;
 				
 			case KeyEvent.VK_SUBTRACT:
-				if (translationY <= scale * CPWIDTH/2 || translationX >= -scale * CPWIDTH/2) {
-					scale /= ZOOM_SPEED;
-				}
+				zoomCamera(false);
+				
 				repaint();
 				break;
 			}
