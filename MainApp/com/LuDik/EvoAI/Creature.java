@@ -22,17 +22,11 @@ public class Creature {
 		fat = 10;
 	}
 
-	private void Eat() {
+	private void Consume() {
 		DesiredFood = 1d; // later door brain bepaalt 1 is max 0 is min negatief
 		Xtile = (int) Math.round((Xpos / Configuration.tileSize) + 0.5d);
 		Ytile = (int) Math.round((Ypos / Configuration.tileSize) + 0.5d);
-		if (Map.tiles[Xtile][Ytile].isWaterTile) {
-			foodInMouth = 0; 	// mogelijk drinkWaterTile functie later
-		} else {
-			foodInMouth = Map.tiles[Xtile][Ytile].eatFoodTile(DesiredFood);
-			fat += foodInMouth;
-			foodInMouth = 0;
-		}
+		
 
 	}
 

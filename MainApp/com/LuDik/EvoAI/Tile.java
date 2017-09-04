@@ -27,4 +27,11 @@ public abstract class Tile {
 		g2d.draw(tileRect);
 	}
 
+	private double Consume(int Xtile, int Ytile, double DesiredFood) {
+		if (Map.tiles[Xtile][Ytile].isWaterTile) {
+			return 0; // mogelijk drinkWaterTile functie of andere actie laten zijn?
+		} else {
+			return Map.tiles[Xtile][Ytile].eatFoodTile(DesiredFood);
+		}
+	}
 }

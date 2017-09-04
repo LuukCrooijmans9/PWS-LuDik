@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
 public class LandTile extends Tile {
-	private float fertility, foodValue;
+	private double fertility, foodValue;
 
 	public LandTile(int upperLeftCornerX, int upperLeftCornerY, float frtlty) {
 
 		isWaterTile = false;
 		fertility = frtlty;
-		foodValue = (float) (fertility * Configuration.globalFertility * Configuration.globalMaxFood);
-		tileColor = new Color((float) fertility, foodValue, 0f);
+		foodValue = (double) (fertility * Configuration.globalFertility * Configuration.globalMaxFood);
+		tileColor = new Color((float) fertility, (float) foodValue, 0f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
 
 	}
@@ -27,6 +27,7 @@ public class LandTile extends Tile {
 	}
 
 	double eatFoodTile(double DesiredFood) {
-		return Math.min(foodValue, DesiredFood);
+		double tempMin = Math.min(foodValue, DesiredFood);
+		return Math.min(tempMin, Configuration.MaxFoodPerConsume);
 	}
 }
