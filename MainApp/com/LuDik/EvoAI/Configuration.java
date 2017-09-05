@@ -20,4 +20,7 @@ public class Configuration {
 	public static double DEFAULT_CREATURE_SIZE = 10, DEFAULT_MAX_FOOD_IN_MOUTH = 5, DEFAULT_MAX_WATER_IN_MOUTH = 5;
 	
 	
+	
+	
+	
 }

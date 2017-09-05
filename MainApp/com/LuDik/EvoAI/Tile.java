@@ -27,7 +27,7 @@ public abstract class Tile {
 		g2d.draw(tileRect);
 	}
 
-	private double Consume(int Xtile, int Ytile, double DesiredFood) {
+	private double beingConsumed(double DesiredFood) {
 		if (this.isWaterTile) {
 			return 0; // mogelijk drinkWaterTile functie of andere actie laten zijn?
 		} else {
