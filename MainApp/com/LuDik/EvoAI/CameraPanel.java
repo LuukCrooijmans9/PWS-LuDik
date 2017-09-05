@@ -28,11 +28,10 @@ public class CameraPanel extends JPanel {
 	private double cameraY = (CPWIDTH/2);
 	private double scale = 1;
 	
-	private AffineTransform at = new AffineTransform();
-	private AffineTransform middleTransform = new AffineTransform();
-	
-	// TODO schrijf de hele translation en scale operatie om met behulp van xpos en ypos
-	
+	private AffineTransform saveXform;
+	private AffineTransform scaleT;
+	private AffineTransform translateT;
+		
 	private static final double SCROLL_SPEED = 20;
 	private static final double ZOOM_SPEED_IN = 1.1;
 	private static final double ZOOM_SPEED_OUT = 1d/1.1;
@@ -61,41 +60,40 @@ public class CameraPanel extends JPanel {
 		
 		AffineTransform saveXform = g2d.getTransform();
 		
+		scaleT = new AffineTransform();
+		translateT = new AffineTransform();
 		
-//		at.translate(cameraX + (cameraX * (1d - scale)), cameraY + (cameraY * (1d - scale)));
-//		at.scale(scale, scale);
-		
-		g2d.transform(at);
-		
-//		g2d.translate(cameraX + (cameraX * (1d - scale)), cameraY + (cameraY * (1d - scale)));
-
-//		g2d.scale(scale, scale);
-//		g2d.translate(-(CPWIDTH/2), -(CPWIDTH/2));
-
-		
-		
-		
+		scaleT.scale(scale, scale);
+		translateT.translate(
+				0.5 * CPWIDTH / scale - (cameraX),
+				0.5 * CPWIDTH / scale - (cameraY));
+				
+		scaleT.concatenate(translateT);		
+		g2d.setTransform(scaleT);	
 		
 		if (mainFrame.getBoard() != null) {
 			mainFrame.getBoard().getMap().drawMap(g2d);
-			mainFrame.getBoard().getMap().getTiles()[0][0];
+			
 		}
 		
 		
 		
 		g2d.setTransform(saveXform);
 		
-		g2d.setColor(Color.green);
-		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
-		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
+//		debug lijnen, uncomment als je twee lijnen die door het midden van het scherm gaan wil hebben.
+//		g2d.setColor(Color.green);
+//		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
+//		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
+		
+		
+		
+		g2d.dispose();
 		
 	}
 	
 	private void moveCamera(int amplitudeX, int amplitudeY) {
-		at.translate(amplitudeX * SCROLL_SPEED, amplitudeY * SCROLL_SPEED);
 		cameraX += amplitudeX * SCROLL_SPEED;
 		cameraY += amplitudeY * SCROLL_SPEED;
-		System.out.println("cameraX" + cameraX + "cameraY" + cameraY);
 	}
 	
 	private void zoomCamera(boolean zoomIn) {
@@ -107,22 +105,7 @@ public class CameraPanel extends JPanel {
 			currentScale = ZOOM_SPEED_OUT;
 		}
 		
-		at.translate(-cameraX * currentScale, -cameraY * currentScale);
-		at.scale(currentScale, currentScale);
-		at.translate(cameraX / currentScale, cameraY / currentScale);
-
-//		middleTransform.translate(100D, 100D);
-//		at.concatenate(middleTransform);
-		
-		scale *= currentScale;
-		
-		Rectangle2D rect = new Rectangle2D.Double(100d, 100d, 10d, 10d);
-		
-		Shape shape = at.createTransformedShape(rect);
-		
-		System.out.println("shape" + shape.getBounds2D());
-		System.out.println("scale" + scale);
-		
+		scale *= currentScale;		
 	}
 	
 	class MouseInputHandler extends MouseAdapter {
@@ -140,12 +123,7 @@ public class CameraPanel extends JPanel {
 		
 		
 		public void mouseDown(MouseWheelEvent e) {
-			System.out.println("mouseScrolled");
-//			if (e.getWheelRotation() > 0) {
-//				scale += ZOOM_SPEED;
-//			} else {
-//				scale -= ZOOM_SPEED;
-//			}
+			System.out.println("mouseScrolled");			
 			repaint();
 		}
 	}
@@ -159,24 +137,24 @@ public class CameraPanel extends JPanel {
 			switch (keyCode) {
 
 			case KeyEvent.VK_LEFT:
-				moveCamera(1, 0);
+				moveCamera(-1, 0);
 				repaint();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				moveCamera(-1, 0);
+				moveCamera(1, 0);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				moveCamera(0, -1);
+				moveCamera(0, 1);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_UP:
-				moveCamera(0, 1);
+				moveCamera(0, -1);
 				
 				repaint();
 				break;
