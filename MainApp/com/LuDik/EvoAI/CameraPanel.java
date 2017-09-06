@@ -1,5 +1,6 @@
 package com.LuDik.EvoAI;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -59,6 +60,8 @@ public class CameraPanel extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		AffineTransform saveXform = g2d.getTransform();
+		
+		g2d.setStroke(new BasicStroke(0.0001f));
 		
 		scaleT = new AffineTransform();
 		translateT = new AffineTransform();
