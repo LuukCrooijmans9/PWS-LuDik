@@ -8,15 +8,20 @@ import java.awt.geom.Line2D;
 public class Creature {
 
 	private long creatureID; // ID om creature aan te herkennen
-	private double age;
 	private long parentAID, parentBID; // ID parents
+
+	private double age;
 	private double fat, weight, fatBurned; // Voedsel vooraad
-	private double xPos, deltaXPos, deltaYPos, yPos, direction, creatureSize; // Positie en draaing
-	private double CreatureSize;
-	private int xTile, yTile;
+	private double desiredFood, foodInMouth;
+	
+	private double xPos, deltaXPos, deltaYPos, yPos, direction; // Positie en draaing
 	private double speed, maxSpeed;
-	private double desiredFood, desiredDrink, foodInMouth, waterInMouth;
+
+	private double creatureSize;
+	private int xTile, yTile;
 	private boolean isDead = false;
+	
+	private Board board;
 
 	// Door brain bepaalt
 	private double deltaDirection, deltaSpeed; // waarde tussen -1 en 1
@@ -24,7 +29,9 @@ public class Creature {
 	Color creatureColor;
 	Ellipse2D creatureShape;
 
-	public void Creature(double x, double y) {
+	public void Creature(double x, double y, Board brd) {
+		
+		board = brd;
 
 		xPos = x + 2 * Configuration.DEFAULT_CREATURE_SIZE;
 		yPos = y + 2 * Configuration.DEFAULT_CREATURE_SIZE;
@@ -55,7 +62,7 @@ public class Creature {
 
 		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
 
-		Map.tiles[xTile][yTile].beingConsumed(desiredFood);
+		board.getMap().getTiles()[xTile][yTile].beingConsumed(desiredFood);
 
 		fatBurned += 0.1;
 
