@@ -29,7 +29,7 @@ public class Creature {
 	Color creatureColor;
 	Ellipse2D creatureShape;
 
-	public void Creature(double x, double y, Board brd) {
+	public Creature(double x, double y, Board brd) {
 		
 		board = brd;
 
@@ -41,7 +41,7 @@ public class Creature {
 		weight = fat * creatureSize;
 
 		creatureColor = new Color(0, 1, 0);
-		creatureShape = new Ellipse2D.Double(xPos, yPos, creatureSize / 2, creatureSize / 2);
+		creatureShape = new Ellipse2D.Double(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
 	}
 
 	private void born(long parentA, long parentB) {
@@ -58,15 +58,15 @@ public class Creature {
 
 	}
 
-	private void consume() {
-
-		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
-
-		board.getMap().getTiles()[xTile][yTile].beingConsumed(desiredFood);
-
-		fatBurned += 0.1;
-
-	}
+//	private void consume() {
+//
+//		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
+//
+//		board.getMap().getTiles()[xTile][yTile].beingConsumed(desiredFood);
+//
+//		fatBurned += 0.1;
+//
+//	}
 
 	private void move() {
 
@@ -144,5 +144,13 @@ public class Creature {
 
 		g2d.draw(new Line2D.Double( xPos,  yPos,  forwardX, forwardY));
 		
+	}
+
+	public Ellipse2D getCreatureShape() {
+		return creatureShape;
+	}
+
+	public void setCreatureShape(Ellipse2D creatureShape) {
+		this.creatureShape = creatureShape;
 	}
 }

@@ -75,7 +75,7 @@ public class CameraPanel extends JPanel {
 		g2d.setTransform(scaleT);	
 		
 		if (mainFrame.getBoard() != null) {
-			mainFrame.getBoard().getMap().drawMap(g2d);
+			mainFrame.getBoard().drawBoard(g2d);
 			
 		}
 		

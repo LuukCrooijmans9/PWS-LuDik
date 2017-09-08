@@ -9,7 +9,7 @@ public abstract class Tile {
 	static int tileSize = Configuration.tileSize;
 	boolean isWaterTile;
 
-	Rectangle2D tileRect;
+	Rectangle2D tileRect = new Rectangle2D.Double();
 
 	Color tileColor;
 
@@ -33,5 +33,9 @@ public abstract class Tile {
 		} else {
 			return this.eatFoodTile(DesiredFood);
 		}
+	}
+	
+	public Rectangle2D getTileRect() {
+		return tileRect;
 	}
 }
