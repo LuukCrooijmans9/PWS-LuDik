@@ -19,7 +19,7 @@ public class ActionPanel extends JPanel {
 	private CameraPanel cameraPanel;
 
 	private Board board;
-	private Timer timer;
+	private TimeKeeper timeKeeper;
 
 	private static int APHeight;
 	private static final int APWidth = 400;

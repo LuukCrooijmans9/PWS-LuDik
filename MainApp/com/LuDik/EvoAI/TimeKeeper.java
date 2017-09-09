@@ -1,5 +1,5 @@
 package com.LuDik.EvoAI;
 
-public class Timer {
+public class TimeKeeper {
 
 }
