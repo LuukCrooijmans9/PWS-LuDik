@@ -82,6 +82,10 @@ public class ActionPanel extends JPanel {
 //				startBoardBtn.setEnabled(false);
 				
 				mainFrame.getCameraPanel().update();
+				
+				board.spawnCreatures();
+				mainFrame.getCameraPanel().update();
+
 			};
 		});
 	}

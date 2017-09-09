@@ -33,14 +33,15 @@ public class Creature {
 		
 		board = brd;
 
-		xPos = x + 2 * Configuration.DEFAULT_CREATURE_SIZE;
-		yPos = y + 2 * Configuration.DEFAULT_CREATURE_SIZE;
+		xPos = x;
+		yPos = y;
+		
 		age = 0;
 		fat = 10;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		weight = fat * creatureSize;
 
-		creatureColor = new Color(0, 1, 0);
+		creatureColor = new Color(0f, 1f, 0f);
 		creatureShape = new Ellipse2D.Double(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
 	}
 
@@ -114,7 +115,7 @@ public class Creature {
 
 	}
 
-	private void proccesTurn() {
+	private void processTurn() {
 
 		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
 								// creatures sneller door een kans te geven aan nieuwe creature
@@ -139,10 +140,10 @@ public class Creature {
 
 		double radianDirection, forwardX, forwardY;
 		radianDirection = Math.toRadians(direction);
-		forwardX = Math.sin(radianDirection);
-		forwardY = Math.cos(radianDirection);
+		forwardX = Math.sin(radianDirection) * creatureSize;
+		forwardY = Math.cos(radianDirection) * creatureSize;
 
-		g2d.draw(new Line2D.Double( xPos,  yPos,  forwardX, forwardY));
+		g2d.draw(new Line2D.Double( xPos,  yPos,  xPos + forwardX, yPos + forwardY));
 		
 	}
 

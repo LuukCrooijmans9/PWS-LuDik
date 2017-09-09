@@ -18,8 +18,9 @@ public class Board {
 	private Map map;	
 	private int mapLength;
 	
+	EvoAI evoAI;
 	
-	private int BEGIN_AMOUNT_CREATURES = 10;
+	private int BEGIN_AMOUNT_CREATURES = 100;
 	private ArrayList<Creature> creatures;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
 	
@@ -40,9 +41,11 @@ public class Board {
 
 	} 
 	
-	public Board(Integer tileSize, Integer mapSize, double seed,  double smoothness, EvoAI evoAI) {
-		evoAI.setBoard(this);
+	public Board(Integer tileSize, Integer mapSize, double seed,  double smoothness, EvoAI eAI) {
+		eAI.setBoard(this);
 
+		evoAI = eAI;
+		
 		map = new Map(tileSize, mapSize, seed, smoothness);
 		
 		landArea = new Area();
@@ -57,38 +60,50 @@ public class Board {
 			}
 		}
 		
+		
+		
+		
+		
+
+	}
+	// spawnCreatures() pakt is op het begin hetzelfde als landArea, zoekt dan op zichzelf een willekeurige positie, 
+	//	maakt daar een creature en haalt dan een hap 2 keer de grootte van een creature op diezelfde plek weg, zodat creatures niet in elkaar gemaakt kunnen worden.
+	//	Deze functie is verre van geoptimaliseerd, dus BEGIN_AMOUNT_CREATURES moet laag zijn wil je de functie in een redelijke tijd klaar hebben
+	public void spawnCreatures() {
+		
 		creatures = new ArrayList<Creature>();
 		spawnArea = landArea;
+		
 		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
 			Rectangle2D spawnAreaBounds = spawnArea.getBounds2D();
-			double spawnAreaWidth = spawnAreaBounds.getWidth();
-			double spawnAreaHeight = spawnAreaBounds.getHeight();
-			double spawnAreaMinX = spawnAreaBounds.getX();
-			double spawnAreaMinY = spawnAreaBounds.getY();
+			float spawnAreaWidth = (float) spawnAreaBounds.getWidth();
+			float spawnAreaHeight = (float) spawnAreaBounds.getHeight();
+			float spawnAreaMinX = (float) spawnAreaBounds.getX();
+			float spawnAreaMinY = (float) spawnAreaBounds.getY();
 			
+
 			
 			while (spawnAreaWidth != 0 || spawnAreaHeight != 0) {
-				double rndx = Math.random() * spawnAreaWidth + spawnAreaMinX;
-				double rndy = Math.random() * spawnAreaHeight + spawnAreaMinY;
+				float rndx = (float) Math.random() * spawnAreaWidth + spawnAreaMinX;
+				float rndy = (float) Math.random() * spawnAreaHeight + spawnAreaMinY;
 				
-				if (spawnArea.contains(rndx, rndy)) {
+				if (spawnArea.contains(rndx, rndy)) {					
 					creatures.add(new Creature(rndx, rndy, this));
-					spawnArea.subtract(new Area(new Ellipse2D.Double(rndx - CREATURE_SIZE, rndy - CREATURE_SIZE, 2 * CREATURE_SIZE, 2 * CREATURE_SIZE)));
-					System.out.println("Creature created at " + rndx + "," + rndy);
+					spawnArea.subtract(new Area(new Ellipse2D.Float(rndx - (float) CREATURE_SIZE, rndy - (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE)));
 					break;
 				} 
 			}
 			
 		}
-		
-		
-
 	}
 	
 	public void drawBoard(Graphics2D g2d) {
 		map.drawMap(g2d);
-		for (Creature crtr : creatures) {
-			crtr.draw(g2d);
+		
+		if (creatures != null) {		
+			for (Creature crtr : creatures) {
+				crtr.draw(g2d);
+			}
 		}
 	}
 
