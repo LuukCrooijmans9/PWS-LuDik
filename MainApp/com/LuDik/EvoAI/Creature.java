@@ -36,6 +36,8 @@ public class Creature {
 		xPos = x;
 		yPos = y;
 		
+		direction = Math.random() * 360;
+		
 		age = 0;
 		fat = 10;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;

@@ -27,13 +27,13 @@ public abstract class Tile {
 		g2d.draw(tileRect);
 	}
 
-	private double beingConsumed(double DesiredFood) {
-		if (this.isWaterTile) {
-			return 0; // mogelijk drinkWaterTile functie of andere actie laten zijn?
-		} else {
-			return this.eatFoodTile(DesiredFood);
-		}
-	}
+//	private double beingConsumed(double DesiredFood) {
+//		if (this.isWaterTile) {
+//			return 0; // mogelijk drinkWaterTile functie of andere actie laten zijn?
+//		} else {
+//			return this.eatFoodTile(DesiredFood);
+//		}
+//	}
 	
 	public Rectangle2D getTileRect() {
 		return tileRect;
