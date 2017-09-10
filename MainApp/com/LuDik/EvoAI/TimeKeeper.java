@@ -5,7 +5,7 @@ public class TimeKeeper implements Runnable {
 	private Board board;
 	private Thread timeKeeper;
 	private long step;
-	private long DELAY;
+	private long DELAY = 2500;
 	private boolean paused;
 	
 	
@@ -20,24 +20,22 @@ public class TimeKeeper implements Runnable {
 	}
 
 	private void makeStep() {
-		
+		board.updateStep();
 	}
 	
 	@Override
 	public void run() {
 		
+		long beforeTime, timeDiff, sleep;
+		
 		while (true) {
-			
-			long beforeTime, timeDiff, sleep;
-			
-			
 			
 			beforeTime = System.nanoTime();
 
 			while (true) {
 
 				makeStep();
-				
+				System.out.println("successful");
 				
 				
 				timeDiff = System.nanoTime() - beforeTime;

@@ -85,6 +85,9 @@ public class ActionPanel extends JPanel {
 				
 				board.spawnCreatures();
 				mainFrame.getCameraPanel().update();
+				
+				timeKeeper = new TimeKeeper(board);
+				timeKeeper.start();
 
 			};
 		});

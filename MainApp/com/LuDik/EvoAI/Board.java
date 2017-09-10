@@ -97,6 +97,16 @@ public class Board {
 		}
 	}
 	
+	public void updateStep() {
+		
+		for (Creature crtr : creatures) {
+			crtr.move();
+		}
+		
+		evoAI.getCameraPanel().update();
+		System.out.println("done");
+	}
+	
 	public void drawBoard(Graphics2D g2d) {
 		map.drawMap(g2d);
 		

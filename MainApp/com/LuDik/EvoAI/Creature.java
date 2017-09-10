@@ -41,25 +41,25 @@ public class Creature {
 		age = 0;
 		fat = 10;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
-		weight = fat * creatureSize;
+//		weight = fat * creatureSize;
 
 		creatureColor = new Color(0f, 1f, 0f);
 		creatureShape = new Ellipse2D.Double(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
 	}
 
-	private void born(long parentA, long parentB) {
+//	private void born(long parentA, long parentB) {
+//
+//		age = 0;
+//		fat = 10;
+//	}
 
-		age = 0;
-		fat = 10;
-	}
-
-	private void prepareCreature() {
-
-		// huidige tile waar die staat
-		xTile = (int) Math.round((xPos / Configuration.tileSize) + 0.5d);
-		yTile = (int) Math.round((yPos / Configuration.tileSize) + 0.5d);
-
-	}
+//	private void prepareCreature() {
+//
+//		// huidige tile waar die staat
+//		xTile = (int) Math.round((xPos / Configuration.tileSize) + 0.5d);
+//		yTile = (int) Math.round((yPos / Configuration.tileSize) + 0.5d);
+//
+//	}
 
 //	private void consume() {
 //
@@ -71,12 +71,15 @@ public class Creature {
 //
 //	}
 
-	private void move() {
+	public void move() {
 
+		deltaSpeed = Math.random() *2 -1;
+		deltaDirection = Math.random() * 2 - 1;
+		
 		// rekent maxSpeed uit.
-		maxSpeed = (10 * creatureSize) / weight;
+		maxSpeed = (0.25 * creatureSize) ;
 
-		deltaSpeed *= (maxSpeed * 0.05d); // 0.05d hoeveel procent van maxSpeed er per move bij kan komen.
+//		deltaSpeed *= (maxSpeed * 0.05d); // 0.05d hoeveel procent van maxSpeed er per move bij kan komen.
 
 		// rekent speed uit
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -87,15 +90,17 @@ public class Creature {
 			speed = speed + deltaSpeed;
 		}
 
+		speed = 0.001;
+		
 		// Rekent nieuwe kijkrichting/beweegrichting uit.
 		// het is nu mogelijk om 180 graden draai te maken en alle snelheid te houden
 		// onrealistisch!
 
-		direction += (deltaDirection * 360);
+		direction += deltaDirection;
 		direction %= 360;
 
-		deltaXPos = Math.sin((Math.PI * direction) / 180) * speed;
-		deltaYPos = Math.cos((Math.PI * direction) / 180) * speed;
+		deltaXPos = Math.sin(Math.toRadians(direction)) * speed;
+		deltaYPos = Math.cos(Math.toRadians(direction)) * speed;
 
 		// Kijkt of de move binnen het veld blijft en voert uit.
 		if (xPos + deltaXPos - (creatureSize / 2) > 0 && xPos + deltaXPos
@@ -113,28 +118,27 @@ public class Creature {
 
 	}
 
-	private void giveBirth() {
 
-	}
-
-	private void processTurn() {
-
-		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
-								// creatures sneller door een kans te geven aan nieuwe creature
-		fatBurned = 0;
-
-		if (fat <= 0) {
-
-			isDead = true;
-
-		} else {
-			age += 0.01;
-		}
-
-	}
+//	private void processTurn() {
+//
+//		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
+//								// creatures sneller door een kans te geven aan nieuwe creature
+//		fatBurned = 0;
+//
+//		if (fat <= 0) {
+//
+//			isDead = true;
+//
+//		} else {
+//			age += 0.01;
+//		}
+//
+//	}
 
 	void draw(Graphics2D g2d) {
 
+		creatureShape.setFrame(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
+		
 		g2d.setColor(creatureColor);
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);
