@@ -10,35 +10,34 @@ public class LandTile extends Tile {
 
 		isWaterTile = false;
 		fertility = frtlty;
-		foodValue = (double) (fertility * Configuration.globalFertility * Configuration.globalMaxFood + 100);
-		foodColor = (double) Math.min(foodValue/500, 1);
+		foodValue = (double) (fertility * Configuration.globalFertility + 100);
+		foodColor = (double) Math.min(foodValue / (Configuration.globalMaxFood), 1);
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
-		
+
 	}
 
 	public void calculateNextFood() {
 
-		if (foodValue < fertility * Configuration.globalFertility * Configuration.globalMaxFood) {
-			foodValue = (float) (foodValue + fertility * Configuration.globalFertility);
+		foodValue = (float) (foodValue + fertility * Configuration.globalFertility);
+
+		if (foodValue >= Configuration.globalMaxFood * fertility) {
+			foodValue = Configuration.globalMaxFood * fertility;
 		}
-		if (foodValue > fertility * Configuration.globalFertility * Configuration.globalMaxFood) {
-			foodValue = (float) (fertility * Configuration.globalFertility * Configuration.globalMaxFood);
-		}
+		foodColor = foodValue / (Configuration.globalMaxFood);
+		//System.out.println(foodColor);
+		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 	}
-	
-	
-	
+
 	public double eatFoodTile(double DesiredFood) {
-		DesiredFood *= 10;
 		double tempFood = Math.min(foodValue, DesiredFood);
-		System.out.println(foodValue);
+		//System.out.println("foodValue before eaten = " + foodValue);
 		double foodEaten = Math.min(tempFood, Configuration.MaxFoodPerConsume);
+		//System.out.println("foodEaten = " + foodEaten);
 		foodValue -= foodEaten;
+		//System.out.println("foodValue after eaten = " + foodValue);
+		
 		return foodEaten;
 	}
-	
-	public void update() {
-		foodValue += fertility;
-	}
+
 }

@@ -56,37 +56,47 @@ public class Creature {
 	// fat = 10;
 	// }
 
-	// private void prepareCreature() {
-	//
-	// // huidige tile waar die staat
-	// xTile = (int) Math.round((xPos / Configuration.tileSize) + 0.5d);
-	// yTile = (int) Math.round((yPos / Configuration.tileSize) + 0.5d);
-	//
-	// }
+	public void prepareCreature() {
+
+		// huidige tile waar die staat
+		xTile = (int) Math.round((xPos / Configuration.tileSize) - 0.5d);
+		yTile = (int) Math.round((yPos / Configuration.tileSize) - 0.5d);
+
+	}
 
 	public void eat() {
+		this.prepareCreature();
+
+		System.out.println("eating..");
 
 		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
 
 		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
+		//System.out.println("Food in mouth = " + foodInMouth);
+		// System.out.println("food from tile " +
+		// board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood));
 
-		if (creatureID == 1) {
-			System.out.println(foodInMouth);
-		}
+		// System.out.println("food in mouth " + foodInMouth);
+
 		fat += foodInMouth;
 		foodInMouth = 0;
 
-		if (creatureID == 1) {
-			// System.out.println(fat);
-		}
+		// System.out.println(fat);
+
 		fat -= 1;
+
+		System.out.println("Done eating");
+
+
 
 	}
 
 	public void move() {
 
-		deltaSpeed = Math.random() * 2 - 1;
-		deltaDirection = Math.random() * 2 - 1;
+		System.out.println("Moving...");
+
+		deltaSpeed = Math.random() * 2 -1;
+		deltaDirection = Math.random() * 2 -1;
 
 		// rekent maxSpeed uit.
 		maxSpeed = (0.25 * creatureSize);
@@ -103,12 +113,10 @@ public class Creature {
 			speed = speed + deltaSpeed;
 		}
 
-		speed = 0.001;
-
 		// Rekent nieuwe kijkrichting/beweegrichting uit.
 		// het is nu mogelijk om 180 graden draai te maken en alle snelheid te houden
 		// onrealistisch!
-
+		deltaDirection *= 360;
 		direction += deltaDirection;
 		direction %= 360;
 
@@ -129,9 +137,11 @@ public class Creature {
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
 		fatBurned += speed * weight;
 
+		System.out.println("Moved");
+
 	}
 
-	private void processTurn() {
+	public void processTurn() {
 
 		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
 								// creatures sneller door een kans te geven aan nieuwe creature

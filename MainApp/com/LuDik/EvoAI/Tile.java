@@ -33,10 +33,12 @@ public abstract class Tile {
 	}
 
 	public double eatFoodTile(double DesiredFood) {
+		System.out.println("WaterTile");
 		return 0;
 	}
 	
-	public void update() {
+
+	public void calculateNextFood() {
 		
 	}
 }

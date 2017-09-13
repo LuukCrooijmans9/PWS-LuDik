@@ -12,7 +12,7 @@ public class Configuration {
 	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 25; 
 	
 	// globalFertility bepaalt
-	public static double globalFertility = 1, globalMaxFood = 1;
+	public static double globalFertility = 1, globalMaxFood = 1000;
 	public static double MaxFoodPerConsume = 40; //exacte waarde later bepalen
 	
 	
@@ -22,7 +22,7 @@ public class Configuration {
 	
 	
 	//Evolutie waarde creature
-	public static int BEGIN_AMOUNT_CREATURES = 1;
+	public static int BEGIN_AMOUNT_CREATURES = 100;
 	
 	
 	

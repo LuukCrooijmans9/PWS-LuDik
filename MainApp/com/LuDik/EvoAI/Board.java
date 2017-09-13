@@ -103,8 +103,10 @@ public class Board {
 			crtr.move();
 			crtr.eat();
 		}
-		for (Tile[] tile : map.getTiles()) {
-			
+		for (Tile[] tileArray : map.getTiles()) {
+			for (Tile tile : tileArray) {
+				tile.calculateNextFood();
+			}
 		}
 		
 		evoAI.getCameraPanel().update();
