@@ -13,14 +13,14 @@ public class Creature {
 	private double age;
 	private double fat, weight, fatBurned; // Voedsel vooraad
 	private double desiredFood, foodInMouth;
-	
+
 	private double xPos, deltaXPos, deltaYPos, yPos, direction; // Positie en draaing
 	private double speed, maxSpeed;
 
 	private double creatureSize;
 	private int xTile, yTile;
 	private boolean isDead = false;
-	
+
 	private Board board;
 
 	// Door brain bepaalt
@@ -29,57 +29,70 @@ public class Creature {
 	Color creatureColor;
 	Ellipse2D creatureShape;
 
-	public Creature(double x, double y, Board brd) {
-		
+	public Creature(double x, double y, Board brd, int creatureNumber) {
+
 		board = brd;
+
+		creatureID = creatureNumber;
 
 		xPos = x;
 		yPos = y;
-		
+
 		direction = Math.random() * 360;
-		
+
 		age = 0;
 		fat = 10;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
-//		weight = fat * creatureSize;
+		// weight = fat * creatureSize;
 
 		creatureColor = new Color(0f, 1f, 0f);
-		creatureShape = new Ellipse2D.Double(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
+		creatureShape = new Ellipse2D.Double(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize,
+				creatureSize);
 	}
 
-//	private void born(long parentA, long parentB) {
-//
-//		age = 0;
-//		fat = 10;
-//	}
+	// private void born(long parentA, long parentB) {
+	//
+	// age = 0;
+	// fat = 10;
+	// }
 
-//	private void prepareCreature() {
-//
-//		// huidige tile waar die staat
-//		xTile = (int) Math.round((xPos / Configuration.tileSize) + 0.5d);
-//		yTile = (int) Math.round((yPos / Configuration.tileSize) + 0.5d);
-//
-//	}
+	// private void prepareCreature() {
+	//
+	// // huidige tile waar die staat
+	// xTile = (int) Math.round((xPos / Configuration.tileSize) + 0.5d);
+	// yTile = (int) Math.round((yPos / Configuration.tileSize) + 0.5d);
+	//
+	// }
 
-//	private void consume() {
-//
-//		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
-//
-//		board.getMap().getTiles()[xTile][yTile].beingConsumed(desiredFood);
-//
-//		fatBurned += 0.1;
-//
-//	}
+	public void eat() {
+
+		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
+
+		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
+
+		if (creatureID == 1) {
+			System.out.println(foodInMouth);
+		}
+		fat += foodInMouth;
+		foodInMouth = 0;
+
+		if (creatureID == 1) {
+			// System.out.println(fat);
+		}
+		fat -= 1;
+
+	}
 
 	public void move() {
 
-		deltaSpeed = Math.random() *2 -1;
+		deltaSpeed = Math.random() * 2 - 1;
 		deltaDirection = Math.random() * 2 - 1;
-		
-		// rekent maxSpeed uit.
-		maxSpeed = (0.25 * creatureSize) ;
 
-//		deltaSpeed *= (maxSpeed * 0.05d); // 0.05d hoeveel procent van maxSpeed er per move bij kan komen.
+		// rekent maxSpeed uit.
+		maxSpeed = (0.25 * creatureSize);
+
+		// deltaSpeed *= (maxSpeed * 0.05d); // 0.05d hoeveel procent van maxSpeed er
+		// per move bij kan komen.
 
 		// rekent speed uit
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -91,7 +104,7 @@ public class Creature {
 		}
 
 		speed = 0.001;
-		
+
 		// Rekent nieuwe kijkrichting/beweegrichting uit.
 		// het is nu mogelijk om 180 graden draai te maken en alle snelheid te houden
 		// onrealistisch!
@@ -118,27 +131,26 @@ public class Creature {
 
 	}
 
+	private void processTurn() {
 
-//	private void processTurn() {
-//
-//		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
-//								// creatures sneller door een kans te geven aan nieuwe creature
-//		fatBurned = 0;
-//
-//		if (fat <= 0) {
-//
-//			isDead = true;
-//
-//		} else {
-//			age += 0.01;
-//		}
-//
-//	}
+		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
+								// creatures sneller door een kans te geven aan nieuwe creature
+		fatBurned = 0;
+
+		if (fat <= 0) {
+
+			isDead = true;
+
+		} else {
+			age += 0.01;
+		}
+
+	}
 
 	void draw(Graphics2D g2d) {
 
 		creatureShape.setFrame(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
-		
+
 		g2d.setColor(creatureColor);
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);
@@ -149,8 +161,8 @@ public class Creature {
 		forwardX = Math.sin(radianDirection) * creatureSize;
 		forwardY = Math.cos(radianDirection) * creatureSize;
 
-		g2d.draw(new Line2D.Double( xPos,  yPos,  xPos + forwardX, yPos + forwardY));
-		
+		g2d.draw(new Line2D.Double(xPos, yPos, xPos + forwardX, yPos + forwardY));
+
 	}
 
 	public Ellipse2D getCreatureShape() {

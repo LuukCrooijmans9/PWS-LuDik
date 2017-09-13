@@ -21,6 +21,11 @@ public class Configuration {
 	
 	
 	
+	//Evolutie waarde creature
+	public static int BEGIN_AMOUNT_CREATURES = 1;
+	
+	
+	
 	
 	
 }

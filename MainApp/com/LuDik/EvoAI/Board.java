@@ -20,7 +20,7 @@ public class Board {
 	
 	EvoAI evoAI;
 	
-	private int BEGIN_AMOUNT_CREATURES = 100;
+	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private ArrayList<Creature> creatures;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
 	
@@ -88,7 +88,7 @@ public class Board {
 				float rndy = (float) Math.random() * spawnAreaHeight + spawnAreaMinY;
 				
 				if (spawnArea.contains(rndx, rndy)) {					
-					creatures.add(new Creature(rndx, rndy, this));
+					creatures.add(new Creature(rndx, rndy, this, i));
 					spawnArea.subtract(new Area(new Ellipse2D.Float(rndx - (float) CREATURE_SIZE, rndy - (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE)));
 					break;
 				} 
@@ -101,6 +101,10 @@ public class Board {
 		
 		for (Creature crtr : creatures) {
 			crtr.move();
+			crtr.eat();
+		}
+		for (Tile[] tile : map.getTiles()) {
+			
 		}
 		
 		evoAI.getCameraPanel().update();
