@@ -22,6 +22,7 @@ public class Board {
 	
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private ArrayList<Creature> creatures;
+	private ArrayList<Creature> tempList;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
 	
 	private Area landArea;
@@ -72,6 +73,7 @@ public class Board {
 	public void spawnCreatures() {
 		
 		creatures = new ArrayList<Creature>();
+		tempList = new ArrayList<Creature>();
 		spawnArea = landArea;
 		
 		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
@@ -102,7 +104,19 @@ public class Board {
 		for (Creature crtr : creatures) {
 			crtr.move();
 			crtr.eat();
+			crtr.processTurn();
+			if(crtr.isDead()) {
+				tempList.add(crtr);
+			}
 		}
+		
+		
+		for (Creature crtr : tempList) {
+			creatures.remove(crtr);
+		}
+		
+		tempList.clear();
+		
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
 				tile.calculateNextFood();

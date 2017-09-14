@@ -182,4 +182,20 @@ public class Creature {
 	public void setCreatureShape(Ellipse2D creatureShape) {
 		this.creatureShape = creatureShape;
 	}
+
+	public long getCreatureID() {
+		return creatureID;
+	}
+
+	public void setCreatureID(long creatureID) {
+		this.creatureID = creatureID;
+	}
+
+	public boolean isDead() {
+		return isDead;
+	}
+
+	public void setDead(boolean isDead) {
+		this.isDead = isDead;
+	}
 }
