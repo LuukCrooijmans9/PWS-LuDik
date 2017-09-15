@@ -67,7 +67,7 @@ public class Creature {
 	public void eat() {
 		this.prepareCreature();
 
-		System.out.println("eating..");
+//		System.out.println("eating..");
 
 		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
 
@@ -85,7 +85,7 @@ public class Creature {
 
 		fat -= 1;
 
-		System.out.println("Done eating");
+//		System.out.println("Done eating");
 
 
 
@@ -93,7 +93,7 @@ public class Creature {
 
 	public void move() {
 
-		System.out.println("Moving...");
+//		System.out.println("Moving...");
 
 		deltaSpeed = Math.random() * 2 -1;
 		deltaDirection = Math.random() * 2 -1;
@@ -137,7 +137,7 @@ public class Creature {
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
 		fatBurned += speed * weight;
 
-		System.out.println("Moved");
+//		System.out.println("Moved");
 
 	}
 

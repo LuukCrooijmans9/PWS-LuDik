@@ -124,7 +124,7 @@ public class Board {
 		}
 		
 		evoAI.getCameraPanel().update();
-		System.out.println("done");
+//		System.out.println("done");
 	}
 	
 	public void drawBoard(Graphics2D g2d) {

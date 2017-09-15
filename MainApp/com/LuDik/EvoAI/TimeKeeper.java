@@ -1,19 +1,18 @@
 package com.LuDik.EvoAI;
 
 public class TimeKeeper implements Runnable {
-	
+
 	private Board board;
 	private Thread timeKeeper;
 	private long step;
-	private long DELAY = 2500;
+	private long DELAY = 25;
 	private boolean paused;
-	
-	
+
 	public TimeKeeper(Board brd) {
 		board = brd;
 		timeKeeper = new Thread(this);
 	}
-	
+
 	public void start() {
 		paused = false;
 		timeKeeper.start();
@@ -22,44 +21,38 @@ public class TimeKeeper implements Runnable {
 	private void makeStep() {
 		board.updateStep();
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 		long beforeTime, timeDiff, sleep;
-		
+
+		beforeTime = System.nanoTime();
+
 		while (true) {
+
+			makeStep();
+
+			timeDiff = (long) (System.nanoTime() - beforeTime) / (long) Math.pow(10, 6) ;
+			sleep = DELAY - timeDiff;
 			
-			beforeTime = System.nanoTime();
+//			System.out.println("Sleep: " + sleep);
 
-			while (true) {
 
-				makeStep();
-				System.out.println("successful");
-				
-				
-				timeDiff = System.nanoTime() - beforeTime;
-				sleep = DELAY - timeDiff;
-				
-				if (sleep < 0) {
-					sleep = 0;
-				}
-
-				try {
-					Thread.sleep(sleep);
-				} catch (InterruptedException e) {
-					System.out.println("Interrupted: " + e.getMessage());
-				}
-				step++;
-								
-				beforeTime = System.nanoTime();
+			if (sleep < 0) {
+				sleep = 0;
 			}
-			
-			
-		}
-		
-		
-	}
-	
-}
 
+			try {
+				Thread.sleep(sleep);
+			} catch (InterruptedException e) {
+				System.out.println("Interrupted: " + e.getMessage());
+			}
+			step++;
+
+			beforeTime = System.nanoTime();
+		}
+
+	}
+
+}
