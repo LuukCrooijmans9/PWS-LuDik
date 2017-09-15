@@ -131,7 +131,7 @@ public class Board {
 		map.drawMap(g2d);
 		
 		if (creatures != null) {		
-			for (Creature crtr : creatures) {
+			for (Creature crtr : new ArrayList<Creature>(creatures)) {
 				crtr.draw(g2d);
 			}
 		}

@@ -116,7 +116,7 @@ public class Creature {
 		// Rekent nieuwe kijkrichting/beweegrichting uit.
 		// het is nu mogelijk om 180 graden draai te maken en alle snelheid te houden
 		// onrealistisch!
-		deltaDirection *= 360;
+		deltaDirection *= 10;
 		direction += deltaDirection;
 		direction %= 360;
 
