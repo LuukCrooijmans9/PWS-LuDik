@@ -27,6 +27,7 @@ public class Board {
 	
 	private Area landArea;
 	private Area spawnArea;
+	private TimeKeeper timeKeeper;
 
 	public Board(Integer tileSize, Integer mapSize, EvoAI evoAI) {
 		evoAI.setBoard(this);
@@ -61,8 +62,8 @@ public class Board {
 			}
 		}
 		
-		
-		
+		timeKeeper = new TimeKeeper(this);
+		timeKeeper.setInfoPanel(evoAI.getInfoPanel());
 		
 		
 
@@ -144,5 +145,23 @@ public class Board {
 	public void setMap(Map map) {
 		this.map = map;
 	}
+
+	public ArrayList<Creature> getCreatures() {
+		return creatures;
+	}
+
+	public TimeKeeper getTimeKeeper() {
+		return timeKeeper;
+	}
+
+	public void setTimeKeeper(TimeKeeper timeKeeper) {
+		this.timeKeeper = timeKeeper;
+	}
+
+	public EvoAI getEvoAI() {
+		return evoAI;
+	}
+
+	
 
 }

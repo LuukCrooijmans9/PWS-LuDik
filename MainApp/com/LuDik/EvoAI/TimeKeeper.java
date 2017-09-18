@@ -4,22 +4,27 @@ public class TimeKeeper implements Runnable {
 
 	private Board board;
 	private Thread timeKeeper;
-	private long step;
+	private long step = 0;
 	private long DELAY = 25;
-	private boolean paused;
+	private InfoPanel infoPanel;
 
 	public TimeKeeper(Board brd) {
+		
+
 		board = brd;
 		timeKeeper = new Thread(this);
+		
+		
+		
 	}
 
 	public void start() {
-		paused = false;
 		timeKeeper.start();
 	}
 
 	private void makeStep() {
 		board.updateStep();
+		getInfoPanel().update();
 	}
 
 	@Override
@@ -53,6 +58,18 @@ public class TimeKeeper implements Runnable {
 			beforeTime = System.nanoTime();
 		}
 
+	}
+
+	public long getStep() {
+		return step;
+	}
+
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
+
+	public void setInfoPanel(InfoPanel infoPanel) {
+		this.infoPanel = infoPanel;
 	}
 
 }

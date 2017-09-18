@@ -30,13 +30,16 @@ public class EvoAI extends JFrame {
 		
 		cameraPanel = new CameraPanel(this);
 		
-		
-//		InfoPanel infoPanel = new InfoPanel(this);
-//		add(infoPanel);
+		infoPanel = new InfoPanel(this);
+
 		
 		actionPanel = new ActionPanel(this);
 		add(actionPanel);
 		add(cameraPanel);
+		
+
+		add(infoPanel);
+
 				
 		setSize(2000, 2000);
 		

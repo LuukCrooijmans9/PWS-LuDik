@@ -17,6 +17,7 @@ public class ActionPanel extends JPanel {
 	// UI containers:
 	private EvoAI mainFrame;
 	private CameraPanel cameraPanel;
+	private InfoPanel infoPanel;
 
 	private Board board;
 	private TimeKeeper timeKeeper;
@@ -54,8 +55,11 @@ public class ActionPanel extends JPanel {
 		add(startBoardBtn);
 
 		startBoardBtn.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent evt) {
+				infoPanel = mainFrame.getInfoPanel();
+				
 				try {
 					board = new Board(
 							Integer.valueOf(boardTileSizeTF.getText()),
@@ -81,15 +85,28 @@ public class ActionPanel extends JPanel {
 //				boardMapSizeInTilesTF.setEditable(false);
 //				startBoardBtn.setEnabled(false);
 				
+				infoPanel.setBoard(board);
+				
 				mainFrame.getCameraPanel().update();
 				
 				board.spawnCreatures();
 				mainFrame.getCameraPanel().update();
 				
-				timeKeeper = new TimeKeeper(board);
+				timeKeeper = board.getTimeKeeper();
+				
 				timeKeeper.start();
+				
 
 			};
 		});
+	}
+
+	public TimeKeeper getTimeKeeper() {
+		
+		return timeKeeper;
+	}
+
+	public Board getBoard() {
+		return board;
 	}
 }
