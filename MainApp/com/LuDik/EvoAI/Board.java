@@ -28,6 +28,7 @@ public class Board {
 	private Area landArea;
 	private Area spawnArea;
 	private TimeKeeper timeKeeper;
+	private InfoPanel infoPanel;
 
 	public Board(Integer tileSize, Integer mapSize, EvoAI evoAI) {
 		evoAI.setBoard(this);
@@ -47,10 +48,11 @@ public class Board {
 		eAI.setBoard(this);
 
 		evoAI = eAI;
-		
+		infoPanel = evoAI.getInfoPanel();
 		map = new Map(tileSize, mapSize, seed, smoothness);
 		
 		landArea = new Area();
+		
 		
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
@@ -63,7 +65,9 @@ public class Board {
 		}
 		
 		timeKeeper = new TimeKeeper(this);
-		timeKeeper.setInfoPanel(evoAI.getInfoPanel());
+		timeKeeper.setInfoPanel(infoPanel);
+		infoPanel.setTimeKeeper(timeKeeper);
+		
 		
 		
 
