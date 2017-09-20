@@ -114,7 +114,7 @@ public class CameraPanel extends JPanel {
 	class MouseInputHandler extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
-			requestFocusInWindow();
+			mainFrame.getInfoPanel().updateMousePos(e.getX(), e.getY());
 			System.out.println("mousepressed");
 		}
 		

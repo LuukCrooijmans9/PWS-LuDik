@@ -27,6 +27,7 @@ public class InfoPanel extends JPanel{
 
 	private JLabel stepLbl;
 	private JLabel crtrAmountLbl;
+	private JLabel mousePosLbl;
 	
 
 	public InfoPanel(EvoAI parent) {
@@ -44,9 +45,11 @@ public class InfoPanel extends JPanel{
 		
 		stepLbl = new JLabel("Step: " + 0);
 		crtrAmountLbl = new JLabel("Amount of creatures: " + 0);
+		mousePosLbl = new JLabel("mousePosX" + 0 + "mousePosY" + 0);
 		
 		add(stepLbl);
 		add(crtrAmountLbl);
+		add(mousePosLbl);
 
 		
 	}
@@ -57,6 +60,10 @@ public class InfoPanel extends JPanel{
 
 	public void setBoard(Board brd) {
 		board = brd;
+	}
+	
+	public void updateMousePos(int x, int y) {
+		mousePosLbl.setText("mousePosX " + x + " mousePosY " + y);
 	}
 	
 	public void update() {
