@@ -10,7 +10,7 @@ public class LandTile extends Tile {
 
 		isWaterTile = false;
 		fertility = frtlty;
-		foodValue = (double) (fertility * Configuration.globalFertility + 100);
+		foodValue = (double) (fertility * Configuration.globalMaxFood + 100);
 		foodColor = (double) Math.min(foodValue / (Configuration.globalMaxFood), 1);
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
