@@ -60,6 +60,10 @@ public class ActionPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				infoPanel = mainFrame.getInfoPanel();
 				
+				if (timeKeeper != null) {
+					timeKeeper = null;
+				}
+				
 				try {
 					board = new Board(
 							Integer.valueOf(boardTileSizeTF.getText()),
