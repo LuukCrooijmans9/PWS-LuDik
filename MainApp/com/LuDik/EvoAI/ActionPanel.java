@@ -63,7 +63,7 @@ public class ActionPanel extends JPanel {
 		delaySlider = new JSlider(0, 200, 25);
 		delaySlider.setPaintTicks(true);
 		delaySlider.setPaintLabels(true);
-		delaySlider.setMajorTickSpacing(10);		
+		delaySlider.setMajorTickSpacing(20);		
 		
 		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms");
 

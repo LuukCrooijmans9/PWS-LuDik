@@ -26,7 +26,7 @@ public class Creature {
 	// Door brain bepaalt
 	private double deltaDirection, deltaSpeed; // waarde tussen -1 en 1
 
-	Color creatureColor;
+	private Color creatureColor;
 	Ellipse2D creatureShape;
 
 	public Creature(double x, double y, Board brd, int creatureNumber) {
@@ -45,7 +45,7 @@ public class Creature {
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		// weight = fat * creatureSize;
 
-		creatureColor = new Color(0f, 1f, 0f);
+		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
 	}
@@ -161,7 +161,7 @@ public class Creature {
 
 		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize, creatureSize);
 
-		g2d.setColor(creatureColor);
+		g2d.setColor(getCreatureColor());
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);
 		g2d.draw(creatureShape);
@@ -213,5 +213,13 @@ public class Creature {
 
 	public void setYPos(double yPos) {
 		this.yPos = yPos;
+	}
+
+	public Color getCreatureColor() {
+		return creatureColor;
+	}
+
+	public void setCreatureColor(Color creatureColor) {
+		this.creatureColor = creatureColor;
 	}
 }

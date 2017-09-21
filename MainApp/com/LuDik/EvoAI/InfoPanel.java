@@ -28,6 +28,7 @@ public class InfoPanel extends JPanel{
 	private static final int IPWidth = 400;
 
 	private JLabel stepLbl;
+	private JLabel timePerStepLbl;
 	private JLabel crtrAmountLbl;
 	private JLabel mousePosLbl;
 	private JLabel selectedCreatureLbl;
@@ -47,11 +48,13 @@ public class InfoPanel extends JPanel{
 
 		
 		stepLbl = new JLabel("Step: " + 0);
+		timePerStepLbl = new JLabel("TimePerStep: " + 0);
 		crtrAmountLbl = new JLabel("Amount of creatures: " + 0);
 		mousePosLbl = new JLabel("mousePosX" + 0 + "mousePosY" + 0);
 		selectedCreatureLbl = new JLabel("selectedCreature: " + 0 );
 		
 		add(stepLbl);
+		add(timePerStepLbl);
 		add(crtrAmountLbl);
 		add(mousePosLbl);
 		add(selectedCreatureLbl);
@@ -80,6 +83,7 @@ public class InfoPanel extends JPanel{
 		
 		if (timeKeeper != null) {
 			stepLbl.setText("Step: " + timeKeeper.getStep());
+			timePerStepLbl.setText("NanoTimePerStep: " + timeKeeper.getTimeDiffNano());
 		}
 		
 		if (board != null && board.getCreatures() != null) {

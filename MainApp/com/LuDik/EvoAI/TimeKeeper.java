@@ -6,9 +6,11 @@ public class TimeKeeper implements Runnable {
 	private Thread timeKeeper;
 	private long step = 0;
 	private long delay = 25;
+	private long timeDiff;
 	private InfoPanel infoPanel;
 	
 	private boolean paused;
+	private long timeDiffNano;
 
 	public TimeKeeper(Board brd) {
 		
@@ -32,7 +34,7 @@ public class TimeKeeper implements Runnable {
 	@Override
 	public void run() {
 
-		long beforeTime, timeDiff, sleep;
+		long beforeTime, sleep;
 
 		while (true) {
 			
@@ -40,6 +42,7 @@ public class TimeKeeper implements Runnable {
 			
 			makeStep();
 
+			timeDiffNano = System.nanoTime() - beforeTime;
 			timeDiff = (long) (System.nanoTime() - beforeTime) / (long) Math.pow(10, 6) ;
 			sleep = delay - timeDiff;
 			
@@ -95,5 +98,15 @@ public class TimeKeeper implements Runnable {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
+
+	public long getTimeDiff() {
+		return timeDiff;
+	}
+
+	public long getTimeDiffNano() {
+		return timeDiffNano;
+	}
+
+	
 
 }

@@ -34,6 +34,8 @@ public class CameraPanel extends JPanel {
 	private AffineTransform saveXform;
 	private AffineTransform scaleT;
 	private AffineTransform translateT;
+
+	private Creature selectedCreature;
 		
 	private static final double SCROLL_SPEED = 20;
 	private static final double ZOOM_SPEED_IN = 1.1;
@@ -125,7 +127,14 @@ public class CameraPanel extends JPanel {
 			mainFrame.getInfoPanel().updateMousePos(x, y);
 			for (Creature crtr : creatures) {
 				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
-					mainFrame.getInfoPanel().setSelectedCreature(crtr);
+					
+					if (selectedCreature != null) {
+						selectedCreature.setCreatureColor(Color.green);
+					}
+					selectedCreature = crtr;
+					
+					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
+					selectedCreature.setCreatureColor(Color.blue);
 					break;
 				}
 			}
