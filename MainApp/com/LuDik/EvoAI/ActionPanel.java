@@ -26,9 +26,12 @@ public class ActionPanel extends JPanel {
 	private static final int APWidth = 400;
 
 	private Button startBoardBtn;
+	private Button pauseBtn;
 	private TextField boardTileSizeTF;
 	private TextField boardMapSizeInTilesTF;
 	private TextField smoothnessTF;
+
+	private boolean paused;
 
 	public ActionPanel(EvoAI parent) {
 		initActionPanel(parent);
@@ -41,6 +44,7 @@ public class ActionPanel extends JPanel {
 		setPreferredSize(new Dimension(APWidth, APHeight));
 
 		mainFrame = parent;
+		paused = false;
 
 		boardTileSizeTF = new TextField("" + Configuration.DEFAULT_TILE_SIZE);
 		add(boardTileSizeTF);
@@ -53,6 +57,12 @@ public class ActionPanel extends JPanel {
 
 		startBoardBtn = new Button("Start board");
 		add(startBoardBtn);
+
+		pauseBtn = new Button("Paused: " + paused);
+		pauseBtn.setEnabled(false);
+		add(pauseBtn);
+		
+		
 
 		startBoardBtn.addActionListener(new ActionListener() {
 
@@ -96,11 +106,34 @@ public class ActionPanel extends JPanel {
 				board.spawnCreatures();
 				mainFrame.getCameraPanel().update();
 				
-				timeKeeper = board.getTimeKeeper();
-				
+				timeKeeper = board.getTimeKeeper();				
 				timeKeeper.start();
 				
+				pauseBtn.setEnabled(true);
 
+
+			};
+		});
+		
+		pauseBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				paused = !paused;
+				
+				synchronized(timeKeeper) {
+					timeKeeper.setPaused(paused);
+				}
+				
+				if(!paused) {
+					synchronized(timeKeeper) {
+						timeKeeper.notify();
+					}
+				}
+				
+				pauseBtn.setLabel("Paused: " + paused);
+				
+				
 			};
 		});
 	}

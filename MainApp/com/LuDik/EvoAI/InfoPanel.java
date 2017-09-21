@@ -82,7 +82,7 @@ public class InfoPanel extends JPanel{
 			stepLbl.setText("Step: " + timeKeeper.getStep());
 		}
 		
-		if (board != null) {
+		if (board != null && board.getCreatures() != null) {
 			crtrAmountLbl.setText("Amount of creatures: " + board.getCreatures().size());
 		}
 		
