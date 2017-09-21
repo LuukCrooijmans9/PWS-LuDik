@@ -49,6 +49,8 @@ public class CameraPanel extends JPanel {
 		setFocusable(true);
 		addKeyListener(new KeyInputHandler());
 		addMouseListener(new MouseInputHandler());
+		addMouseMotionListener(new MouseInputHandler());
+		addMouseWheelListener(new MouseInputHandler());
 		
 	}
 
@@ -138,8 +140,14 @@ public class CameraPanel extends JPanel {
 					break;
 				}
 			}
-//			System.out.println("mousepressed");
+			System.out.println("mousepressed");
 		}
+		
+		 @Override
+		    public void mouseDragged(MouseEvent e) {
+		        System.out.println("mouseDragged");
+		            
+		    }
 		
 		@Override
 		public void mouseEntered(MouseEvent e) {
@@ -147,9 +155,15 @@ public class CameraPanel extends JPanel {
 			System.out.println("mouseEntered");
 		}
 		
-		
-		public void mouseDown(MouseWheelEvent e) {
-			System.out.println("mouseScrolled");			
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			System.out.println("mouseScrolled");	
+			if(e.getWheelRotation() < 0) {
+				zoomCamera(true);
+			} else {
+				zoomCamera(false);
+			}
+			
 			repaint();
 		}
 	}
