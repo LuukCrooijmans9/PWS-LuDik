@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -28,6 +29,7 @@ public class CameraPanel extends JPanel {
 	private double cameraX = (CPWIDTH/2);
 	private double cameraY = (CPWIDTH/2);
 	private double scale = 1;
+	
 	
 	private AffineTransform saveXform;
 	private AffineTransform scaleT;
@@ -112,10 +114,22 @@ public class CameraPanel extends JPanel {
 	}
 	
 	class MouseInputHandler extends MouseAdapter {
+		
+
+
 		@Override
 		public void mousePressed(MouseEvent e) {
-			mainFrame.getInfoPanel().updateMousePos(e.getX(), e.getY());
-			System.out.println("mousepressed");
+			int x = e.getX(), y = e.getY();
+			ArrayList<Creature> creatures = mainFrame.getBoard().getCreatures();
+			
+			mainFrame.getInfoPanel().updateMousePos(x, y);
+			for (Creature crtr : creatures) {
+				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
+					mainFrame.getInfoPanel().setSelectedCreature(crtr);
+					break;
+				}
+			}
+//			System.out.println("mousepressed");
 		}
 		
 		@Override

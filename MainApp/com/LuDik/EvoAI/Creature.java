@@ -35,8 +35,8 @@ public class Creature {
 
 		creatureID = creatureNumber;
 
-		xPos = x;
-		yPos = y;
+		setXPos(x);
+		setYPos(y);
 
 		direction = Math.random() * 360;
 
@@ -46,7 +46,7 @@ public class Creature {
 		// weight = fat * creatureSize;
 
 		creatureColor = new Color(0f, 1f, 0f);
-		creatureShape = new Ellipse2D.Double(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize,
+		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
 	}
 
@@ -59,8 +59,8 @@ public class Creature {
 	public void prepareCreature() {
 
 		// huidige tile waar die staat
-		xTile = (int) Math.round((xPos / Configuration.tileSize) - 0.5d);
-		yTile = (int) Math.round((yPos / Configuration.tileSize) - 0.5d);
+		xTile = (int) Math.round((getXPos() / Configuration.tileSize) - 0.5d);
+		yTile = (int) Math.round((getYPos() / Configuration.tileSize) - 0.5d);
 
 	}
 
@@ -124,14 +124,14 @@ public class Creature {
 		deltaYPos = Math.cos(Math.toRadians(direction)) * speed;
 
 		// Kijkt of de move binnen het veld blijft en voert uit.
-		if (xPos + deltaXPos - (creatureSize / 2) > 0 && xPos + deltaXPos
+		if (getXPos() + deltaXPos - (creatureSize / 2) > 0 && getXPos() + deltaXPos
 				+ (creatureSize / 2) < Configuration.DEFAULT_MAP_SIZE_IN_TILES * Configuration.DEFAULT_TILE_SIZE) {
-			xPos = xPos + deltaXPos;
+			setXPos(getXPos() + deltaXPos);
 		}
 
-		if (yPos + deltaYPos - (creatureSize / 2) > 0 && yPos + deltaYPos
+		if (getYPos() + deltaYPos - (creatureSize / 2) > 0 && getYPos() + deltaYPos
 				+ (creatureSize / 2) < Configuration.DEFAULT_MAP_SIZE_IN_TILES * Configuration.DEFAULT_TILE_SIZE) {
-			yPos = yPos + deltaYPos;
+			setYPos(getYPos() + deltaYPos);
 		}
 
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
@@ -159,7 +159,7 @@ public class Creature {
 
 	void draw(Graphics2D g2d) {
 
-		creatureShape.setFrame(xPos - (creatureSize / 2), yPos - (creatureSize / 2), creatureSize, creatureSize);
+		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize, creatureSize);
 
 		g2d.setColor(creatureColor);
 		g2d.fill(creatureShape);
@@ -171,7 +171,7 @@ public class Creature {
 		forwardX = Math.sin(radianDirection) * creatureSize;
 		forwardY = Math.cos(radianDirection) * creatureSize;
 
-		g2d.draw(new Line2D.Double(xPos, yPos, xPos + forwardX, yPos + forwardY));
+		g2d.draw(new Line2D.Double(getXPos(), getYPos(), getXPos() + forwardX, getYPos() + forwardY));
 
 	}
 
@@ -197,5 +197,21 @@ public class Creature {
 
 	public void setDead(boolean isDead) {
 		this.isDead = isDead;
+	}
+
+	public double getXPos() {
+		return xPos;
+	}
+
+	public void setXPos(double xPos) {
+		this.xPos = xPos;
+	}
+
+	public double getYPos() {
+		return yPos;
+	}
+
+	public void setYPos(double yPos) {
+		this.yPos = yPos;
 	}
 }
