@@ -8,7 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ActionPanel extends JPanel {
 
@@ -27,6 +31,10 @@ public class ActionPanel extends JPanel {
 
 	private Button startBoardBtn;
 	private Button pauseBtn;
+	
+	private JSlider delaySlider;
+	private JLabel delaySliderLbl;
+	
 	private TextField boardTileSizeTF;
 	private TextField boardMapSizeInTilesTF;
 	private TextField smoothnessTF;
@@ -47,19 +55,31 @@ public class ActionPanel extends JPanel {
 		paused = false;
 
 		boardTileSizeTF = new TextField("" + Configuration.DEFAULT_TILE_SIZE);
-		add(boardTileSizeTF);
 
 		boardMapSizeInTilesTF = new TextField("" + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
-		add(boardMapSizeInTilesTF);
 		
 		smoothnessTF = new TextField("" + Configuration.DEFAULT_SMOOTHNESS);
-		add(smoothnessTF);
+		
+		delaySlider = new JSlider(0, 200, 25);
+		delaySlider.setPaintTicks(true);
+		delaySlider.setPaintLabels(true);
+		delaySlider.setMajorTickSpacing(10);		
+		
+		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms");
 
 		startBoardBtn = new Button("Start board");
-		add(startBoardBtn);
 
 		pauseBtn = new Button("Paused: " + paused);
 		pauseBtn.setEnabled(false);
+		
+		add(boardTileSizeTF);
+		add(boardMapSizeInTilesTF);
+		add(smoothnessTF);
+		
+		add(delaySliderLbl);
+		add(delaySlider);
+		
+		add(startBoardBtn);
 		add(pauseBtn);
 		
 		
@@ -135,6 +155,19 @@ public class ActionPanel extends JPanel {
 				
 				
 			};
+		});
+		
+		delaySlider.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider source = (JSlider)e.getSource();
+			    if (source.getValueIsAdjusting()) {
+			    	timeKeeper.setDelay((int) source.getValue());
+			    	delaySliderLbl.setText("Delay: " + delaySlider.getValue() + " ms");
+			    }
+			}
+			
 		});
 	}
 
