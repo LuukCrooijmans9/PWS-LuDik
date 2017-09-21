@@ -41,6 +41,8 @@ public class CameraPanel extends JPanel {
 	private static final double ZOOM_SPEED_IN = 1.1;
 	private static final double ZOOM_SPEED_OUT = 1d/1.1;
 	
+	private int x,y;
+	
 	public CameraPanel(EvoAI parent) {
 		mainFrame = parent;
 		setBackground(Color.white);
@@ -90,9 +92,9 @@ public class CameraPanel extends JPanel {
 		g2d.setTransform(saveXform);
 		
 //		debug lijnen, uncomment als je twee lijnen die door het midden van het scherm gaan wil hebben.
-//		g2d.setColor(Color.green);
-//		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
-//		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
+		g2d.setColor(Color.green);
+		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
+		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
 		
 		
 		
@@ -100,9 +102,9 @@ public class CameraPanel extends JPanel {
 		
 	}
 	
-	private void moveCamera(int amplitudeX, int amplitudeY) {
-		cameraX += amplitudeX * SCROLL_SPEED;
-		cameraY += amplitudeY * SCROLL_SPEED;
+	private void moveCamera(double amplitudeX, double amplitudeY) {
+		cameraX += amplitudeX;
+		cameraY += amplitudeY;
 	}
 	
 	private void zoomCamera(boolean zoomIn) {
@@ -123,7 +125,8 @@ public class CameraPanel extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			int x = e.getX(), y = e.getY();
+			x = e.getX();
+			y = e.getY();
 			ArrayList<Creature> creatures = mainFrame.getBoard().getCreatures();
 			
 			mainFrame.getInfoPanel().updateMousePos(x, y);
@@ -140,24 +143,33 @@ public class CameraPanel extends JPanel {
 					break;
 				}
 			}
-			System.out.println("mousepressed");
+	           System.out.println(x+ " , "+ y);
+
+//			System.out.println("mousepressed");
 		}
 		
 		 @Override
 		    public void mouseDragged(MouseEvent e) {
-		        System.out.println("mouseDragged");
-		            
+//		        System.out.println("mouseDragged");
+		           double dx = e.getX() - x;
+		           double dy = e.getY() - y;
+		           
+		           moveCamera(-dx / scale,-dy / scale);
+		           x = e.getX();
+		           y = e.getY();
+		           
+		           repaint();
 		    }
 		
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			requestFocusInWindow();
-			System.out.println("mouseEntered");
+//			System.out.println("mouseEntered");
 		}
 		
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			System.out.println("mouseScrolled");	
+//			System.out.println("mouseScrolled");	
 			if(e.getWheelRotation() < 0) {
 				zoomCamera(true);
 			} else {
@@ -177,24 +189,24 @@ public class CameraPanel extends JPanel {
 			switch (keyCode) {
 
 			case KeyEvent.VK_LEFT:
-				moveCamera(-1, 0);
+				moveCamera(-1 * SCROLL_SPEED, 0);
 				repaint();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				moveCamera(1, 0);
+				moveCamera(1 * SCROLL_SPEED, 0);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				moveCamera(0, 1);
+				moveCamera(0, 1 * SCROLL_SPEED);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_UP:
-				moveCamera(0, -1);
+				moveCamera(0, -1 * SCROLL_SPEED);
 				
 				repaint();
 				break;
