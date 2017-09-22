@@ -21,6 +21,9 @@ public class Creature {
 	private int xTile, yTile;
 	private boolean isDead = false;
 
+	private Color leftEyeColor, rightEyeColor;
+	private double eyeDeviation, eyeLength, rightEyeX, rightEyeY, leftEyeX, leftEyeY;
+
 	private Board board;
 
 	// Door brain bepaalt
@@ -40,39 +43,33 @@ public class Creature {
 
 		direction = Math.random() * 360;
 
+		eyeDeviation = 45;
+
 		age = 0;
 		fat = 10;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
+		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
 		// weight = fat * creatureSize;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
-		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
-				creatureSize);
+		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
+				creatureSize, creatureSize);
 	}
 
-	// private void born(long parentA, long parentB) {
-	//
-	// age = 0;
-	// fat = 10;
-	// }
-
-	public void prepareCreature() {
-
-		// huidige tile waar die staat
-		xTile = (int) Math.round((getXPos() / Configuration.tileSize) - 0.5d);
-		yTile = (int) Math.round((getYPos() / Configuration.tileSize) - 0.5d);
-
+	public int posToTile(double x) {
+		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
 	}
 
 	public void eat() {
-		this.prepareCreature();
+		xTile = this.posToTile(getXPos());
+		yTile = this.posToTile(getYPos());
 
-//		System.out.println("eating..");
+		// System.out.println("eating..");
 
 		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
 
 		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
-		//System.out.println("Food in mouth = " + foodInMouth);
+		// System.out.println("Food in mouth = " + foodInMouth);
 		// System.out.println("food from tile " +
 		// board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood));
 
@@ -85,18 +82,16 @@ public class Creature {
 
 		fat -= 1;
 
-//		System.out.println("Done eating");
-
-
+		// System.out.println("Done eating");
 
 	}
 
 	public void move() {
 
-//		System.out.println("Moving...");
+		// System.out.println("Moving...");
 
-		deltaSpeed = Math.random() * 2 -1;
-		deltaDirection = Math.random() * 2 -1;
+		deltaSpeed = Math.random() * 2 - 1;
+		deltaDirection = Math.random() * 2 - 1;
 
 		// rekent maxSpeed uit.
 		maxSpeed = (0.25 * creatureSize);
@@ -137,7 +132,42 @@ public class Creature {
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
 		fatBurned += speed * weight;
 
-//		System.out.println("Moved");
+		// System.out.println("Moved");
+
+	}
+
+	public void look() {
+
+		double rightRadianDirection, leftRadianDirection;
+		rightRadianDirection = Math.toRadians(direction - eyeDeviation);
+		rightEyeX = (Math.sin(rightRadianDirection) * eyeLength) + getXPos();
+		rightEyeY = (Math.cos(rightRadianDirection) * eyeLength) + getYPos();
+
+		leftRadianDirection = Math.toRadians(direction + eyeDeviation);
+		leftEyeX = (Math.sin(leftRadianDirection) * eyeLength) + getXPos();
+		leftEyeY = (Math.cos(leftRadianDirection) * eyeLength) + getYPos();
+
+		int xRightEyeTile = posToTile(rightEyeX);
+		int yRightEyeTile = posToTile(rightEyeY);
+		int xLeftEyeTile = posToTile(leftEyeX);
+		int yLeftEyeTile = posToTile(leftEyeY);
+
+		
+
+		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
+				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
+
+			rightEyeColor = Color.WHITE;
+
+		} else if (xLeftEyeTile < 0 || yLeftEyeTile < 0 || xLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
+				|| yLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
+
+			leftEyeColor = Color.WHITE;
+
+		} else {
+			rightEyeColor = board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor();
+			leftEyeColor = board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor();
+		}
 
 	}
 
@@ -149,7 +179,7 @@ public class Creature {
 
 		if (fat <= 0) {
 
-			isDead = true;
+			// isDead = true;
 
 		} else {
 			age += 0.01;
@@ -159,7 +189,8 @@ public class Creature {
 
 	void draw(Graphics2D g2d) {
 
-		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize, creatureSize);
+		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
+				creatureSize);
 
 		g2d.setColor(getCreatureColor());
 		g2d.fill(creatureShape);
@@ -173,6 +204,10 @@ public class Creature {
 
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), getXPos() + forwardX, getYPos() + forwardY));
 
+		g2d.setColor(Color.RED);
+		g2d.draw(new Line2D.Double(getXPos(), getYPos(), rightEyeX, rightEyeY));
+		g2d.setColor(Color.BLUE);
+		g2d.draw(new Line2D.Double(getXPos(), getYPos(), leftEyeX, leftEyeY));
 	}
 
 	public Ellipse2D getCreatureShape() {
