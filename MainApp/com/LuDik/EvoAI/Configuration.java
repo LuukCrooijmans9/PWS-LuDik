@@ -17,7 +17,7 @@ public class Configuration {
 	
 	
 	//Max waarde van creature
-	public static double DEFAULT_CREATURE_SIZE = 10, DEFAULT_MAX_FOOD_IN_MOUTH = 5, DEFAULT_MAX_WATER_IN_MOUTH = 5;
+	public static double DEFAULT_CREATURE_SIZE = 10, DEFAULT_MAX_FOOD_IN_MOUTH = 5, DEFAULT_MAX_WATER_IN_MOUTH = 5, DEFAULT_EYE_LENGTH = 10;
 	
 	
 	

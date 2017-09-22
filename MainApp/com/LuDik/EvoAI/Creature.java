@@ -136,13 +136,13 @@ public class Creature {
 
 	}
 
-	public void look(){
+	public void look() {
 
 		double rightRadianDirection, leftRadianDirection;
 		rightRadianDirection = Math.toRadians(direction - eyeDeviation);
 		rightEyeX = (Math.sin(rightRadianDirection) * eyeLength) + getXPos();
 		rightEyeY = (Math.cos(rightRadianDirection) * eyeLength) + getYPos();
-		
+
 		leftRadianDirection = Math.toRadians(direction + eyeDeviation);
 		leftEyeX = (Math.sin(leftRadianDirection) * eyeLength) + getXPos();
 		leftEyeY = (Math.cos(leftRadianDirection) * eyeLength) + getYPos();
@@ -152,28 +152,34 @@ public class Creature {
 		int xLeftEyeTile = posToTile(leftEyeX);
 		int yLeftEyeTile = posToTile(leftEyeY);
 
-		System.out.println(xRightEyeTile + ", " + yRightEyeTile);
 		
-	
 
-		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xLeftEyeTile < 0 || yLeftEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES ) {
-			this.setCreatureColor(Color.WHITE);
+		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
+				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
+
+			rightEyeColor = Color.WHITE;
+
+		} else if (xLeftEyeTile < 0 || yLeftEyeTile < 0 || xLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
+				|| yLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
+
+			leftEyeColor = Color.WHITE;
+
 		} else {
-			System.out.println(rightEyeColor = board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor());
-			System.out.println(leftEyeColor = board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor());
+			rightEyeColor = board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor();
+			leftEyeColor = board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor();
 		}
-		
+
 	}
 
 	public void processTurn() {
 
 		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
 								// creatures sneller door een kans te geven aan nieuwe creature
-		fatBurned = 0;		
+		fatBurned = 0;
 
 		if (fat <= 0) {
 
-			isDead = true;
+			// isDead = true;
 
 		} else {
 			age += 0.01;
@@ -197,9 +203,11 @@ public class Creature {
 		forwardY = Math.cos(radianDirection) * creatureSize;
 
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), getXPos() + forwardX, getYPos() + forwardY));
-		
+
 		g2d.setColor(Color.RED);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), rightEyeX, rightEyeY));
+		g2d.setColor(Color.BLUE);
+		g2d.draw(new Line2D.Double(getXPos(), getYPos(), leftEyeX, leftEyeY));
 	}
 
 	public Ellipse2D getCreatureShape() {
