@@ -109,6 +109,7 @@ public class Board {
 		for (Creature crtr : creatures) {
 			crtr.move();
 			crtr.eat();
+			crtr.look();
 			crtr.processTurn();
 			if(crtr.isDead()) {
 				tempList.add(crtr);

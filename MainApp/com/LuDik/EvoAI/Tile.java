@@ -5,6 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
 public abstract class Tile {
+
+
+
 	int upperLeftX, upperLeftY;
 	static int tileSize = Configuration.tileSize;
 	boolean isWaterTile;
@@ -40,5 +43,13 @@ public abstract class Tile {
 
 	public void calculateNextFood() {
 		
+	}
+	
+	public Color getTileColor() {
+		return tileColor;
+	}
+
+	public void setTileColor(Color tileColor) {
+		this.tileColor = tileColor;
 	}
 }
