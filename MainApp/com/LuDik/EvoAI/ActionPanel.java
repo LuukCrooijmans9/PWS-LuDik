@@ -31,6 +31,7 @@ public class ActionPanel extends JPanel {
 
 	private Button startBoardBtn;
 	private Button pauseBtn;
+	private Button followCrtrBtn;
 	
 	private JSlider delaySlider;
 	private JLabel delaySliderLbl;
@@ -40,6 +41,9 @@ public class ActionPanel extends JPanel {
 	private TextField smoothnessTF;
 
 	private boolean paused;
+	private boolean followCrtr;
+
+
 
 	public ActionPanel(EvoAI parent) {
 		initActionPanel(parent);
@@ -71,6 +75,10 @@ public class ActionPanel extends JPanel {
 
 		pauseBtn = new Button("Paused: " + paused);
 		pauseBtn.setEnabled(false);
+
+		followCrtrBtn = new Button("followCreature: " + followCrtr);
+		followCrtrBtn.setEnabled(false);
+		followCrtr = false;
 		
 		add(boardTileSizeTF);
 		add(boardMapSizeInTilesTF);
@@ -81,6 +89,7 @@ public class ActionPanel extends JPanel {
 		
 		add(startBoardBtn);
 		add(pauseBtn);
+		add(followCrtrBtn);
 		
 		
 
@@ -89,6 +98,7 @@ public class ActionPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				infoPanel = mainFrame.getInfoPanel();
+				cameraPanel = mainFrame.getCameraPanel();
 				
 				if (timeKeeper != null) {
 					timeKeeper = null;
@@ -121,10 +131,8 @@ public class ActionPanel extends JPanel {
 				
 				infoPanel.setBoard(board);
 				
-				mainFrame.getCameraPanel().update();
-				
 				board.spawnCreatures();
-				mainFrame.getCameraPanel().update();
+				cameraPanel.update();
 				
 				timeKeeper = board.getTimeKeeper();				
 				timeKeeper.start();
@@ -157,6 +165,20 @@ public class ActionPanel extends JPanel {
 			};
 		});
 		
+		followCrtrBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				followCrtr = !followCrtr;
+				
+				cameraPanel.setFollowSelectedCreature(followCrtr);
+				
+				followCrtrBtn.setLabel("followCreature: " + followCrtr);
+				
+				
+			};
+		});
+		
 		delaySlider.addChangeListener(new ChangeListener() {
 
 			@Override
@@ -178,5 +200,9 @@ public class ActionPanel extends JPanel {
 
 	public Board getBoard() {
 		return board;
+	}
+
+	public void setFollowCrtrBtnEnabled(boolean bool) {
+		followCrtrBtn.setEnabled(bool);
 	}
 }

@@ -30,6 +30,7 @@ public class CameraPanel extends JPanel {
 	private double cameraY = (CPWIDTH/2);
 	private double scale = 1;
 	
+	private boolean followSelectedCreature;
 	
 	private AffineTransform saveXform;
 	private AffineTransform scaleT;
@@ -59,10 +60,15 @@ public class CameraPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
+		
+		if(isFollowSelectedCreature()) {
+			setCameraOnCreature(selectedCreature);
+		}
+		
 		doDrawing(g);
 
 	}
+
 
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -119,6 +125,11 @@ public class CameraPanel extends JPanel {
 		scale *= currentScale;		
 	}
 	
+	private void setCameraOnCreature(Creature crtr) {
+		cameraX = crtr.getXPos();
+		cameraY = crtr.getYPos();
+	}
+	
 	class MouseInputHandler extends MouseAdapter {
 		
 
@@ -136,6 +147,9 @@ public class CameraPanel extends JPanel {
 					if (selectedCreature != null) {
 						selectedCreature.setCreatureColor(Color.green);
 					}
+					
+					mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
+					
 					selectedCreature = crtr;
 					
 					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
@@ -143,7 +157,7 @@ public class CameraPanel extends JPanel {
 					break;
 				}
 			}
-	           System.out.println(x+ " , "+ y);
+//	           System.out.println(x+ " , "+ y);
 
 //			System.out.println("mousepressed");
 		}
@@ -236,6 +250,14 @@ public class CameraPanel extends JPanel {
 
 	public static int getCPHEIGHT() {
 		return CPHEIGHT;
+	}
+
+	public boolean isFollowSelectedCreature() {
+		return followSelectedCreature;
+	}
+
+	public void setFollowSelectedCreature(boolean followSelectedCreature) {
+		this.followSelectedCreature = followSelectedCreature;
 	}
 
 }
