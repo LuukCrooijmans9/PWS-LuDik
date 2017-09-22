@@ -2,6 +2,7 @@ package com.LuDik.EvoAI;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class Map {
 
@@ -9,6 +10,7 @@ public class Map {
 	private int tileSize;
 	private Tile[][] tiles;
 	private double smoothness;
+	private ArrayList<LandTile> landTiles;
 
 	public Map(int tSize, int mapSizeInTiles) {
 
@@ -18,6 +20,7 @@ public class Map {
 		mapSize = mapSizeInTiles;
 		Configuration.mapSizeInTiles = mapSizeInTiles;
 		tiles = new Tile[mapSize][mapSize];
+		setLandTiles(new ArrayList<LandTile>());
 
 		double randomValue;
 
@@ -29,6 +32,7 @@ public class Map {
 
 				if (randomValue >= 0) {
 					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) randomValue);
+					landTiles.add((LandTile) tiles[i][k]);
 				} else {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
 				}
@@ -57,6 +61,8 @@ public class Map {
 		double perlinSeededValue;
 		double perlin;
 				
+		setLandTiles(new ArrayList<LandTile>());
+		
 		for (int i = 0; i < mapSize; i++) {
 
 			for (int k = 0; k < mapSize; k++) {
@@ -67,6 +73,8 @@ public class Map {
 				
 				if (perlinSeededValue >= 0) {
 					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) perlinSeededValue);
+					landTiles.add((LandTile) tiles[i][k]);
+					
 				} else {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
 				}
@@ -94,6 +102,8 @@ public class Map {
 			double perlinSeededValue;
 			double perlin;
 			
+			setLandTiles(new ArrayList<LandTile>());
+			
 			for (int i = 0; i < mapSize; i++) {
 				
 				for (int k = 0; k < mapSize; k++) {
@@ -104,6 +114,7 @@ public class Map {
 					
 					if (perlinSeededValue >= 0) {
 						tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) perlinSeededValue);
+						landTiles.add((LandTile) tiles[i][k]);
 					} else {
 						tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
 					}
@@ -128,6 +139,14 @@ public class Map {
 				tile.draw(g2d);
 			}
 		}
+	}
+
+	public ArrayList<LandTile> getLandTiles() {
+		return landTiles;
+	}
+
+	public void setLandTiles(ArrayList<LandTile> landTiles) {
+		this.landTiles = landTiles;
 	}
 
 }
