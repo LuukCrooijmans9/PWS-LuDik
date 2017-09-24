@@ -83,9 +83,9 @@ public class ActionPanel extends JPanel {
 		followCrtrBtn.setEnabled(false);
 		followCrtr = false;
 		
-		controlCrtrBtn = new Button("controlCreature: " + controlCrtr);
+		controlCrtrBtn = new Button("controlCreature: " + isControlCrtr());
 		controlCrtrBtn.setEnabled(false);
-		controlCrtr = false;
+		setControlCrtr(false);
 		
 		add(boardTileSizeTF);
 		add(boardMapSizeInTilesTF);
@@ -191,11 +191,11 @@ public class ActionPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				controlCrtr = !controlCrtr;
+				setControlCrtr(!isControlCrtr());
 				
-				cameraPanel.setControlCrtr(controlCrtr);
+				cameraPanel.setControlCrtr(isControlCrtr());
 				
-				controlCrtrBtn.setLabel("controlCreature: " + controlCrtr);
+				controlCrtrBtn.setLabel("controlCreature: " + isControlCrtr());
 				
 				
 			};
@@ -230,5 +230,14 @@ public class ActionPanel extends JPanel {
 	
 	public void setControlCrtrBtnEnabled(boolean bool) {
 		controlCrtrBtn.setEnabled(bool);
+	}
+
+	public boolean isControlCrtr() {
+		return controlCrtr;
+	}
+
+	public void setControlCrtr(boolean controlCrtr) {
+		this.controlCrtr = controlCrtr;
+		controlCrtrBtn.setLabel("controlCreature: " + isControlCrtr());
 	}
 }

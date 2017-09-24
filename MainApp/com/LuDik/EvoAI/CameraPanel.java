@@ -153,6 +153,8 @@ public class CameraPanel extends JPanel {
 					
 					if (selectedCreature != null) {
 						selectedCreature.setSelected(false);
+						selectedCreature.setControlled(false);
+						mainFrame.getActionPanel().setControlCrtr(false);
 					} else {
 						mainFrame.getActionPanel().setControlCrtrBtnEnabled(true);
 						mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
