@@ -103,7 +103,7 @@ public class CameraPanel extends JPanel {
 		g2d.setColor(Color.green);
 		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
 		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
-		
+		 
 		
 		
 		g2d.dispose();

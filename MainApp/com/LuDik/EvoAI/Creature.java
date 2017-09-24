@@ -62,13 +62,13 @@ public class Creature {
 		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
 	}
 
-	public void eat() {
+	public void eat(double amount) {
 		xTile = this.posToTile(getXPos());
 		yTile = this.posToTile(getYPos());
 
 		// System.out.println("eating..");
 
-		desiredFood = 1d; // later door brain bepaalt 1 is max 0 is min
+		desiredFood = amount;
 
 		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
 		// System.out.println("Food in mouth = " + foodInMouth);
@@ -88,12 +88,12 @@ public class Creature {
 
 	}
 
-	public void move() {
+	public void move(double deltaSpeed,double deltaDirection) {
 
 		// System.out.println("Moving...");
 
-		deltaSpeed = Math.random() * 2 - 1;
-		deltaDirection = Math.random() * 2 - 1;
+		//this.deltaSpeed = Math.random() * 2 - 1;
+		//this.deltaDirection = Math.random() * 2 - 1;
 
 		// rekent maxSpeed uit.
 		maxSpeed = (0.25 * creatureSize);
