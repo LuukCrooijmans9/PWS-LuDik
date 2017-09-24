@@ -32,6 +32,7 @@ public class ActionPanel extends JPanel {
 	private Button startBoardBtn;
 	private Button pauseBtn;
 	private Button followCrtrBtn;
+	private Button controlCrtrBtn;
 	
 	private JSlider delaySlider;
 	private JLabel delaySliderLbl;
@@ -42,6 +43,8 @@ public class ActionPanel extends JPanel {
 
 	private boolean paused;
 	private boolean followCrtr;
+	private boolean controlCrtr;
+
 
 
 
@@ -80,6 +83,10 @@ public class ActionPanel extends JPanel {
 		followCrtrBtn.setEnabled(false);
 		followCrtr = false;
 		
+		controlCrtrBtn = new Button("controlCreature: " + controlCrtr);
+		controlCrtrBtn.setEnabled(false);
+		controlCrtr = false;
+		
 		add(boardTileSizeTF);
 		add(boardMapSizeInTilesTF);
 		add(smoothnessTF);
@@ -90,6 +97,7 @@ public class ActionPanel extends JPanel {
 		add(startBoardBtn);
 		add(pauseBtn);
 		add(followCrtrBtn);
+		add(controlCrtrBtn);
 		
 		
 
@@ -174,6 +182,20 @@ public class ActionPanel extends JPanel {
 				cameraPanel.setFollowSelectedCreature(followCrtr);
 				
 				followCrtrBtn.setLabel("followCreature: " + followCrtr);
+				
+				
+			};
+		});
+		
+		controlCrtrBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				controlCrtr = !controlCrtr;
+				
+				cameraPanel.setControlCrtr(controlCrtr);
+				
+				controlCrtrBtn.setLabel("controlCreature: " + controlCrtr);
 				
 				
 			};

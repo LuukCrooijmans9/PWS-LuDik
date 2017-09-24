@@ -31,6 +31,7 @@ public class CameraPanel extends JPanel {
 	private double scale = 1;
 	
 	private boolean followSelectedCreature;
+	private boolean controlCrtr;
 	
 	private AffineTransform saveXform;
 	private AffineTransform scaleT;
@@ -43,6 +44,7 @@ public class CameraPanel extends JPanel {
 	private static final double ZOOM_SPEED_OUT = 1d/1.1;
 	
 	private int x,y;
+
 	
 	public CameraPanel(EvoAI parent) {
 		mainFrame = parent;
@@ -145,7 +147,7 @@ public class CameraPanel extends JPanel {
 				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
 					
 					if (selectedCreature != null) {
-						selectedCreature.setCreatureColor(Color.green);
+						selectedCreature.setSelected(false);
 					}
 					
 					mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
@@ -153,7 +155,8 @@ public class CameraPanel extends JPanel {
 					selectedCreature = crtr;
 					
 					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
-					selectedCreature.setCreatureColor(Color.blue);
+//					selectedCreature.setCreatureColor(Color.blue);
+					selectedCreature.setSelected(true);
 					break;
 				}
 			}
@@ -258,6 +261,14 @@ public class CameraPanel extends JPanel {
 
 	public void setFollowSelectedCreature(boolean followSelectedCreature) {
 		this.followSelectedCreature = followSelectedCreature;
+	}
+
+	public void setControlCrtr(boolean controlCrtr) {
+		this.controlCrtr= controlCrtr;
+	}
+	
+	public boolean isControlCrtr() {
+		return controlCrtr;
 	}
 
 }

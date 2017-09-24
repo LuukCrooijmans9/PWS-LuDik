@@ -31,6 +31,8 @@ public class Creature {
 
 	private Color creatureColor;
 	Ellipse2D creatureShape;
+	
+	private boolean selected;
 
 	public Creature(double x, double y, Board brd, int creatureNumber) {
 
@@ -189,10 +191,13 @@ public class Creature {
 
 	void draw(Graphics2D g2d) {
 
-		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
+		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
+				creatureSize,
 				creatureSize);
-
-		g2d.setColor(getCreatureColor());
+		
+		if (!selected) g2d.setColor(getCreatureColor());
+		else g2d.setColor(Color.blue);
+		
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);
 		g2d.draw(creatureShape);
@@ -256,5 +261,14 @@ public class Creature {
 
 	public void setCreatureColor(Color creatureColor) {
 		this.creatureColor = creatureColor;
+	}
+
+
+	public boolean selected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }
