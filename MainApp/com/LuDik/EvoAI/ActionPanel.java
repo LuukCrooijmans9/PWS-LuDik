@@ -227,4 +227,8 @@ public class ActionPanel extends JPanel {
 	public void setFollowCrtrBtnEnabled(boolean bool) {
 		followCrtrBtn.setEnabled(bool);
 	}
+	
+	public void setControlCrtrBtnEnabled(boolean bool) {
+		controlCrtrBtn.setEnabled(bool);
+	}
 }

@@ -148,10 +148,10 @@ public class CameraPanel extends JPanel {
 					
 					if (selectedCreature != null) {
 						selectedCreature.setSelected(false);
+					} else {
+						mainFrame.getActionPanel().setControlCrtrBtnEnabled(true);
+						mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
 					}
-					
-					mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
-					
 					selectedCreature = crtr;
 					
 					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
@@ -206,24 +206,25 @@ public class CameraPanel extends JPanel {
 			switch (keyCode) {
 
 			case KeyEvent.VK_LEFT:
-				moveCamera(-1 * SCROLL_SPEED, 0);
+				
+				
 				repaint();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				moveCamera(1 * SCROLL_SPEED, 0);
+				if (controlCrtr) 
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				moveCamera(0, 1 * SCROLL_SPEED);
+				
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_UP:
-				moveCamera(0, -1 * SCROLL_SPEED);
+				
 				
 				repaint();
 				break;
@@ -264,7 +265,8 @@ public class CameraPanel extends JPanel {
 	}
 
 	public void setControlCrtr(boolean controlCrtr) {
-		this.controlCrtr= controlCrtr;
+		this.controlCrtr = controlCrtr;
+		selectedCreature.setControlled(controlCrtr);
 	}
 	
 	public boolean isControlCrtr() {

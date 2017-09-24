@@ -53,8 +53,8 @@ public class Board {
 
 		landArea = new Area();
 
-//		System.out.println(map.getLandTiles());
-		
+		// System.out.println(map.getLandTiles());
+
 		for (LandTile landTile : map.getLandTiles()) {
 
 			if (landTile.getTileRect() != null) {
@@ -103,18 +103,22 @@ public class Board {
 
 		}
 	}
-	
-	
-	
+
 	public void updateStep() {
 
 		for (Creature crtr : creatures) {
-			crtr.move(Math.random() * 2 - 1,Math.random() * 2 - 1);
-			crtr.eat(Math.random());
-			crtr.look();
-			crtr.processTurn();
-			if (crtr.isDead()) {
-				tempList.add(crtr);
+
+			if (crtr.isControlled()) {
+				
+			} else {
+				crtr.move(Math.random() * 2 - 1, Math.random() * 2 - 1);
+				crtr.eat(Math.random());
+			}
+				crtr.look();
+				crtr.processTurn();
+				if (crtr.isDead()) {
+					tempList.add(crtr);
+				
 			}
 		}
 

@@ -33,6 +33,7 @@ public class Creature {
 	Ellipse2D creatureShape;
 	
 	private boolean selected;
+	private boolean controlled;
 
 	public Creature(double x, double y, Board brd, int creatureNumber) {
 
@@ -270,5 +271,13 @@ public class Creature {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public boolean isControlled() {
+		return controlled;
+	}
+
+	public void setControlled(boolean controlled) {
+		this.controlled = controlled;
 	}
 }
