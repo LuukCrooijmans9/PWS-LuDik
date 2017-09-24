@@ -109,8 +109,8 @@ public class Board {
 	public void updateStep() {
 
 		for (Creature crtr : creatures) {
-			crtr.move();
-			crtr.eat();
+			crtr.move(Math.random() * 2 - 1,Math.random() * 2 - 1);
+			crtr.eat(Math.random());
 			crtr.look();
 			crtr.processTurn();
 			if (crtr.isDead()) {
