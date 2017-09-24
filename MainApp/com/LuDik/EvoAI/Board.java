@@ -18,7 +18,7 @@ public class Board {
 	private Map map;
 	private int mapLength;
 
-	EvoAI evoAI;
+	EvoAI mainFrame;
 
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private ArrayList<Creature> creatures;
@@ -47,8 +47,8 @@ public class Board {
 	public Board(Integer tileSize, Integer mapSize, double seed, double smoothness, EvoAI eAI) {
 		eAI.setBoard(this);
 
-		evoAI = eAI;
-		infoPanel = evoAI.getInfoPanel();
+		mainFrame = eAI;
+		infoPanel = mainFrame.getInfoPanel();
 		map = new Map(tileSize, mapSize, seed, smoothness);
 
 		landArea = new Area();
@@ -109,7 +109,8 @@ public class Board {
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
-				
+				crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(), mainFrame.getCameraPanel().getRcDeltaDirection());
+				crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
 			} else {
 				crtr.move(Math.random() * 2 - 1, Math.random() * 2 - 1);
 				crtr.eat(Math.random());
@@ -134,7 +135,7 @@ public class Board {
 			}
 		}
 
-		evoAI.getCameraPanel().update();
+		mainFrame.getCameraPanel().update();
 		// System.out.println("done");
 	}
 
@@ -169,7 +170,7 @@ public class Board {
 	}
 
 	public EvoAI getEvoAI() {
-		return evoAI;
+		return mainFrame;
 	}
 
 }

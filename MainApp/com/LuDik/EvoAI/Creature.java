@@ -115,7 +115,7 @@ public class Creature {
 		// het is nu mogelijk om 180 graden draai te maken en alle snelheid te houden
 		// onrealistisch!
 		deltaDirection *= 10;
-		direction += deltaDirection;
+		direction -= deltaDirection;
 		direction %= 360;
 
 		deltaXPos = Math.sin(Math.toRadians(direction)) * speed;

@@ -43,7 +43,12 @@ public class CameraPanel extends JPanel {
 	private static final double ZOOM_SPEED_IN = 1.1;
 	private static final double ZOOM_SPEED_OUT = 1d/1.1;
 	
+	private double rcDeltaSpeed = 0;
+	private double rcDeltaDirection = 0;
+	private double rcFoodAmount = 0;
+	
 	private int x,y;
+
 
 	
 	public CameraPanel(EvoAI parent) {
@@ -206,25 +211,31 @@ public class CameraPanel extends JPanel {
 			switch (keyCode) {
 
 			case KeyEvent.VK_LEFT:
-				
+				setRcDeltaDirection(-1);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				if (controlCrtr) 
+				setRcDeltaDirection(1);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				
+				setRcDeltaSpeed(-1);
 				
 				repaint();
 				break;
 
 			case KeyEvent.VK_UP:
+				setRcDeltaSpeed(1);
 				
+				repaint();
+				break;
+
+			case KeyEvent.VK_SPACE:
+				setRcFoodAmount(1);
 				
 				repaint();
 				break;
@@ -239,6 +250,39 @@ public class CameraPanel extends JPanel {
 				zoomCamera(false);
 				
 				repaint();
+				break;
+			}
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			int keyCode = e.getKeyCode();
+
+			switch (keyCode) {
+
+			case KeyEvent.VK_LEFT:
+				setRcDeltaDirection(0);
+				
+				break;
+				
+			case KeyEvent.VK_RIGHT:
+				setRcDeltaDirection(0);
+				
+				break;
+				
+			case KeyEvent.VK_SPACE:
+				setRcFoodAmount(0);
+				
+				repaint();
+				break;
+			case KeyEvent.VK_DOWN:
+				setRcDeltaSpeed(0);
+				
+				break;
+
+			case KeyEvent.VK_UP:
+				setRcDeltaSpeed(0);
+				
 				break;
 			}
 		}
@@ -271,6 +315,30 @@ public class CameraPanel extends JPanel {
 	
 	public boolean isControlCrtr() {
 		return controlCrtr;
+	}
+
+	public double getRcDeltaDirection() {
+		return rcDeltaDirection;
+	}
+
+	public void setRcDeltaDirection(double rcDeltaDirection) {
+		this.rcDeltaDirection = rcDeltaDirection;
+	}
+
+	public double getRcDeltaSpeed() {
+		return rcDeltaSpeed;
+	}
+
+	public void setRcDeltaSpeed(double rcDeltaSpeed) {
+		this.rcDeltaSpeed = rcDeltaSpeed;
+	}
+
+	public double getRcFoodAmount() {
+		return rcFoodAmount;
+	}
+
+	public void setRcFoodAmount(double rcFoodAmount) {
+		this.rcFoodAmount = rcFoodAmount;
 	}
 
 }
