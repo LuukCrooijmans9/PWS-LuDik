@@ -3,6 +3,7 @@ package com.LuDik.EvoAI;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -16,14 +17,17 @@ import java.util.ArrayList;
 public class Board {
 
 	private Map map;
+	private ArrayList<LandTile> landTiles;
 	private int mapLength;
 
 	EvoAI mainFrame;
 
-	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private ArrayList<Creature> creatures;
 	private ArrayList<Creature> tempList;
+	
+	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
+	private Integer tileSize;
 
 	private Area landArea;
 	private Area spawnArea;
@@ -39,6 +43,8 @@ public class Board {
 
 	public Board(Integer tileSize, Integer mapSize, double seed, EvoAI evoAI) {
 		evoAI.setBoard(this);
+		
+		this.tileSize = tileSize;
 
 		map = new Map(tileSize, mapSize, seed);
 
@@ -46,16 +52,19 @@ public class Board {
 
 	public Board(Integer tileSize, Integer mapSize, double seed, double smoothness, EvoAI eAI) {
 		eAI.setBoard(this);
-
+		
+		this.tileSize = tileSize;
 		mainFrame = eAI;
 		infoPanel = mainFrame.getInfoPanel();
 		map = new Map(tileSize, mapSize, seed, smoothness);
+		
+		landTiles = map.getLandTiles();
 
 		landArea = new Area();
 
 		// System.out.println(map.getLandTiles());
 
-		for (LandTile landTile : map.getLandTiles()) {
+		for (LandTile landTile : landTiles) {
 
 			if (landTile.getTileRect() != null) {
 				landArea.add(new Area(landTile.getTileRect()));
@@ -102,6 +111,38 @@ public class Board {
 			}
 
 		}
+	}
+
+//	public void spawnCreatures() {
+//		
+//		creatures = new ArrayList<Creature>();
+//		tempList = new ArrayList<Creature>();
+//		spawnArea = landArea;
+//		
+//		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
+//		
+//		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
+//			Point2D point = spawnPoints.get(i);
+//			creatures.add(new Creature(point.getX(), point.getY(), this, i));
+//
+//		}
+//	}
+	
+	private ArrayList<Point2D> generateSpawnPoints() {
+		
+		ArrayList<Point2D> spawnPoints = new ArrayList<Point2D>();
+		
+		for (LandTile landTile : landTiles) {
+			for (int i = 0; i < tileSize/(CREATURE_SIZE + 2); i++) {
+				for (int k = 0; k < tileSize/(CREATURE_SIZE + 2); i++) {
+					spawnPoints.add(new Point2D.Double(
+							landTile.getTileRect().getX() + (i + 0.5d) * ((CREATURE_SIZE + 2d) / 2d), 
+							landTile.getTileRect().getX() + (k + 0.5d) * ((CREATURE_SIZE + 2d) / 2d)));
+				}
+			}
+		}
+		
+		return spawnPoints;
 	}
 
 	public void updateStep() {
