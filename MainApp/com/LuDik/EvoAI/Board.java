@@ -157,10 +157,8 @@ public class Board {
 				crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(), mainFrame.getCameraPanel().getRcDeltaDirection());
 				crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
 			} else {
-				crtr.move(Math.random() * 2 - 1, Math.random() * 2 - 1);
-				crtr.eat(Math.random());
+				crtr.doStep();
 			}
-				crtr.look();
 				crtr.endStep();
 				if (crtr.isDead()) {
 					tempList.add(crtr);

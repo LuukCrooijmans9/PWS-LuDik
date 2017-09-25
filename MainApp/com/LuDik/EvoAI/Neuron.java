@@ -17,7 +17,9 @@ public class Neuron {
 	double processNeuron(double[] inputs) {
 		double weightedSum = this.bias;
 		for (int i = 0; i < inputs.length; i++) {
+		
 			weightedSum += inputs[i] * weights[i];
+		
 		}
 		return Neuron.sigmoid(weightedSum);
 	}

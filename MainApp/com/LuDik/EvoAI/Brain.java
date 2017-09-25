@@ -8,28 +8,28 @@ public class Brain {
 	private Creature creature;
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
-	
-	/*inputs											outputs
-	 * 0 tot 3: RGB waarden van het linkeroog. 			0:			verandering in snelheid.
-	 * 3 tot 6: RGB waarden van het rechteroog.			1:			verandering in richting.
-	 * 6: 		snelheid van creature.					2:			hoeveel en of de creature eet.
-	 * 7: 		richting van creature. 					3:			rood waarde van lichaamskleur.
-	 * 8:		leeftijd van creature.					4:			groen waarde van lichaamskleur.
-	 * 9:		vetvooraad van creature.				5:			blauw waarde van lichaamskleur.
-	 * 10:		constante waarde 1.						6 tot 10:	te bepalen outputs.
-	 * 11>:		geheugencellen.							11>:		geheugencellen */
+
+	/*
+	 * inputs outputs 0 tot 3: RGB waarden van het linkeroog. 0: verandering in
+	 * snelheid. 3 tot 6: RGB waarden van het rechteroog. 1: verandering in
+	 * richting. 6: snelheid van creature. 2: hoeveel en of de creature eet. 7:
+	 * richting van creature. 3: rood waarde van lichaamskleur. 8: leeftijd van
+	 * creature. 4: groen waarde van lichaamskleur. 9: vetvooraad van creature. 5:
+	 * blauw waarde van lichaamskleur. 10: constante waarde 1. 6 tot 10: te bepalen
+	 * outputs. 11>: geheugencellen. 11>: geheugencellen
+	 */
 
 	Brain(int brainHeight, int brainWidth, Creature creature) {
 		this.brainHeight = brainHeight;
 		this.brainWidth = brainWidth;
-		neurons = new Neuron[brainHeight][brainWidth];
+		neurons = new Neuron[brainWidth][brainHeight];
 		this.creature = creature;
 		outputs = new double[brainHeight];
 		inputs = new double[brainHeight];
-		
-		for (int i = 0; i < this.brainHeight; i++) {
-			for (int j = 0; j < this.brainWidth; j++) {
-				neurons[i][j] = new Neuron(i);
+		rgbColor = new float[2];
+		for (int i = 0; i < this.brainWidth; i++) {
+			for (int j = 0; j < this.brainHeight; j++) {
+				neurons[i][j] = new Neuron(brainHeight);
 			}
 		}
 	}
@@ -37,13 +37,19 @@ public class Brain {
 	public void generateInputs() {
 
 		Color leftEyeColor = creature.getLeftEyeColor();
-		leftEyeColor.getRGBColorComponents(rgbColor);
-		for (int i = 0; i < rgbColor.length; i++) {
-			inputs[i] = rgbColor[i];
+		if (leftEyeColor != null) {
+			rgbColor = leftEyeColor.getRGBColorComponents(null);
+			for (int i = 0; i < rgbColor.length; i++) {
+				inputs[i] = rgbColor[i];
+			}
 		}
 
 		Color rightEyeColor = creature.getRightEyeColor();
-		rightEyeColor.getRGBColorComponents(rgbColor);
+		if (rightEyeColor != null) {
+			rgbColor = rightEyeColor.getRGBColorComponents(null);
+		}
+		// Color rightEyeColor = creature.getRightEyeColor();
+		// rightEyeColor.getRGBColorComponents(rgbColor);
 		for (int i = 0; i < rgbColor.length; i++) {
 			inputs[i + 3] = rgbColor[i];
 		}
@@ -60,6 +66,7 @@ public class Brain {
 		for (int i = 11; i < brainHeight; i++) {
 			inputs[i] = outputs[i];
 		}
+
 	}
 
 	public double[] feedForward() {

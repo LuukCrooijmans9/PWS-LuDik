@@ -66,6 +66,7 @@ public class Creature {
 
 	public void doStep() {
 		this.beginStep();
+		this.brainStep();
 		this.endStep();
 	}
 
@@ -76,12 +77,16 @@ public class Creature {
 
 	public void beginStep() {
 		this.look();
+	}
+
+	public void brainStep() {
 		brain.generateInputs();
 		brainOutputs = brain.feedForward();
 
 		this.move(brainOutputs[0], brainOutputs[1]);
 		this.eat(brainOutputs[2]);
-		creatureColor = new Color((float) brainOutputs[3], (float)brainOutputs[4], (float) brainOutputs[5]);
+		creatureColor = new Color((float) brainOutputs[3] / 2 + .5f, (float) brainOutputs[4] / 2 + .5f,
+				(float) brainOutputs[5] / 2 + .5f);
 	}
 
 	public int posToTile(double x) {
