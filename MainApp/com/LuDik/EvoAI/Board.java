@@ -125,7 +125,7 @@ public class Board {
 		
 		
 		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
-			Point2D point = availableSpawnPoints.get((int) (availableSpawnPoints.size() * Math.random() + 0.5));
+			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size()-1) * Math.random() + 0.5));
 			creatures.add(new Creature(point.getX(), point.getY(), this, i));
 			availableSpawnPoints.remove(point);
 		}
