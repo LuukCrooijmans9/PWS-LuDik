@@ -85,59 +85,67 @@ public class Board {
 	// kunnen worden.
 	// Deze functie is verre van geoptimaliseerd, dus BEGIN_AMOUNT_CREATURES
 	// moet laag zijn wil je de functie in een redelijke tijd klaar hebben
-	public void spawnCreatures() {
-
-		creatures = new ArrayList<Creature>();
-		tempList = new ArrayList<Creature>();
-		spawnArea = landArea;
-
-		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
-			Rectangle2D spawnAreaBounds = spawnArea.getBounds2D();
-			float spawnAreaWidth = (float) spawnAreaBounds.getWidth();
-			float spawnAreaHeight = (float) spawnAreaBounds.getHeight();
-			float spawnAreaMinX = (float) spawnAreaBounds.getX();
-			float spawnAreaMinY = (float) spawnAreaBounds.getY();
-
-			while (spawnAreaWidth != 0 || spawnAreaHeight != 0) {
-				float rndx = (float) Math.random() * spawnAreaWidth + spawnAreaMinX;
-				float rndy = (float) Math.random() * spawnAreaHeight + spawnAreaMinY;
-
-				if (spawnArea.contains(rndx, rndy)) {
-					creatures.add(new Creature(rndx, rndy, this, i));
-					spawnArea.subtract(new Area(new Ellipse2D.Float(rndx - (float) CREATURE_SIZE,
-							rndy - (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE)));
-					break;
-				}
-			}
-
-		}
-	}
-
 //	public void spawnCreatures() {
-//		
+//
 //		creatures = new ArrayList<Creature>();
 //		tempList = new ArrayList<Creature>();
 //		spawnArea = landArea;
-//		
-//		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
-//		
+//
 //		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
-//			Point2D point = spawnPoints.get(i);
-//			creatures.add(new Creature(point.getX(), point.getY(), this, i));
+//			Rectangle2D spawnAreaBounds = spawnArea.getBounds2D();
+//			float spawnAreaWidth = (float) spawnAreaBounds.getWidth();
+//			float spawnAreaHeight = (float) spawnAreaBounds.getHeight();
+//			float spawnAreaMinX = (float) spawnAreaBounds.getX();
+//			float spawnAreaMinY = (float) spawnAreaBounds.getY();
+//
+//			while (spawnAreaWidth != 0 || spawnAreaHeight != 0) {
+//				float rndx = (float) Math.random() * spawnAreaWidth + spawnAreaMinX;
+//				float rndy = (float) Math.random() * spawnAreaHeight + spawnAreaMinY;
+//
+//				if (spawnArea.contains(rndx, rndy)) {
+//					creatures.add(new Creature(rndx, rndy, this, i));
+//					spawnArea.subtract(new Area(new Ellipse2D.Float(rndx - (float) CREATURE_SIZE,
+//							rndy - (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE)));
+//					break;
+//				}
+//			}
 //
 //		}
 //	}
+
+	public void spawnCreatures() {
+		
+		creatures = new ArrayList<Creature>();
+		tempList = new ArrayList<Creature>();
+//		spawnArea = landArea;
+		
+		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
+		
+		
+		
+		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
+			Point2D point = spawnPoints.get(i);
+			creatures.add(new Creature(point.getX(), point.getY(), this, i));
+
+		}
+	}
 	
 	private ArrayList<Point2D> generateSpawnPoints() {
 		
 		ArrayList<Point2D> spawnPoints = new ArrayList<Point2D>();
 		
+		spawnPoints.ensureCapacity((int) (landTiles.size() * (tileSize/(CREATURE_SIZE + 2)) * (tileSize/(CREATURE_SIZE + 2))));
+		System.out.println((int) (landTiles.size() * (tileSize/(CREATURE_SIZE + 2)) * (tileSize/(CREATURE_SIZE + 2))));
 		for (LandTile landTile : landTiles) {
+			System.out.println(landTiles.size());
+			System.out.println("size in crtrs: " + tileSize/(CREATURE_SIZE + 2));
 			for (int i = 0; i < tileSize/(CREATURE_SIZE + 2); i++) {
-				for (int k = 0; k < tileSize/(CREATURE_SIZE + 2); i++) {
+				
+				for (int k = 0; k < tileSize/(CREATURE_SIZE + 2); k++) {
 					spawnPoints.add(new Point2D.Double(
 							landTile.getTileRect().getX() + (i + 0.5d) * ((CREATURE_SIZE + 2d) / 2d), 
-							landTile.getTileRect().getX() + (k + 0.5d) * ((CREATURE_SIZE + 2d) / 2d)));
+							landTile.getTileRect().getY() + (k + 0.5d) * ((CREATURE_SIZE + 2d) / 2d)));
+					System.out.println("length: " + spawnPoints.size() + "," + i + "," + k);
 				}
 			}
 		}
