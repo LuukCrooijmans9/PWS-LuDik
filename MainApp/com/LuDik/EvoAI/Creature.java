@@ -9,6 +9,7 @@ public class Creature {
 
 	private long creatureID; // ID om creature aan te herkennen
 	private long parentAID, parentBID; // ID parents
+	private Brain brain;
 
 	private double age;
 	private double fat, weight, fatBurned; // Voedsel vooraad
@@ -31,7 +32,7 @@ public class Creature {
 
 	private Color creatureColor;
 	Ellipse2D creatureShape;
-	
+
 	private boolean selected;
 	private boolean controlled;
 
@@ -57,6 +58,24 @@ public class Creature {
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
+		brain = new Brain(12, 3, this);
+	}
+
+	public void doStep() {
+		this.beginStep();
+		
+		
+	}
+
+	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
+		move(deltaSpeed, deltaDirection);
+		eat(amount);
+	}
+
+	public void beginStep() {
+		this.look();
+		brain.generateInputs();
+		brain.feedForward();
 	}
 
 	public int posToTile(double x) {
@@ -89,12 +108,12 @@ public class Creature {
 
 	}
 
-	public void move(double deltaSpeed,double deltaDirection) {
+	public void move(double deltaSpeed, double deltaDirection) {
 
 		// System.out.println("Moving...");
 
-		//this.deltaSpeed = Math.random() * 2 - 1;
-		//this.deltaDirection = Math.random() * 2 - 1;
+		// this.deltaSpeed = Math.random() * 2 - 1;
+		// this.deltaDirection = Math.random() * 2 - 1;
 
 		// rekent maxSpeed uit.
 		maxSpeed = (0.25 * creatureSize);
@@ -155,8 +174,6 @@ public class Creature {
 		int xLeftEyeTile = posToTile(leftEyeX);
 		int yLeftEyeTile = posToTile(leftEyeY);
 
-		
-
 		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
 				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
 
@@ -192,13 +209,14 @@ public class Creature {
 
 	void draw(Graphics2D g2d) {
 
-		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
-				creatureSize,
+		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
-		
-		if (!selected) g2d.setColor(getCreatureColor());
-		else g2d.setColor(Color.blue);
-		
+
+		if (!selected)
+			g2d.setColor(getCreatureColor());
+		else
+			g2d.setColor(Color.blue);
+
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);
 		g2d.draw(creatureShape);
@@ -263,7 +281,6 @@ public class Creature {
 	public void setCreatureColor(Color creatureColor) {
 		this.creatureColor = creatureColor;
 	}
-
 
 	public boolean selected() {
 		return selected;
