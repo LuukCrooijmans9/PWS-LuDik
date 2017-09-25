@@ -160,16 +160,16 @@ public class Creature {
 		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
 				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
 
-			rightEyeColor = Color.WHITE;
+			setRightEyeColor(Color.WHITE);
 
 		} else if (xLeftEyeTile < 0 || yLeftEyeTile < 0 || xLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
 				|| yLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
 
-			leftEyeColor = Color.WHITE;
+			setLeftEyeColor(Color.WHITE);
 
 		} else {
-			rightEyeColor = board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor();
-			leftEyeColor = board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor();
+			setRightEyeColor(board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor());
+			setLeftEyeColor(board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor());
 		}
 
 	}
@@ -279,5 +279,53 @@ public class Creature {
 
 	public void setControlled(boolean controlled) {
 		this.controlled = controlled;
+	}
+
+	public Color getLeftEyeColor() {
+		return leftEyeColor;
+	}
+
+	public void setLeftEyeColor(Color leftEyeColor) {
+		this.leftEyeColor = leftEyeColor;
+	}
+
+	public Color getRightEyeColor() {
+		return rightEyeColor;
+	}
+
+	public void setRightEyeColor(Color rightEyeColor) {
+		this.rightEyeColor = rightEyeColor;
+	}
+
+	public double getAge() {
+		return age;
+	}
+
+	public void setAge(double age) {
+		this.age = age;
+	}
+
+	public double getFat() {
+		return fat;
+	}
+
+	public void setFat(double fat) {
+		this.fat = fat;
+	}
+
+	public double getDirection() {
+		return direction;
+	}
+
+	public void setDirection(double direction) {
+		this.direction = direction;
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 }
