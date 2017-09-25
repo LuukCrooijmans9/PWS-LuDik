@@ -19,7 +19,7 @@ public class Neuron {
 		for (int i = 0; i < inputs.length; i++) {
 			weightedSum += inputs[i] * weights[i];
 		}
-		return this.sigmoid(weightedSum);
+		return Neuron.sigmoid(weightedSum);
 	}
 
 	// zorgt dat de neuron waardes tussen de -1 en 1 heeft

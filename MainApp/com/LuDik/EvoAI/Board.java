@@ -165,7 +165,7 @@ public class Board {
 				crtr.eat(Math.random());
 			}
 				crtr.look();
-				crtr.processTurn();
+				crtr.endStep();
 				if (crtr.isDead()) {
 					tempList.add(crtr);
 				

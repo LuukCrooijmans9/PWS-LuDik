@@ -10,13 +10,13 @@ public class Brain {
 	private float[] rgbColor;
 	
 	/*inputs											outputs
-	 * 0 tot 3: RGB waarden van het linkeroog. 			1:			verandering in snelheid.
-	 * 3 tot 6: RGB waarden van het rechteroog.			2:			verandering in richting.
-	 * 6: 		snelheid van creature.					3:			hoeveel en of de creature eet.
-	 * 7: 		richting van creature. 					4:			rood waarde van lichaamskleur.
-	 * 8:		leeftijd van creature.					5:			groen waarde van lichaamskleur.
-	 * 9:		vetvooraad van creature.				6:			blauw waarde van lichaamskleur.
-	 * 10:		constante waarde 1.						7 tot 10:	te bepalen outputs.
+	 * 0 tot 3: RGB waarden van het linkeroog. 			0:			verandering in snelheid.
+	 * 3 tot 6: RGB waarden van het rechteroog.			1:			verandering in richting.
+	 * 6: 		snelheid van creature.					2:			hoeveel en of de creature eet.
+	 * 7: 		richting van creature. 					3:			rood waarde van lichaamskleur.
+	 * 8:		leeftijd van creature.					4:			groen waarde van lichaamskleur.
+	 * 9:		vetvooraad van creature.				5:			blauw waarde van lichaamskleur.
+	 * 10:		constante waarde 1.						6 tot 10:	te bepalen outputs.
 	 * 11>:		geheugencellen.							11>:		geheugencellen */
 
 	Brain(int brainHeight, int brainWidth, Creature creature) {

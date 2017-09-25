@@ -10,6 +10,7 @@ public class Creature {
 	private long creatureID; // ID om creature aan te herkennen
 	private long parentAID, parentBID; // ID parents
 	private Brain brain;
+	private double[] brainOutputs;
 
 	private double age;
 	private double fat, weight, fatBurned; // Voedsel vooraad
@@ -59,12 +60,13 @@ public class Creature {
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
 		brain = new Brain(12, 3, this);
+		brainOutputs = new double[12];
+
 	}
 
 	public void doStep() {
 		this.beginStep();
-		
-		
+		this.endStep();
 	}
 
 	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
@@ -75,7 +77,11 @@ public class Creature {
 	public void beginStep() {
 		this.look();
 		brain.generateInputs();
-		brain.feedForward();
+		brainOutputs = brain.feedForward();
+
+		this.move(brainOutputs[0], brainOutputs[1]);
+		this.eat(brainOutputs[2]);
+		creatureColor = new Color((float) brainOutputs[3], (float)brainOutputs[4], (float) brainOutputs[5]);
 	}
 
 	public int posToTile(double x) {
@@ -191,7 +197,7 @@ public class Creature {
 
 	}
 
-	public void processTurn() {
+	public void endStep() {
 
 		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
 								// creatures sneller door een kans te geven aan nieuwe creature
