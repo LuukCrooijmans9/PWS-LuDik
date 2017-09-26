@@ -122,8 +122,9 @@ public class Board {
 
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
 		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
+		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
 
-		for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
+		for (int i = 0; i < creaturesToSpawn; i++) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 			creatures.add(new Creature(point.getX(), point.getY(), this, i));
 			availableSpawnPoints.remove(point);
@@ -150,7 +151,7 @@ public class Board {
 	}
 
 	public void updateStep() {
-		
+
 		if (creatures.size() == 0) {
 			this.spawnRandomCreatures();
 		}
@@ -173,7 +174,6 @@ public class Board {
 		for (Creature crtr : tempList) {
 			creatures.remove(crtr);
 		}
-		
 
 		tempList.clear();
 
@@ -193,7 +193,12 @@ public class Board {
 
 		if (creatures != null) {
 			for (Creature crtr : new ArrayList<Creature>(creatures)) {
-				crtr.draw(g2d);
+				if (crtr != null) {
+					crtr.draw(g2d);
+				} else {
+					System.out.println(crtr);
+
+				}
 			}
 		}
 	}

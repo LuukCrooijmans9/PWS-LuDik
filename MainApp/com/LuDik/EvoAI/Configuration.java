@@ -22,7 +22,7 @@ public class Configuration {
 	
 	
 	//Evolutie waarde creature
-	public static int BEGIN_AMOUNT_CREATURES = 100;
+	public static int BEGIN_AMOUNT_CREATURES = 10000;
 	
 	
 	
