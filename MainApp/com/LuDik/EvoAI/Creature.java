@@ -25,6 +25,7 @@ public class Creature {
 
 	private Color leftEyeColor, rightEyeColor;
 	private double eyeDeviation, eyeLength, rightEyeX, rightEyeY, leftEyeX, leftEyeY;
+	private Eye eye;
 
 	private Board board;
 
@@ -61,6 +62,8 @@ public class Creature {
 				creatureSize, creatureSize);
 		brain = new Brain(12, 3, this);
 		brainOutputs = new double[12];
+		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
+		
 
 	}
 
@@ -76,7 +79,7 @@ public class Creature {
 	}
 
 	public void beginStep() {
-		this.look();
+		eye.look();
 	}
 
 	public void brainStep() {
@@ -89,13 +92,13 @@ public class Creature {
 				(float) brainOutputs[5] / 2 + .5f);
 	}
 
-	public int posToTile(double x) {
+	static public int posToTile(double x) {
 		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
 	}
 
 	public void eat(double amount) {
-		xTile = this.posToTile(getXPos());
-		yTile = this.posToTile(getYPos());
+		xTile = Creature.posToTile(getXPos());
+		yTile = Creature.posToTile(getYPos());
 
 		// System.out.println("eating..");
 
@@ -169,38 +172,38 @@ public class Creature {
 
 	}
 
-	public void look() {
-
-		double rightRadianDirection, leftRadianDirection;
-		rightRadianDirection = Math.toRadians(direction - eyeDeviation);
-		rightEyeX = (Math.sin(rightRadianDirection) * eyeLength) + getXPos();
-		rightEyeY = (Math.cos(rightRadianDirection) * eyeLength) + getYPos();
-
-		leftRadianDirection = Math.toRadians(direction + eyeDeviation);
-		leftEyeX = (Math.sin(leftRadianDirection) * eyeLength) + getXPos();
-		leftEyeY = (Math.cos(leftRadianDirection) * eyeLength) + getYPos();
-
-		int xRightEyeTile = posToTile(rightEyeX);
-		int yRightEyeTile = posToTile(rightEyeY);
-		int xLeftEyeTile = posToTile(leftEyeX);
-		int yLeftEyeTile = posToTile(leftEyeY);
-
-		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
-				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
-
-			setRightEyeColor(Color.WHITE);
-
-		} else if (xLeftEyeTile < 0 || yLeftEyeTile < 0 || xLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
-				|| yLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
-
-			setLeftEyeColor(Color.WHITE);
-
-		} else {
-			setRightEyeColor(board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor());
-			setLeftEyeColor(board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor());
-		}
-
-	}
+//	public void look() {
+//
+//		double rightRadianDirection, leftRadianDirection;
+//		rightRadianDirection = Math.toRadians(direction - eyeDeviation);
+//		rightEyeX = (Math.sin(rightRadianDirection) * eyeLength) + getXPos();
+//		rightEyeY = (Math.cos(rightRadianDirection) * eyeLength) + getYPos();
+//
+//		leftRadianDirection = Math.toRadians(direction + eyeDeviation);
+//		leftEyeX = (Math.sin(leftRadianDirection) * eyeLength) + getXPos();
+//		leftEyeY = (Math.cos(leftRadianDirection) * eyeLength) + getYPos();
+//
+//		int xRightEyeTile = posToTile(rightEyeX);
+//		int yRightEyeTile = posToTile(rightEyeY);
+//		int xLeftEyeTile = posToTile(leftEyeX);
+//		int yLeftEyeTile = posToTile(leftEyeY);
+//
+//		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
+//				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
+//
+//			setRightEyeColor(Color.WHITE);
+//
+//		} else if (xLeftEyeTile < 0 || yLeftEyeTile < 0 || xLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
+//				|| yLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
+//
+//			setLeftEyeColor(Color.WHITE);
+//
+//		} else {
+//			setRightEyeColor(board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor());
+//			setLeftEyeColor(board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor());
+//		}
+//
+//	}
 
 	public void endStep() {
 
@@ -240,9 +243,9 @@ public class Creature {
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), getXPos() + forwardX, getYPos() + forwardY));
 
 		g2d.setColor(Color.RED);
-		g2d.draw(new Line2D.Double(getXPos(), getYPos(), rightEyeX, rightEyeY));
+		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getRightX(), eye.getRightY()));
 		g2d.setColor(Color.BLUE);
-		g2d.draw(new Line2D.Double(getXPos(), getYPos(), leftEyeX, leftEyeY));
+		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
 
 	public Ellipse2D getCreatureShape() {
