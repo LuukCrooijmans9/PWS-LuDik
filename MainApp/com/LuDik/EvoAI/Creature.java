@@ -51,7 +51,7 @@ public class Creature {
 		eyeDeviation = 45;
 
 		age = 0;
-		fat = 10;
+		fat = 1000;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
 		// weight = fat * creatureSize;
@@ -210,7 +210,7 @@ public class Creature {
 
 		if (fat <= 0) {
 
-			// isDead = true;
+			isDead = true;
 
 		} else {
 			age += 0.01;
