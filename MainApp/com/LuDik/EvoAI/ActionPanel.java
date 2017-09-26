@@ -139,7 +139,7 @@ public class ActionPanel extends JPanel {
 				
 				infoPanel.setBoard(board);
 				
-				board.spawnCreatures();
+				board.spawnRandomCreatures();
 				cameraPanel.update();
 				
 				timeKeeper = board.getTimeKeeper();				

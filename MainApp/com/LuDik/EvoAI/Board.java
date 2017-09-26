@@ -114,7 +114,7 @@ public class Board {
 	// }
 	// }
 
-	public void spawnCreatures() {
+	public void spawnRandomCreatures() {
 
 		creatures = new ArrayList<Creature>();
 		tempList = new ArrayList<Creature>();
@@ -152,7 +152,7 @@ public class Board {
 	public void updateStep() {
 		
 		if (creatures.size() == 0) {
-			this.spawnCreatures();
+			this.spawnRandomCreatures();
 		}
 
 		for (Creature crtr : creatures) {
