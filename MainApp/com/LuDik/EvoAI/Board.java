@@ -25,9 +25,12 @@ public class Board {
 	private ArrayList<Creature> creatures;
 	private ArrayList<Creature> tempList;
 	private ArrayList<Creature> allCreaturesOfGeneration;
+	private int generation;
+	private ArrayList<Number> averageFitness;
 
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
+	private int EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
 	private Integer tileSize;
 
 	private Area landArea;
@@ -82,7 +85,9 @@ public class Board {
 	public void spawnRandomCreatures() {
 
 		creatures = new ArrayList<Creature>();
+		allCreaturesOfGeneration = new ArrayList<Creature>();
 		tempList = new ArrayList<Creature>();
+		averageFitness = new ArrayList<Number>();
 		// spawnArea = landArea;
 
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
@@ -91,24 +96,43 @@ public class Board {
 
 		for (int i = 0; i < creaturesToSpawn; i++) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-			creatures.add(new Creature(point.getX(), point.getY(), this, i));
+			Creature nextCreature = new Creature(point.getX(), point.getY(), this, i);
+			creatures.add(nextCreature);
+			allCreaturesOfGeneration.add(nextCreature);
 			availableSpawnPoints.remove(point);
 		}
-		allCreaturesOfGeneration = creatures;
+		generation = 0;
 	}
-	
+
 	public void spawnCreatures() {
-		
-		//TODO dit afmaken
+
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
 		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
 
 		for (int i = 0; i < creaturesToSpawn; i++) {
-			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-			
+
+			Creature parentCreature = allCreaturesOfGeneration
+					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 1, 0, 2));
+
+			if (parentCreature.getAmountOfChilderen() < 10) {
+				Point2D point = availableSpawnPoints
+						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+				Creature nextCreature = new Creature(parentCreature, point.getX(), point.getY(), generation, i,
+						EVOLUTION_FACTOR);
+				creatures.add(nextCreature);
+				parentCreature.setAmountOfChilderen(parentCreature.getAmountOfChilderen() + 1);
+			} else {
+				allCreaturesOfGeneration.remove(parentCreature);
+			}
+
 		}
-		allCreaturesOfGeneration = creatures;
+		for (int i = 0; i < creatures.size(); i++) {
+			allCreaturesOfGeneration.remove(i);
+			allCreaturesOfGeneration.add(i, creatures.get(i));
+		}
+		generation++;
+		System.out.println("Generation: " + generation + " spawned!");
 	}
 
 	private ArrayList<Point2D> generateSpawnPoints() {
@@ -133,19 +157,29 @@ public class Board {
 	public void updateStep() {
 
 		if (creatures.size() == 0) {
-			this.spawnRandomCreatures();
+			double averageFitness = 0;
+			for (int i = 0; i < allCreaturesOfGeneration.size(); i++) {
+				averageFitness += allCreaturesOfGeneration.get(i).getFitness();
+			}
+			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
+			System.out.println("averageFitness: " + (int) averageFitness);
+			this.averageFitness.add(generation, averageFitness);
+			if (generation > 2) {
+				double improvement = (double) this.averageFitness.get(generation)
+						- (double) this.averageFitness.get(generation - 1);
+				System.out.println("improvement: " + (int) improvement);
+			}
+			this.spawnCreatures();
 		}
 
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
-//				crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(),
-//						mainFrame.getCameraPanel().getRcDeltaDirection());
-//				crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
-				crtr.doStep(
-						mainFrame.getCameraPanel().getRcDeltaSpeed(),
-						mainFrame.getCameraPanel().getRcDeltaDirection(), 
-						mainFrame.getCameraPanel().getRcFoodAmount());
+				// crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(),
+				// mainFrame.getCameraPanel().getRcDeltaDirection());
+				// crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
+				crtr.doStep(mainFrame.getCameraPanel().getRcDeltaSpeed(),
+						mainFrame.getCameraPanel().getRcDeltaDirection(), mainFrame.getCameraPanel().getRcFoodAmount());
 
 			} else {
 				crtr.doStep();
@@ -210,6 +244,14 @@ public class Board {
 
 	public EvoAI getEvoAI() {
 		return mainFrame;
+	}
+
+	public ArrayList<Creature> getAllCreaturesOfGeneration() {
+		return allCreaturesOfGeneration;
+	}
+
+	public void setAllCreaturesOfGeneration(ArrayList<Creature> allCreaturesOfGeneration) {
+		this.allCreaturesOfGeneration = allCreaturesOfGeneration;
 	}
 
 }

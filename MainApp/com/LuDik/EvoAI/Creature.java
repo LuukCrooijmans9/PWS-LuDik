@@ -39,6 +39,7 @@ public class Creature {
 
 	private boolean selected;
 	private boolean controlled;
+	private int amountOfChilderen;
 
 	Creature(double x, double y, Board brd, int creatureNumber) {
 
@@ -106,6 +107,7 @@ public class Creature {
 	}
 
 	public void beginStep() {
+		fatBurned = 0;
 		eye.look();
 	}
 
@@ -134,14 +136,13 @@ public class Creature {
 		fat += foodInMouth;
 		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
 		foodInMouth = 0;
-		fat -= 1;
+		fatBurned += 1;
 	}
 
 	public void move(double deltaSpeed, double deltaDirection) {
 
 		// rekent maxSpeed uit.
 		maxSpeed = (0.25 * creatureSize);
-
 
 		// rekent speed uit
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -177,16 +178,16 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= fatBurned * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is de
-								// creatures sneller door een kans te geven aan nieuwe creature
-		fatBurned = 0;
+		fat -= 1 + fatBurned * age * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is
+											// de
+		// creatures sneller door een kans te geven aan nieuwe creature
 
 		if (fat <= 0) {
 
 			isDead = true;
 
 		} else {
-			age += 0.01;
+			age += 0.01d;
 		}
 	}
 
@@ -215,7 +216,6 @@ public class Creature {
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
-	
 
 	public double getFitness() {
 		fitness = age * getTotalFoodEaten();
@@ -556,5 +556,13 @@ public class Creature {
 
 	public void setFitness(double fitness) {
 		this.fitness = fitness;
+	}
+
+	public int getAmountOfChilderen() {
+		return amountOfChilderen;
+	}
+
+	public void setAmountOfChilderen(int amountOfChilderen) {
+		this.amountOfChilderen = amountOfChilderen;
 	}
 }
