@@ -27,13 +27,14 @@ public class LandTile extends Tile {
 		foodColor = foodValue / (Configuration.globalMaxFood);
 		//System.out.println(foodColor);
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
-	}
 
-	public double eatFoodTile(double DesiredFood) {
-		double tempFood = Math.min(foodValue, DesiredFood);
-		//System.out.println("foodValue before eaten = " + foodValue);
-		double foodEaten = Math.min(tempFood, Configuration.MaxFoodPerConsume);
+	}
+//	desiredFood moet hier een getal tussen -1 en 1 zijn
+	public double eatFoodTile(double desiredFood) {
+		double tempFood = desiredFood * Configuration.MaxFoodPerConsume;
 		//System.out.println("foodEaten = " + foodEaten);
+		double foodEaten = Math.min(foodValue, tempFood);
+		//System.out.println("foodValue before eaten = " + foodValue);
 		foodValue -= foodEaten;
 		//System.out.println("foodValue after eaten = " + foodValue);
 		

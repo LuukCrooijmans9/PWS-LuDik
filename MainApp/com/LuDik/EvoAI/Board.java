@@ -159,11 +159,17 @@ public class Board {
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
-				crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(),
-						mainFrame.getCameraPanel().getRcDeltaDirection());
-				crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
+//				crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(),
+//						mainFrame.getCameraPanel().getRcDeltaDirection());
+//				crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
+				crtr.doStep(
+						mainFrame.getCameraPanel().getRcDeltaSpeed(),
+						mainFrame.getCameraPanel().getRcDeltaDirection(), 
+						mainFrame.getCameraPanel().getRcFoodAmount());
+
 			} else {
 				crtr.doStep();
+
 			}
 			crtr.endStep();
 			if (crtr.isDead()) {
