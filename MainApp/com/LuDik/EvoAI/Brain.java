@@ -34,6 +34,21 @@ public class Brain {
 		}
 	}
 
+	Brain(Brain parentBrain, Creature creature, double deviation) {
+		this.brainHeight = parentBrain.getBrainHeight();
+		this.brainWidth = parentBrain.getBrainWidth();
+		this.neurons = parentBrain.getNeurons();
+		this.creature = creature;
+		outputs = new double[this.brainHeight];
+		inputs = new double[this.brainHeight];
+		rgbColor = new float[2];
+		for (int i = 0; i < this.brainWidth; i++) {
+			for (int j = 0; j < this.brainHeight; j++) {
+				this.neurons[i][j] = new Neuron(this.neurons[i][j], deviation);
+			}
+		}
+	}
+
 	public void generateInputs() {
 
 		Color leftEyeColor = creature.getLeftEyeColor();
@@ -87,6 +102,78 @@ public class Brain {
 		}
 		outputs = hiddenOutputs;
 		return outputs;
+	}
+
+	public int getBrainHeight() {
+		return brainHeight;
+	}
+
+	public void setBrainHeight(int brainHeight) {
+		this.brainHeight = brainHeight;
+	}
+
+	public int getBrainWidth() {
+		return brainWidth;
+	}
+
+	public void setBrainWidth(int brainWidth) {
+		this.brainWidth = brainWidth;
+	}
+
+	public Neuron[][] getNeurons() {
+		return neurons;
+	}
+
+	public void setNeurons(Neuron[][] neurons) {
+		this.neurons = neurons;
+	}
+
+	public Creature getCreature() {
+		return creature;
+	}
+
+	public void setCreature(Creature creature) {
+		this.creature = creature;
+	}
+
+	public double[] getInputs() {
+		return inputs;
+	}
+
+	public void setInputs(double[] inputs) {
+		this.inputs = inputs;
+	}
+
+	public double[] getHiddenOutputs() {
+		return hiddenOutputs;
+	}
+
+	public void setHiddenOutputs(double[] hiddenOutputs) {
+		this.hiddenOutputs = hiddenOutputs;
+	}
+
+	public double[] getHiddenInputs() {
+		return hiddenInputs;
+	}
+
+	public void setHiddenInputs(double[] hiddenInputs) {
+		this.hiddenInputs = hiddenInputs;
+	}
+
+	public double[] getOutputs() {
+		return outputs;
+	}
+
+	public void setOutputs(double[] outputs) {
+		this.outputs = outputs;
+	}
+
+	public float[] getRgbColor() {
+		return rgbColor;
+	}
+
+	public void setRgbColor(float[] rgbColor) {
+		this.rgbColor = rgbColor;
 	}
 
 }

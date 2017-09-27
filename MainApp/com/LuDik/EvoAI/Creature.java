@@ -7,7 +7,7 @@ import java.awt.geom.Line2D;
 
 public class Creature {
 
-	private long creatureID; // ID om creature aan te herkennen
+	private final long creatureID; // ID om creature aan te herkennen
 	private long parentAID, parentBID; // ID parents
 	private Brain brain;
 	private double[] brainOutputs;
@@ -40,7 +40,7 @@ public class Creature {
 	private boolean selected;
 	private boolean controlled;
 
-	public Creature(double x, double y, Board brd, int creatureNumber) {
+	Creature(double x, double y, Board brd, int creatureNumber) {
 
 		board = brd;
 
@@ -57,16 +57,38 @@ public class Creature {
 		fat = 1000;
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
-		// weight = fat * creatureSize;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
-		brain = new Brain(12, 3, this);
-		brainOutputs = new double[12];
+		brain = new Brain(20, 5, this);
+		brainOutputs = new double[20];
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
-		
+	}
 
+	Creature(Creature parentCreature, double x, double y, int generation, int creatureNumber, int deviation) {
+		board = parentCreature.getBoard();
+
+		creatureID = creatureNumber + Configuration.BEGIN_AMOUNT_CREATURES * generation;
+
+		setXPos(x);
+		setYPos(y);
+
+		direction = Math.random() * 360;
+
+		eyeDeviation = 45;
+
+		age = 0;
+		fat = 1000;
+		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
+		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
+
+		setCreatureColor(new Color(0f, 1f, 0f));
+		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
+				creatureSize, creatureSize);
+		brain = new Brain(parentCreature.getBrain(), this, deviation);
+		brainOutputs = new double[20];
+		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
 	public void doStep() {
@@ -75,7 +97,6 @@ public class Creature {
 		this.actionStep();
 		this.endStep();
 	}
-
 
 	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
 		eye.look();
@@ -92,15 +113,13 @@ public class Creature {
 		brain.generateInputs();
 		brainOutputs = brain.feedForward();
 
-		
 	}
 
 	private void actionStep() {
 		this.move(brainOutputs[0], brainOutputs[1]);
-//		System.out.println(brainOutputs[0] + " , " + brainOutputs[1] + " , " + brainOutputs[2] + " , " + brainOutputs[3] + " , " + brainOutputs[4] + " , " + brainOutputs[5] + " , " + brainOutputs[6]);
 		this.eat(brainOutputs[2]);
 		creatureColor = new Color((float) brainOutputs[3] / 2 + .5f, (float) brainOutputs[4] / 2 + .5f,
-				(float) brainOutputs[5] / 2 + .5f);		
+				(float) brainOutputs[5] / 2 + .5f);
 	}
 
 	static public int posToTile(double x) {
@@ -110,44 +129,19 @@ public class Creature {
 	public void eat(double amount) {
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
-
-//		 System.out.println(amount);
-
 		desiredFood = Math.max(amount, 0);
-
-//		System.out.println("desiredFood" + desiredFood);
-		
 		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
-		// System.out.println("Food in mouth = " + foodInMouth);
-		// System.out.println("food from tile " +
-		// board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood));
-
-		// System.out.println("food in mouth " + foodInMouth);
-
 		fat += foodInMouth;
 		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
 		foodInMouth = 0;
-
-		// System.out.println(fat);
-
 		fat -= 1;
-
-		// System.out.println("Done eating");
-
 	}
 
 	public void move(double deltaSpeed, double deltaDirection) {
 
-		// System.out.println("Moving...");
-
-		// this.deltaSpeed = Math.random() * 2 - 1;
-		// this.deltaDirection = Math.random() * 2 - 1;
-
 		// rekent maxSpeed uit.
 		maxSpeed = (0.25 * creatureSize);
 
-		// deltaSpeed *= (maxSpeed * 0.05d); // 0.05d hoeveel procent van maxSpeed er
-		// per move bij kan komen.
 
 		// rekent speed uit
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -159,8 +153,6 @@ public class Creature {
 		}
 
 		// Rekent nieuwe kijkrichting/beweegrichting uit.
-		// het is nu mogelijk om 180 graden draai te maken en alle snelheid te houden
-		// onrealistisch!
 		deltaDirection *= 10;
 		direction -= deltaDirection;
 		direction %= 360;
@@ -181,43 +173,7 @@ public class Creature {
 
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
 		fatBurned += speed * weight;
-
-		// System.out.println("Moved");
-
 	}
-
-//	public void look() {
-//
-//		double rightRadianDirection, leftRadianDirection;
-//		rightRadianDirection = Math.toRadians(direction - eyeDeviation);
-//		rightEyeX = (Math.sin(rightRadianDirection) * eyeLength) + getXPos();
-//		rightEyeY = (Math.cos(rightRadianDirection) * eyeLength) + getYPos();
-//
-//		leftRadianDirection = Math.toRadians(direction + eyeDeviation);
-//		leftEyeX = (Math.sin(leftRadianDirection) * eyeLength) + getXPos();
-//		leftEyeY = (Math.cos(leftRadianDirection) * eyeLength) + getYPos();
-//
-//		int xRightEyeTile = posToTile(rightEyeX);
-//		int yRightEyeTile = posToTile(rightEyeY);
-//		int xLeftEyeTile = posToTile(leftEyeX);
-//		int yLeftEyeTile = posToTile(leftEyeY);
-//
-//		if (xRightEyeTile < 0 || yRightEyeTile < 0 || xRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
-//				|| yRightEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
-//
-//			setRightEyeColor(Color.WHITE);
-//
-//		} else if (xLeftEyeTile < 0 || yLeftEyeTile < 0 || xLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1
-//				|| yLeftEyeTile > Configuration.DEFAULT_MAP_SIZE_IN_TILES - 1) {
-//
-//			setLeftEyeColor(Color.WHITE);
-//
-//		} else {
-//			setRightEyeColor(board.getMap().getTiles()[xRightEyeTile][yRightEyeTile].getTileColor());
-//			setLeftEyeColor(board.getMap().getTiles()[xLeftEyeTile][yLeftEyeTile].getTileColor());
-//		}
-//
-//	}
 
 	public void endStep() {
 
@@ -232,11 +188,9 @@ public class Creature {
 		} else {
 			age += 0.01;
 		}
-
 	}
 
 	void draw(Graphics2D g2d) {
-
 		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
 
@@ -262,6 +216,7 @@ public class Creature {
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
 	
+
 	public double getFitness() {
 		fitness = age * getTotalFoodEaten();
 		return fitness;
@@ -277,10 +232,6 @@ public class Creature {
 
 	public long getCreatureID() {
 		return creatureID;
-	}
-
-	public void setCreatureID(long creatureID) {
-		this.creatureID = creatureID;
 	}
 
 	public boolean isDead() {
@@ -385,5 +336,225 @@ public class Creature {
 
 	public void setTotalFoodEaten(double totalFoodEaten) {
 		this.totalFoodEaten = totalFoodEaten;
+	}
+
+	public double[] getBrainOutputs() {
+		return brainOutputs;
+	}
+
+	public double getBrainOutputs(int i) {
+		return brainOutputs[i];
+	}
+
+	public void setBrainOutputs(double[] brainOutputs) {
+		this.brainOutputs = brainOutputs;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public long getParentAID() {
+		return parentAID;
+	}
+
+	public void setParentAID(long parentAID) {
+		this.parentAID = parentAID;
+	}
+
+	public long getParentBID() {
+		return parentBID;
+	}
+
+	public void setParentBID(long parentBID) {
+		this.parentBID = parentBID;
+	}
+
+	public Brain getBrain() {
+		return brain;
+	}
+
+	public void setBrain(Brain brain) {
+		this.brain = brain;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public double getFatBurned() {
+		return fatBurned;
+	}
+
+	public void setFatBurned(double fatBurned) {
+		this.fatBurned = fatBurned;
+	}
+
+	public double getDesiredFood() {
+		return desiredFood;
+	}
+
+	public void setDesiredFood(double desiredFood) {
+		this.desiredFood = desiredFood;
+	}
+
+	public double getFoodInMouth() {
+		return foodInMouth;
+	}
+
+	public void setFoodInMouth(double foodInMouth) {
+		this.foodInMouth = foodInMouth;
+	}
+
+	public double getxPos() {
+		return xPos;
+	}
+
+	public void setxPos(double xPos) {
+		this.xPos = xPos;
+	}
+
+	public double getDeltaXPos() {
+		return deltaXPos;
+	}
+
+	public void setDeltaXPos(double deltaXPos) {
+		this.deltaXPos = deltaXPos;
+	}
+
+	public double getDeltaYPos() {
+		return deltaYPos;
+	}
+
+	public void setDeltaYPos(double deltaYPos) {
+		this.deltaYPos = deltaYPos;
+	}
+
+	public double getyPos() {
+		return yPos;
+	}
+
+	public void setyPos(double yPos) {
+		this.yPos = yPos;
+	}
+
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public void setMaxSpeed(double maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public double getCreatureSize() {
+		return creatureSize;
+	}
+
+	public void setCreatureSize(double creatureSize) {
+		this.creatureSize = creatureSize;
+	}
+
+	public int getxTile() {
+		return xTile;
+	}
+
+	public void setxTile(int xTile) {
+		this.xTile = xTile;
+	}
+
+	public int getyTile() {
+		return yTile;
+	}
+
+	public void setyTile(int yTile) {
+		this.yTile = yTile;
+	}
+
+	public double getEyeDeviation() {
+		return eyeDeviation;
+	}
+
+	public void setEyeDeviation(double eyeDeviation) {
+		this.eyeDeviation = eyeDeviation;
+	}
+
+	public double getEyeLength() {
+		return eyeLength;
+	}
+
+	public void setEyeLength(double eyeLength) {
+		this.eyeLength = eyeLength;
+	}
+
+	public double getRightEyeX() {
+		return rightEyeX;
+	}
+
+	public void setRightEyeX(double rightEyeX) {
+		this.rightEyeX = rightEyeX;
+	}
+
+	public double getRightEyeY() {
+		return rightEyeY;
+	}
+
+	public void setRightEyeY(double rightEyeY) {
+		this.rightEyeY = rightEyeY;
+	}
+
+	public double getLeftEyeX() {
+		return leftEyeX;
+	}
+
+	public void setLeftEyeX(double leftEyeX) {
+		this.leftEyeX = leftEyeX;
+	}
+
+	public double getLeftEyeY() {
+		return leftEyeY;
+	}
+
+	public void setLeftEyeY(double leftEyeY) {
+		this.leftEyeY = leftEyeY;
+	}
+
+	public Eye getEye() {
+		return eye;
+	}
+
+	public void setEye(Eye eye) {
+		this.eye = eye;
+	}
+
+	public double getDeltaDirection() {
+		return deltaDirection;
+	}
+
+	public void setDeltaDirection(double deltaDirection) {
+		this.deltaDirection = deltaDirection;
+	}
+
+	public double getDeltaSpeed() {
+		return deltaSpeed;
+	}
+
+	public void setDeltaSpeed(double deltaSpeed) {
+		this.deltaSpeed = deltaSpeed;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setFitness(double fitness) {
+		this.fitness = fitness;
 	}
 }

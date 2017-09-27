@@ -24,6 +24,7 @@ public class Board {
 
 	private ArrayList<Creature> creatures;
 	private ArrayList<Creature> tempList;
+	private ArrayList<Creature> allCreaturesOfGeneration;
 
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
@@ -93,6 +94,21 @@ public class Board {
 			creatures.add(new Creature(point.getX(), point.getY(), this, i));
 			availableSpawnPoints.remove(point);
 		}
+		allCreaturesOfGeneration = creatures;
+	}
+	
+	public void spawnCreatures() {
+		
+		//TODO dit afmaken
+		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
+		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
+		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
+
+		for (int i = 0; i < creaturesToSpawn; i++) {
+			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+			
+		}
+		allCreaturesOfGeneration = creatures;
 	}
 
 	private ArrayList<Point2D> generateSpawnPoints() {
