@@ -72,10 +72,13 @@ public class Creature {
 	public void doStep() {
 		this.beginStep();
 		this.brainStep();
+		this.actionStep();
 		this.endStep();
 	}
 
+
 	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
+		eye.look();
 		move(deltaSpeed, deltaDirection);
 		eat(amount);
 	}
@@ -88,10 +91,15 @@ public class Creature {
 		brain.generateInputs();
 		brainOutputs = brain.feedForward();
 
+		
+	}
+
+	private void actionStep() {
 		this.move(brainOutputs[0], brainOutputs[1]);
+//		System.out.println(brainOutputs[0] + " , " + brainOutputs[1] + " , " + brainOutputs[2] + " , " + brainOutputs[3] + " , " + brainOutputs[4] + " , " + brainOutputs[5] + " , " + brainOutputs[6]);
 		this.eat(brainOutputs[2]);
 		creatureColor = new Color((float) brainOutputs[3] / 2 + .5f, (float) brainOutputs[4] / 2 + .5f,
-				(float) brainOutputs[5] / 2 + .5f);
+				(float) brainOutputs[5] / 2 + .5f);		
 	}
 
 	static public int posToTile(double x) {
@@ -102,10 +110,12 @@ public class Creature {
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
 
-		// System.out.println("eating..");
+//		 System.out.println(amount);
 
-		desiredFood = amount;
+		desiredFood = Math.max(amount, 0);
 
+//		System.out.println("desiredFood" + desiredFood);
+		
 		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
 		// System.out.println("Food in mouth = " + foodInMouth);
 		// System.out.println("food from tile " +

@@ -27,7 +27,7 @@ public class Neuron {
 	// zorgt dat de neuron waardes tussen de -1 en 1 heeft
 	// Dit wordt ook wel de activation function genoemd
 	static double sigmoid(double input) {
-		if (input < 10) {
+		if (input < -10) {
 			return -1;
 		} else if (input > 10) {
 			return 1;

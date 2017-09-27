@@ -86,7 +86,7 @@ public class InfoPanel extends JPanel{
 		
 		if (timeKeeper != null) {
 			stepLbl.setText("Step: " + timeKeeper.getStep());
-			timePerStepLbl.setText("NanoTimePerStep: " + timeKeeper.getTimeDiffNano());
+			timePerStepLbl.setText("NanoTimePerStep: " + timeKeeper.getTimeDiffNano()/Math.pow(10, 6));
 		}
 		
 		if (board != null && board.getCreatures() != null) {
