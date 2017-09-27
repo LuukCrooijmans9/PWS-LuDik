@@ -31,7 +31,8 @@ public class InfoPanel extends JPanel{
 	private JLabel timePerStepLbl;
 	private JLabel crtrAmountLbl;
 	private JLabel mousePosLbl;
-	private JLabel selectedCreatureLbl;
+	private JLabel selectedCrtrPosFatLbl;
+	private JLabel selectedCrtrFoodFitnessLbl;
 	
 
 	public InfoPanel(EvoAI parent) {
@@ -51,13 +52,15 @@ public class InfoPanel extends JPanel{
 		timePerStepLbl = new JLabel("TimePerStep: " + 0);
 		crtrAmountLbl = new JLabel("Amount of creatures: " + 0);
 		mousePosLbl = new JLabel("mousePosX" + 0 + "mousePosY" + 0);
-		selectedCreatureLbl = new JLabel("selectedCreature: " + 0 );
+		selectedCrtrPosFatLbl = new JLabel("selectedCreature: " + 0 );
+		selectedCrtrFoodFitnessLbl = new JLabel("TotalFoodEaten: " + 0 + " Fitness: " + 0);
 		
 		add(stepLbl);
 		add(timePerStepLbl);
 		add(crtrAmountLbl);
 		add(mousePosLbl);
-		add(selectedCreatureLbl);
+		add(selectedCrtrPosFatLbl);
+		add(selectedCrtrFoodFitnessLbl);
 		
 		
 		
@@ -91,7 +94,8 @@ public class InfoPanel extends JPanel{
 		}
 		
 		if (selectedCreature != null) {
-			selectedCreatureLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX() + " , " + (int) selectedCreature.getCreatureShape().getCenterY());
+			selectedCrtrPosFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX() + " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: " + selectedCreature.getFat());
+			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + selectedCreature.getTotalFoodEaten() + " Fitness: " + selectedCreature.getFitness());
 		}
 	}
 

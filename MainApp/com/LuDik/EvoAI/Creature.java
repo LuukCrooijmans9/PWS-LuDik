@@ -13,6 +13,8 @@ public class Creature {
 	private double[] brainOutputs;
 
 	private double age;
+	private double totalFoodEaten;
+	private double fitness;
 	private double fat, weight, fatBurned; // Voedsel vooraad
 	private double desiredFood, foodInMouth;
 
@@ -112,6 +114,7 @@ public class Creature {
 		// System.out.println("food in mouth " + foodInMouth);
 
 		fat += foodInMouth;
+		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
 		foodInMouth = 0;
 
 		// System.out.println(fat);
@@ -247,6 +250,11 @@ public class Creature {
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
+	
+	public double getFitness() {
+		fitness = age * getTotalFoodEaten();
+		return fitness;
+	}
 
 	public Ellipse2D getCreatureShape() {
 		return creatureShape;
@@ -358,5 +366,13 @@ public class Creature {
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
+	}
+
+	public double getTotalFoodEaten() {
+		return totalFoodEaten;
+	}
+
+	public void setTotalFoodEaten(double totalFoodEaten) {
+		this.totalFoodEaten = totalFoodEaten;
 	}
 }
