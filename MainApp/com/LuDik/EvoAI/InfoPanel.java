@@ -6,6 +6,10 @@ import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -22,6 +26,7 @@ public class InfoPanel extends JPanel{
 	private Board board;
 	private TimeKeeper timeKeeper;
 	
+	private List<Creature> creatures;
 	private Creature selectedCreature;
 
 	private static int IPHeight;
@@ -33,6 +38,7 @@ public class InfoPanel extends JPanel{
 	private JLabel mousePosLbl;
 	private JLabel selectedCrtrPosFatLbl;
 	private JLabel selectedCrtrFoodFitnessLbl;
+
 	
 
 	public InfoPanel(EvoAI parent) {
@@ -73,6 +79,7 @@ public class InfoPanel extends JPanel{
 
 	public void setBoard(Board brd) {
 		board = brd;
+		
 	}
 	
 	public void updateMousePos(int x, int y) {
@@ -80,6 +87,8 @@ public class InfoPanel extends JPanel{
 	}
 	
 	public void update() {
+		
+		creatures = board.getCreatures();
 		
 //		selectedCreature = board.getCreatures().get(0);
 
@@ -96,6 +105,22 @@ public class InfoPanel extends JPanel{
 		if (selectedCreature != null) {
 			selectedCrtrPosFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX() + " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: " + selectedCreature.getFat());
 			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + selectedCreature.getTotalFoodEaten() + " Fitness: " + selectedCreature.getFitness());
+		}
+		
+		if (creatures != null) {
+			creatures.sort( new Comparator<Creature>() {
+				@Override
+		        public int compare(Creature creature2, Creature creature1)
+		        {
+
+		            return  Double.compare(creature1.getFitness() , creature2.getFitness());
+		        }
+				
+			});
+			
+			for (Creature crtr : creatures) {
+				System.out.println("Fitness" + crtr.getFitness());
+			}
 		}
 	}
 
