@@ -113,21 +113,20 @@ public class Board {
 		for (int i = 0; i < creaturesToSpawn; i++) {
 
 			Creature parentCreature = allCreaturesOfGeneration
-					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 1, 0, 2));
+					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 10, 0, 2));
 
-			if (parentCreature.getAmountOfChilderen() < 10) {
-				Point2D point = availableSpawnPoints
-						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-				Creature nextCreature = new Creature(parentCreature, point.getX(), point.getY(), generation, i,
-						EVOLUTION_FACTOR);
-				creatures.add(nextCreature);
-				parentCreature.setAmountOfChilderen(parentCreature.getAmountOfChilderen() + 1);
-			} else {
-				allCreaturesOfGeneration.remove(parentCreature);
-			}
+			// if (parentCreature.getAmountOfChilderen() < 10) {
+			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+			Creature nextCreature = new Creature(parentCreature, point.getX(), point.getY(), generation, i,
+					EVOLUTION_FACTOR);
+			creatures.add(nextCreature);
+			parentCreature.setAmountOfChilderen(parentCreature.getAmountOfChilderen() + 1);
+			// } else {
+			// allCreaturesOfGeneration.remove(parentCreature);
+			// }
 
 		}
-		for (int i = 0; i < creatures.size(); i++) {
+		for (int i = creatures.size(); i > creatures.size(); i--) {
 			allCreaturesOfGeneration.remove(i);
 			allCreaturesOfGeneration.add(i, creatures.get(i));
 		}
