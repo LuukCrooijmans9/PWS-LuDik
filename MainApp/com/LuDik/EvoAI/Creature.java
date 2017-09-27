@@ -81,6 +81,7 @@ public class Creature {
 		eye.look();
 		move(deltaSpeed, deltaDirection);
 		eat(amount);
+		this.endStep();
 	}
 
 	public void beginStep() {

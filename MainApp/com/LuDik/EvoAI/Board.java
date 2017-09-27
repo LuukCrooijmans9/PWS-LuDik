@@ -78,42 +78,6 @@ public class Board {
 
 	}
 
-	// spawnCreatures() pakt is op het begin hetzelfde als landArea, zoekt dan
-	// op zichzelf een willekeurige positie,
-	// maakt daar een creature en haalt dan een hap 2 keer de grootte van een
-	// creature op diezelfde plek weg, zodat creatures niet in elkaar gemaakt
-	// kunnen worden.
-	// Deze functie is verre van geoptimaliseerd, dus BEGIN_AMOUNT_CREATURES
-	// moet laag zijn wil je de functie in een redelijke tijd klaar hebben
-	// public void spawnCreatures() {
-	//
-	// creatures = new ArrayList<Creature>();
-	// tempList = new ArrayList<Creature>();
-	// spawnArea = landArea;
-	//
-	// for (int i = 0; i < BEGIN_AMOUNT_CREATURES; i++) {
-	// Rectangle2D spawnAreaBounds = spawnArea.getBounds2D();
-	// float spawnAreaWidth = (float) spawnAreaBounds.getWidth();
-	// float spawnAreaHeight = (float) spawnAreaBounds.getHeight();
-	// float spawnAreaMinX = (float) spawnAreaBounds.getX();
-	// float spawnAreaMinY = (float) spawnAreaBounds.getY();
-	//
-	// while (spawnAreaWidth != 0 || spawnAreaHeight != 0) {
-	// float rndx = (float) Math.random() * spawnAreaWidth + spawnAreaMinX;
-	// float rndy = (float) Math.random() * spawnAreaHeight + spawnAreaMinY;
-	//
-	// if (spawnArea.contains(rndx, rndy)) {
-	// creatures.add(new Creature(rndx, rndy, this, i));
-	// spawnArea.subtract(new Area(new Ellipse2D.Float(rndx - (float) CREATURE_SIZE,
-	// rndy - (float) CREATURE_SIZE, 2 * (float) CREATURE_SIZE, 2 * (float)
-	// CREATURE_SIZE)));
-	// break;
-	// }
-	// }
-	//
-	// }
-	// }
-
 	public void spawnRandomCreatures() {
 
 		creatures = new ArrayList<Creature>();
@@ -171,7 +135,6 @@ public class Board {
 				crtr.doStep();
 
 			}
-			crtr.endStep();
 			if (crtr.isDead()) {
 				tempList.add(crtr);
 			}
