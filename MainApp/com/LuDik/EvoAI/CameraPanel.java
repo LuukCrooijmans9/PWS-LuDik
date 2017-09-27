@@ -151,19 +151,20 @@ public class CameraPanel extends JPanel {
 			for (Creature crtr : creatures) {
 				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
 					
-					if (selectedCreature != null) {
-						selectedCreature.setSelected(false);
-						selectedCreature.setControlled(false);
-						mainFrame.getActionPanel().setControlCrtr(false);
-					} else {
-						mainFrame.getActionPanel().setControlCrtrBtnEnabled(true);
-						mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
-					}
-					selectedCreature = crtr;
-					
-					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
-//					selectedCreature.setCreatureColor(Color.blue);
-					selectedCreature.setSelected(true);
+					setSelectedCreature(crtr);
+//					if (selectedCreature != null) {
+//						selectedCreature.setSelected(false);
+//						selectedCreature.setControlled(false);
+//						mainFrame.getActionPanel().setControlCrtr(false);
+//					} else {
+//						mainFrame.getActionPanel().setControlCrtrBtnEnabled(true);
+//						mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
+//					}
+//					selectedCreature = crtr;
+//					
+//					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
+////					selectedCreature.setCreatureColor(Color.blue);
+//					selectedCreature.setSelected(true);
 					break;
 				}
 			}
@@ -292,6 +293,22 @@ public class CameraPanel extends JPanel {
 
 	public void update() {
 		repaint();
+	}
+	
+	public void setSelectedCreature(Creature crtr) {
+		if (selectedCreature != null) {
+			selectedCreature.setSelected(false);
+			selectedCreature.setControlled(false);
+			mainFrame.getActionPanel().setControlCrtr(false);
+		} else {
+			mainFrame.getActionPanel().setControlCrtrBtnEnabled(true);
+			mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
+		}
+		selectedCreature = crtr;
+		
+		mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
+//		selectedCreature.setCreatureColor(Color.blue);
+		selectedCreature.setSelected(true);
 	}
 
 	public static int getCPWIDTH() {

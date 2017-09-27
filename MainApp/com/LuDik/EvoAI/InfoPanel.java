@@ -12,8 +12,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class InfoPanel extends JPanel{
 
@@ -39,6 +44,7 @@ public class InfoPanel extends JPanel{
 	private JLabel selectedCrtrPosFatLbl;
 	private JLabel selectedCrtrFoodFitnessLbl;
 
+	private JList creaturesList;
 	
 
 	public InfoPanel(EvoAI parent) {
@@ -61,12 +67,24 @@ public class InfoPanel extends JPanel{
 		selectedCrtrPosFatLbl = new JLabel("selectedCreature: " + 0 );
 		selectedCrtrFoodFitnessLbl = new JLabel("TotalFoodEaten: " + 0 + " Fitness: " + 0);
 		
+		creaturesList = new JList();
+		creaturesList.addListSelectionListener(new ListSelectionListener(){
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!creaturesList.isSelectionEmpty()) {
+					int selectedIndex = creaturesList.getSelectedIndex();
+					mainFrame.getCameraPanel().setSelectedCreature(creatures.get(selectedIndex));
+				}
+			}
+		});
+		
 		add(stepLbl);
 		add(timePerStepLbl);
 		add(crtrAmountLbl);
 		add(mousePosLbl);
 		add(selectedCrtrPosFatLbl);
 		add(selectedCrtrFoodFitnessLbl);
+		add(creaturesList);
 		
 		
 		
@@ -118,9 +136,18 @@ public class InfoPanel extends JPanel{
 				
 			});
 			
-			for (Creature crtr : creatures) {
-				System.out.println("Fitness" + crtr.getFitness());
+			DefaultListModel lModel = new DefaultListModel();
+			
+			int listSize = Math.min(creatures.size(), 10);
+			
+			for (int i = 0; i < listSize; i++) {
+//				System.out.println("Fitness" + crtr.getFitness());
+				lModel.add(i, creatures.get(i).getFitness());
 			}
+			
+			creaturesList.setModel(lModel);
+			
+			
 		}
 	}
 
@@ -130,5 +157,13 @@ public class InfoPanel extends JPanel{
 
 	public void setSelectedCreature(Creature selectedCreature) {
 		this.selectedCreature = selectedCreature;
+	}
+
+	public CameraPanel getCameraPanel() {
+		return cameraPanel;
+	}
+
+	public void setCameraPanel(CameraPanel cameraPanel) {
+		this.cameraPanel = cameraPanel;
 	}
 }
