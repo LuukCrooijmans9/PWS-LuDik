@@ -7,6 +7,7 @@ import java.awt.geom.Line2D;
 
 public class Creature {
 
+	private static final double EAT_EFFICIENCY_STEEPNESS = 2;
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
 	private Brain brain;
@@ -16,7 +17,8 @@ public class Creature {
 	private double totalFoodEaten;
 	private double fitness;
 	private double fat, weight, fatBurned; // Voedsel vooraad
-	private double desiredFood, foodInMouth;
+	private double actualFoodAmount, foodInMouth;
+	private double eatEfficiency;
 
 	private double xPos, deltaXPos, deltaYPos, yPos, direction; // Positie en draaing
 	private double speed, maxSpeed;
@@ -129,15 +131,22 @@ public class Creature {
 		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
 	}
 
-	public void eat(double amount) {
+	public void eat(double desiredFoodAmount) {
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
-		desiredFood = Math.max(amount, 0);
-		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(desiredFood);
+		desiredFoodAmount = Math.max(desiredFoodAmount, 0);
+		
+		if (desiredFoodAmount != 0) {
+			eatEfficiency = 1/(EAT_EFFICIENCY_STEEPNESS * speed + 1);
+		}
+		
+		actualFoodAmount = desiredFoodAmount * eatEfficiency;
+		
+		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(actualFoodAmount);
 		fat += foodInMouth;
 		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
 		foodInMouth = 0;
-		fatBurned += 1;
+		fatBurned += desiredFoodAmount;
 	}
 
 	public void move(double deltaSpeed, double deltaDirection) {
@@ -384,11 +393,11 @@ public class Creature {
 	}
 
 	public double getDesiredFood() {
-		return desiredFood;
+		return actualFoodAmount;
 	}
 
 	public void setDesiredFood(double desiredFood) {
-		this.desiredFood = desiredFood;
+		this.actualFoodAmount = desiredFood;
 	}
 
 	public double getFoodInMouth() {
