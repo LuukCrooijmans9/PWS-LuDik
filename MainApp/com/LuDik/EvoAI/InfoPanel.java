@@ -37,7 +37,11 @@ public class InfoPanel extends JPanel {
 	private static int IPHeight;
 	private static final int IPWidth = 400;
 	private double averageFitnessOfPreviousGeneration;
-
+	
+	private JPanel singleLineInfoPanel;
+	private JPanel listPanel;
+	private JPanel graphPanel;
+	
 	private JLabel stepLbl;
 	private JLabel timePerStepLbl;
 	private JLabel crtrAmountLbl;
@@ -47,6 +51,7 @@ public class InfoPanel extends JPanel {
 	private JLabel selectedCrtrAgeFatBurnedLbl;
 
 	private JList creaturesList;
+	
 
 	public InfoPanel(EvoAI parent) {
 		initInfoPanel(parent);
@@ -59,6 +64,17 @@ public class InfoPanel extends JPanel {
 		setPreferredSize(new Dimension(IPWidth, IPHeight));
 
 		mainFrame = parent;
+		
+		singleLineInfoPanel = new JPanel();
+//		singleLineInfoPanel.setLayout(new BoxLayout(singleLineInfoPanel, BoxLayout.PAGE_AXIS));
+		listPanel = new JPanel();
+		graphPanel = new JPanel();
+//		listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
+
+		
+		add(singleLineInfoPanel);
+		add(listPanel);
+		add(graphPanel);
 
 		stepLbl = new JLabel("Step: " + 0);
 		timePerStepLbl = new JLabel("TimePerStep: " + 0);
@@ -79,14 +95,14 @@ public class InfoPanel extends JPanel {
 			}
 		});
 
-		add(stepLbl);
-		add(timePerStepLbl);
-		add(crtrAmountLbl);
-		add(mousePosLbl);
-		add(selectedCrtrPosFatLbl);
-		add(selectedCrtrFoodFitnessLbl);
-		add(selectedCrtrAgeFatBurnedLbl);
-		add(creaturesList);
+		singleLineInfoPanel.add(stepLbl);
+		singleLineInfoPanel.add(timePerStepLbl);
+		singleLineInfoPanel.add(crtrAmountLbl);
+		singleLineInfoPanel.add(mousePosLbl);
+		singleLineInfoPanel.add(selectedCrtrPosFatLbl);
+		singleLineInfoPanel.add(selectedCrtrFoodFitnessLbl);
+		singleLineInfoPanel.add(selectedCrtrAgeFatBurnedLbl);
+		listPanel.add(creaturesList);
 
 	}
 
@@ -123,10 +139,10 @@ public class InfoPanel extends JPanel {
 			selectedCrtrPosFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX()
 					+ " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: "
 					+ selectedCreature.getFat());
-			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + selectedCreature.getTotalFoodEaten() + " Fitness: "
+			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + (int) selectedCreature.getTotalFoodEaten() + " Fitness: "
 					+ selectedCreature.getFitness());
 			selectedCrtrAgeFatBurnedLbl.setText(
-					"Age: " + selectedCreature.getAge() + " FatBurnedThisStep: " + selectedCreature.getFatBurned());
+					"Age: " + (int) selectedCreature.getAge() + " FatBurnedThisStep: " + (int) selectedCreature.getFatBurned());
 		}
 
 		if (creatures != null) {
@@ -145,7 +161,7 @@ public class InfoPanel extends JPanel {
 
 			for (int i = 0; i < listSize; i++) {
 				// System.out.println("Fitness" + crtr.getFitness());
-				lModel.add(i, creatures.get(i).getFitness());
+				lModel.add(i, (int) creatures.get(i).getFitness());
 			}
 
 			creaturesList.setModel(lModel);
