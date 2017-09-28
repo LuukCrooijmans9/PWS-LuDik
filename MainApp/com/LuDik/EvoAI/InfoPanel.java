@@ -176,4 +176,21 @@ public class InfoPanel extends JPanel {
 	public void setAverageFitnessOfPreviousGeneration(double averageFitnessOfPreviousGeneration) {
 		this.averageFitnessOfPreviousGeneration = averageFitnessOfPreviousGeneration;
 	}
+
+	public JList getCreaturesList() {
+		return creaturesList;
+	}
+
+	public void setCreaturesList(JList creaturesList) {
+		this.creaturesList = creaturesList;
+	}
+
+	public List<Creature> getCreatures() {
+		return creatures;
+	}
+
+	public void setCreatures(List<Creature> creatures) {
+		this.creatures = creatures;
+	}
+	
 }

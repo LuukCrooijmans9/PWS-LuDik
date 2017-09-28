@@ -8,7 +8,7 @@ import java.awt.geom.Line2D;
 public class Creature {
 
 	private final long creatureID; // ID om creature aan te herkennen
-	private long parentAID, parentBID; // ID parents
+	private Creature parent; // de parent van deze creature
 	private Brain brain;
 	private double[] brainOutputs;
 
@@ -67,8 +67,9 @@ public class Creature {
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
-	Creature(Creature parentCreature, double x, double y, int generation, int creatureNumber, int deviation) {
-		board = parentCreature.getBoard();
+	Creature(Creature parentCreature, double x, double y, int generation, int creatureNumber, double deviation) {
+		parent = parentCreature;
+		board = parent.getBoard();
 
 		creatureID = creatureNumber + Configuration.BEGIN_AMOUNT_CREATURES * generation;
 
@@ -356,22 +357,6 @@ public class Creature {
 
 	public void setBoard(Board board) {
 		this.board = board;
-	}
-
-	public long getParentAID() {
-		return parentAID;
-	}
-
-	public void setParentAID(long parentAID) {
-		this.parentAID = parentAID;
-	}
-
-	public long getParentBID() {
-		return parentBID;
-	}
-
-	public void setParentBID(long parentBID) {
-		this.parentBID = parentBID;
 	}
 
 	public Brain getBrain() {

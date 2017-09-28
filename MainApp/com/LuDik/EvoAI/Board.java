@@ -30,7 +30,7 @@ public class Board {
 
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
-	private int EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
+	private double EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
 	private Integer tileSize;
 
 	private Area landArea;
@@ -102,33 +102,46 @@ public class Board {
 			availableSpawnPoints.remove(point);
 		}
 		generation = 0;
+		System.out.println("Generation: " + generation + " spawned!");
 	}
 
 	public void spawnCreatures() {
-
+		
+		
+		
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
 		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
+		ArrayList<Creature> newAllCreaturesOfGeneration = new ArrayList<Creature>();
+		ArrayList<Creature> sortedCreaturesOfGeneration = new ArrayList<Creature>(infoPanel.getCreatures());
+		
+		
+		
+		
+		
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
-
+		System.out.println("New generation consist of " + creaturesToSpawn + " creatures");
 		for (int i = 0; i < creaturesToSpawn; i++) {
-
-			Creature parentCreature = allCreaturesOfGeneration
-					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 10, 0, 2));
-
+			Creature parentCreature = sortedCreaturesOfGeneration
+					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 1, 0, 2));
 			// if (parentCreature.getAmountOfChilderen() < 10) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 			Creature nextCreature = new Creature(parentCreature, point.getX(), point.getY(), generation, i,
 					EVOLUTION_FACTOR);
 			creatures.add(nextCreature);
+			newAllCreaturesOfGeneration.add(nextCreature);
 			parentCreature.setAmountOfChilderen(parentCreature.getAmountOfChilderen() + 1);
 			// } else {
 			// allCreaturesOfGeneration.remove(parentCreature);
 			// }
-
 		}
-		for (int i = creatures.size(); i > creatures.size(); i--) {
-			allCreaturesOfGeneration.remove(i);
-			allCreaturesOfGeneration.add(i, creatures.get(i));
+		allCreaturesOfGeneration.clear();
+		for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
+			allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
+		}
+		
+
+		if (creatures.equals(allCreaturesOfGeneration)) {
+			System.out.println("Succes");
 		}
 		generation++;
 		System.out.println("Generation: " + generation + " spawned!");
@@ -154,12 +167,14 @@ public class Board {
 	}
 
 	public void updateStep() {
-
+		
+		
 		if (creatures.size() == 0) {
 			double averageFitness = 0;
 			for (int i = 0; i < allCreaturesOfGeneration.size(); i++) {
 				averageFitness += allCreaturesOfGeneration.get(i).getFitness();
 			}
+			averageFitness /= BEGIN_AMOUNT_CREATURES;
 			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
 			System.out.println("averageFitness: " + (int) averageFitness);
 			this.averageFitness.add(generation, averageFitness);

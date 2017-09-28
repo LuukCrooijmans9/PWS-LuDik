@@ -12,7 +12,7 @@ public class Configuration {
 
 	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 100;
 
-	public static final int DEFAULT_EVOLUTION_FACTOR = 5;
+	public static final double DEFAULT_EVOLUTION_FACTOR = 0.02; // 1 is maximale evolutio 0 is geen evolutie
 
 	// globalFertility bepaalt
 	public static double globalFertility = 1, globalMaxFood = 1000;
@@ -23,7 +23,7 @@ public class Configuration {
 			DEFAULT_EYE_LENGTH = 10;
 
 	// Evolutie waarde creature
-	public static int BEGIN_AMOUNT_CREATURES = 200;
+	public static int BEGIN_AMOUNT_CREATURES = 500;
 
 	// een aantal rekenkundige functies.
 

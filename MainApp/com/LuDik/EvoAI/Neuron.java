@@ -16,18 +16,15 @@ public class Neuron {
 	Neuron(Neuron neuron, double deviation /* van 0 tot 100 waar 100 een volledig random weights maakt */) {
 		this.weights = neuron.getWeights();
 		for (int i = 0; i < this.weights.length; i++) {
-			int random = (int) (Math.random() * 100);
-			if (random == deviation) {
-				weights[i] = Math.random() * 2 - 1;
-			} else if (random < deviation) {
-				weights[i] += Math.random() * 2 - 1 * deviation;
+			double random = Math.random() * 2 - 1;
+			if (random < deviation) {
+				weights[i] += (Math.random() * 2 - 1) * deviation;
 			}
 		}
-		int random = (int) (Math.random() * 101);
-		if (random == deviation) {
-			this.bias = Math.random() * 2 - 1;
-		} else if (random < deviation) {
-			this.bias += Math.random() * 2 - 1 * deviation;
+		double random =Math.random();
+		if (random < deviation) {
+			deviation = (Math.random() * 2 - 1) * deviation;
+			this.bias += deviation;
 		}
 	}
 
