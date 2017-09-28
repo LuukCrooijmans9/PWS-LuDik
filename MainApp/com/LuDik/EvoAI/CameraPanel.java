@@ -309,6 +309,8 @@ public class CameraPanel extends JPanel {
 		mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
 //		selectedCreature.setCreatureColor(Color.blue);
 		selectedCreature.setSelected(true);
+		
+		repaint();
 	}
 
 	public static int getCPWIDTH() {
@@ -325,6 +327,7 @@ public class CameraPanel extends JPanel {
 
 	public void setFollowSelectedCreature(boolean followSelectedCreature) {
 		this.followSelectedCreature = followSelectedCreature;
+		repaint();
 	}
 
 	public void setControlCrtr(boolean controlCrtr) {
