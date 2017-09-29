@@ -9,6 +9,7 @@ public class Creature {
 
 	private static final double EAT_EFFICIENCY_STEEPNESS = 2;
 	private static final double WEIGHT_PER_FAT = 0.1;
+	private static final double BASE_FAT_CONSUMPTION = 0.5;
 	
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
@@ -191,7 +192,7 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= (0.1 + fatBurned) * age * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is
+		fat -= (BASE_FAT_CONSUMPTION + fatBurned) * age * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is
 		weight = fat * WEIGHT_PER_FAT;
 											// de
 		// creatures sneller door een kans te geven aan nieuwe creature
