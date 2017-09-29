@@ -13,7 +13,7 @@ public class Neuron {
 		bias = Math.random() * 2 - 1;
 	}
 
-	Neuron(Neuron neuron, double deviation /* van 0 tot 100 waar 100 een volledig random weights maakt */) {
+	Neuron(Neuron neuron, double deviation /* van 0 tot 1 waar 1 een volledig random weight maakt */) {
 		this.weights = neuron.getWeights();
 		for (int i = 0; i < this.weights.length; i++) {
 			double random = Math.random() * 2 - 1;
