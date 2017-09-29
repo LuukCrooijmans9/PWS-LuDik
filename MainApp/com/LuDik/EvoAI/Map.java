@@ -120,10 +120,14 @@ public class Map {
 					}
 				}
 				
-			}
-			
-
+			}			
 	}
+		
+		public void refillLandTiles() {
+			for (LandTile lndTile : landTiles) {
+				lndTile.refill();
+			}
+		}
 
 	public Tile[][] getTiles() {
 			return tiles;
@@ -148,5 +152,6 @@ public class Map {
 	public void setLandTiles(ArrayList<LandTile> landTiles) {
 		this.landTiles = landTiles;
 	}
+
 
 }

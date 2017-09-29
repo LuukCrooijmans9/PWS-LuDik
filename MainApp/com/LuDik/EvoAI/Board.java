@@ -171,8 +171,10 @@ public class Board {
 				averageFitness += allCreaturesOfGeneration.get(i).getFitness();
 			}
 			averageFitness /= BEGIN_AMOUNT_CREATURES;
-			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
+			
+			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);			
 			System.out.println("averageFitness: " + (int) averageFitness);
+			
 			this.averageFitness.add(generation, averageFitness);
 			if (generation > 2) {
 				double improvement = (double) this.averageFitness.get(generation)
@@ -182,17 +184,19 @@ public class Board {
 				System.out.println("Total improvement: " + (int) improvement);
 
 			}
+			
+			map.refillLandTiles();
+			
 			this.spawnCreatures();
 		}
 
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
-				// crtr.move(mainFrame.getCameraPanel().getRcDeltaSpeed(),
-				// mainFrame.getCameraPanel().getRcDeltaDirection());
-				// crtr.eat(mainFrame.getCameraPanel().getRcFoodAmount());
-				crtr.doStep(mainFrame.getCameraPanel().getRcDeltaSpeed(),
-						mainFrame.getCameraPanel().getRcDeltaDirection(), mainFrame.getCameraPanel().getRcFoodAmount());
+				crtr.doStep(
+						mainFrame.getCameraPanel().getRcDeltaSpeed(),
+						mainFrame.getCameraPanel().getRcDeltaDirection(),
+						mainFrame.getCameraPanel().getRcFoodAmount());
 
 			} else {
 				crtr.doStep();
