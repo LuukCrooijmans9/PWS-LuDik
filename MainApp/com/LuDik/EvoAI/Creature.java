@@ -10,6 +10,8 @@ public class Creature {
 	private static final double EAT_EFFICIENCY_STEEPNESS = 2;
 	private static final double WEIGHT_PER_FAT = 0.1;
 	private static final double BASE_FAT_CONSUMPTION = 0.5;
+	private static final int DEFAULT_BRAIN_WIDTH = 1;
+	private static final int DEFAULT_BRAIN_HEIGHT = 20;
 	
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
@@ -67,7 +69,7 @@ public class Creature {
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
-		brain = new Brain(20, 5, this);
+		brain = new Brain(DEFAULT_BRAIN_HEIGHT, DEFAULT_BRAIN_WIDTH, this);
 		brainOutputs = new double[20];
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
