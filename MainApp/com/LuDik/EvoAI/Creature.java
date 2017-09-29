@@ -10,9 +10,10 @@ public class Creature {
 	private static final double EAT_EFFICIENCY_STEEPNESS = 2;
 	private static final double WEIGHT_PER_FAT = 0.1;
 	private static final double BASE_FAT_CONSUMPTION = 0.5;
+	private double BASE_CREATURE_EFFICIENCY = 10;
 	private static final int DEFAULT_BRAIN_WIDTH = 1;
 	private static final int DEFAULT_BRAIN_HEIGHT = 20;
-	
+
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
 	private Brain brain;
@@ -22,11 +23,13 @@ public class Creature {
 	private double totalFoodEaten;
 	private double fitness;
 	private double fat, weight, fatBurned; // Voedsel vooraad
+	
 	private double actualFoodAmount, foodInMouth;
 	private double eatEfficiency;
 
 	private double xPos, deltaXPos, deltaYPos, yPos, direction; // Positie en draaing
 	private double speed, maxSpeed;
+	private double totalDistanceTravelled;
 
 	private double creatureSize;
 	private int xTile, yTile;
@@ -140,13 +143,13 @@ public class Creature {
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
 		desiredFoodAmount = Math.max(desiredFoodAmount, 0);
-		
+
 		if (desiredFoodAmount != 0) {
-			eatEfficiency = 1/(EAT_EFFICIENCY_STEEPNESS * speed + 1);
+			eatEfficiency = 1 / (EAT_EFFICIENCY_STEEPNESS * speed + 1);
 		}
-		
+
 		actualFoodAmount = desiredFoodAmount * eatEfficiency;
-		
+
 		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(actualFoodAmount);
 		fat += foodInMouth;
 		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
@@ -187,6 +190,7 @@ public class Creature {
 			setYPos(getYPos() + deltaYPos);
 		}
 
+		setTotalDistanceTravelled(getTotalDistanceTravelled() + speed);
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
 		fatBurned += speed * weight;
 		fatBurned += Math.abs(deltaDirection) * weight;
@@ -194,10 +198,10 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= (BASE_FAT_CONSUMPTION + fatBurned) * age * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is
+		fat -= (BASE_FAT_CONSUMPTION + fatBurned) * age * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures een nadeel te geven dit
+																// verbeterd als het goed is
 		weight = fat * WEIGHT_PER_FAT;
-											// de
-		// creatures sneller door een kans te geven aan nieuwe creature
+		// de creatures sneller door een kans te geven aan nieuwe creature
 
 		if (fat <= 0) {
 
@@ -235,7 +239,7 @@ public class Creature {
 	}
 
 	public double getFitness() {
-		fitness = age * getTotalFoodEaten();
+		fitness = age * getTotalFoodEaten() + getTotalDistanceTravelled() * getTotalFoodEaten();
 		return fitness;
 	}
 
@@ -565,5 +569,13 @@ public class Creature {
 
 	public void setAmountOfChilderen(int amountOfChilderen) {
 		this.amountOfChilderen = amountOfChilderen;
+	}
+
+	public double getTotalDistanceTravelled() {
+		return totalDistanceTravelled;
+	}
+
+	public void setTotalDistanceTravelled(double totalDistanceTravelled) {
+		this.totalDistanceTravelled = totalDistanceTravelled;
 	}
 }

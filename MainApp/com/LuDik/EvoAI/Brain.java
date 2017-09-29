@@ -9,14 +9,27 @@ public class Brain {
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
 
-	/*
-	 * inputs outputs 0 tot 3: RGB waarden van het linkeroog. 0: verandering in
-	 * snelheid. 3 tot 6: RGB waarden van het rechteroog. 1: verandering in
-	 * richting. 6: snelheid van creature. 2: hoeveel en of de creature eet. 7:
-	 * richting van creature. 3: rood waarde van lichaamskleur. 8: leeftijd van
-	 * creature. 4: groen waarde van lichaamskleur. 9: vetvooraad van creature. 5:
-	 * blauw waarde van lichaamskleur. 10: constante waarde 1. 6 tot 10: te bepalen
-	 * outputs. 11>: geheugencellen. 11>: geheugencellen
+	/* inputs 
+	 * 0 tot 3: RGB waarden van het linkeroog. 
+	 * 3 tot 6: RGB waarden van het rechteroog. 
+	 * 6: snelheid van creature. 
+	 * 7: richting van creature. 
+	 * 8: leeftijd van creature. 
+	 * 9: vetvooraad van creature. 
+	 * 10: constante waarde 1. 
+	 * 11>: geheugencellen.
+	 * 
+	 * outputs 
+	 * 0: verandering in snelheid. 
+	 * 1: verandering in richting. 
+	 * 2: hoeveel en
+	 * of de creature eet. 
+	 * 3: rood waarde van lichaamskleur. 
+	 * 4: groen waarde van
+	 * lichaamskleur. 
+	 * 5:blauw waarde van lichaamskleur. 
+	 * 6 tot 10: te bepalen outputs. 
+	 * 11>: geheugencellen
 	 */
 
 	Brain(int brainHeight, int brainWidth, Creature creature) {
@@ -70,7 +83,7 @@ public class Brain {
 		}
 
 		inputs[6] = creature.getSpeed();
-		inputs[7] = creature.getDirection();
+		// inputs[7] = creature.getDirection();
 		inputs[8] = creature.getAge();
 		inputs[9] = creature.getFat();
 

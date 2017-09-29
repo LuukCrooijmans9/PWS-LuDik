@@ -31,6 +31,8 @@ public class Board {
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
 	private double EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
+	private int RATIO_CHILDS_PER_PARENT = Configuration.RATIO_CHILDS_PER_PARENT;
+	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
 	private Integer tileSize;
 
 	private Area landArea;
@@ -82,7 +84,7 @@ public class Board {
 
 	}
 
-	public void spawnRandomCreatures() {
+	public void spawnFirstCreatures() {
 
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
@@ -112,18 +114,31 @@ public class Board {
 		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
 		ArrayList<Creature> newAllCreaturesOfGeneration = new ArrayList<Creature>();
 		ArrayList<Creature> sortedCreaturesOfGeneration = new ArrayList<Creature>(infoPanel.getCreatures());
-
-		for (int i = 0; i < BEGIN_AMOUNT_CREATURES / 2; i++) {
-			int index = Configuration.distributedRandomNumber(sortedCreaturesOfGeneration.size() - 1, 0, 1.1);
-			Creature parentCreature = sortedCreaturesOfGeneration.get(index);
+		// for (int i = 0; i < sortedCreaturesOfGeneration.size(); i++) {
+		// System.out.println(i + ": " +
+		// sortedCreaturesOfGeneration.get(i).getFitness());
+		// }
+		// for (int i = 0; i < BEGIN_AMOUNT_CREATURES / 2; i++) {
+		// int index =
+		// Configuration.distributedRandomNumber(sortedCreaturesOfGeneration.size() - 1,
+		// 0, 2);
+		// Creature parentCreature = sortedCreaturesOfGeneration.get(index);
+		// parentCreatures.add(parentCreature);
+		// sortedCreaturesOfGeneration.remove(parentCreature);
+		// }
+		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
+		// for (int i = 0; i < sortedCreaturesOfGeneration.size(); i++) {
+		// System.out.println(i + ": " +
+		// sortedCreaturesOfGeneration.get(i).getFitness());
+		// }
+		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT; i++) {
+			Creature parentCreature = sortedCreaturesOfGeneration.get(i);
 			parentCreatures.add(parentCreature);
 			sortedCreaturesOfGeneration.remove(parentCreature);
 		}
-		System.out.println(parentCreatures.size());
 
-		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
-		
-		for (int i = 0; i < creaturesToSpawn / 2; i++) {
+		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT
+				- AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION; i++) {
 			parentCreatures.get(i);
 			for (int j = 0; j < 2; j++) {
 				Point2D point = availableSpawnPoints
@@ -134,14 +149,26 @@ public class Board {
 				newAllCreaturesOfGeneration.add(nextCreature);
 			}
 		}
+		
 		allCreaturesOfGeneration.clear();
 		for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
 			allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
 		}
-		
+		for (int i = newAllCreaturesOfGeneration.size(); i < creaturesToSpawn; i++) {
+			allCreaturesOfGeneration.add(spawnRandomCreature(i));
+		}
+
 		generation++;
-		System.out.println("New generation consist of " + allCreaturesOfGeneration.size() + " creatures");
+		// System.out.println("New generation consist of " +
+		// allCreaturesOfGeneration.size() + " creatures");
 		System.out.println("Generation: " + generation + " spawned!");
+	}
+
+	public Creature spawnRandomCreature(int id) {
+		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
+		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);	
+		return randomCreature;
 	}
 
 	private ArrayList<Point2D> generateSpawnPoints() {
@@ -171,10 +198,10 @@ public class Board {
 				averageFitness += allCreaturesOfGeneration.get(i).getFitness();
 			}
 			averageFitness /= BEGIN_AMOUNT_CREATURES;
-			
-			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);			
+
+			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
 			System.out.println("averageFitness: " + (int) averageFitness);
-			
+
 			this.averageFitness.add(generation, averageFitness);
 			if (generation > 2) {
 				double improvement = (double) this.averageFitness.get(generation)
@@ -184,19 +211,17 @@ public class Board {
 				System.out.println("Total improvement: " + (int) improvement);
 
 			}
-			
+
 			map.refillLandTiles();
-			
+
 			this.spawnCreatures();
 		}
 
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
-				crtr.doStep(
-						mainFrame.getCameraPanel().getRcDeltaSpeed(),
-						mainFrame.getCameraPanel().getRcDeltaDirection(),
-						mainFrame.getCameraPanel().getRcFoodAmount());
+				crtr.doStep(mainFrame.getCameraPanel().getRcDeltaSpeed(),
+						mainFrame.getCameraPanel().getRcDeltaDirection(), mainFrame.getCameraPanel().getRcFoodAmount());
 
 			} else {
 				crtr.doStep();
