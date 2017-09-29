@@ -16,7 +16,7 @@ public class Configuration {
 
 	// globalFertility bepaalt
 	public static double globalFertility = 1, globalMaxFood = 1000;
-	public static double MaxFoodPerConsume = 1.5; // exacte waarde later bepalen
+	public static double MaxFoodPerConsume = 5; // exacte waarde later bepalen
 
 	// Max waarde van creature
 	public static double DEFAULT_CREATURE_SIZE = 10, DEFAULT_MAX_FOOD_IN_MOUTH = 5, DEFAULT_MAX_WATER_IN_MOUTH = 5,

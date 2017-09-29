@@ -8,6 +8,8 @@ import java.awt.geom.Line2D;
 public class Creature {
 
 	private static final double EAT_EFFICIENCY_STEEPNESS = 2;
+	private static final double WEIGHT_PER_FAT = 0.1;
+	
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
 	private Brain brain;
@@ -146,7 +148,7 @@ public class Creature {
 		fat += foodInMouth;
 		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
 		foodInMouth = 0;
-		fatBurned += desiredFoodAmount;
+		fatBurned += desiredFoodAmount * 0.1;
 	}
 
 	public void move(double deltaSpeed, double deltaDirection) {
@@ -184,11 +186,13 @@ public class Creature {
 
 		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
 		fatBurned += speed * weight;
+		fatBurned += Math.abs(deltaDirection) * weight;
 	}
 
 	public void endStep() {
 
-		fat -= 1 + fatBurned * age * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is
+		fat -= (0.1 + fatBurned) * age * age; // *age om oudere creatures een nadeel te geven dit verbeterd als het goed is
+		weight = fat * WEIGHT_PER_FAT;
 											// de
 		// creatures sneller door een kans te geven aan nieuwe creature
 

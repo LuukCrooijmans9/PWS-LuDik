@@ -138,7 +138,7 @@ public class InfoPanel extends JPanel {
 		if (selectedCreature != null) {
 			selectedCrtrPosFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX()
 					+ " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: "
-					+ selectedCreature.getFat());
+					+ (int) selectedCreature.getFat());
 			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + (int) selectedCreature.getTotalFoodEaten() + " Fitness: "
 					+ selectedCreature.getFitness());
 			selectedCrtrAgeFatBurnedLbl.setText(

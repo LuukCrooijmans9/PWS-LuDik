@@ -122,7 +122,7 @@ public class Board {
 		System.out.println("New generation consist of " + creaturesToSpawn + " creatures");
 		for (int i = 0; i < creaturesToSpawn; i++) {
 			Creature parentCreature = sortedCreaturesOfGeneration
-					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 1, 0, 2));
+					.get(Configuration.distributedRandomNumber(allCreaturesOfGeneration.size() - 1, 0, 50));
 			// if (parentCreature.getAmountOfChilderen() < 10) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 			Creature nextCreature = new Creature(parentCreature, point.getX(), point.getY(), generation, i,

@@ -130,7 +130,7 @@ public class Map {
 		}
 
 		public void setTiles(Tile[][] tiles) {
-			tiles = tiles;
+			this.tiles = tiles;
 		}
 
 	public void drawMap(Graphics2D g2d) {
