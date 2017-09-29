@@ -10,7 +10,7 @@ public class Configuration {
 													// ver je ingezoomt zit op de perlin noise.
 	public static final double DEFAULT_SEED = -1; // Seed is een double van 0 tot 255. negatief laten voor random seed
 
-	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 100;
+	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 25;
 
 	public static final double DEFAULT_EVOLUTION_FACTOR = 0.02; // 1 is maximale evolutio 0 is geen evolutie
 
@@ -23,7 +23,7 @@ public class Configuration {
 			DEFAULT_EYE_LENGTH = 10;
 
 	// Evolutie waarde creature
-	public static int BEGIN_AMOUNT_CREATURES = 500;
+	public static int BEGIN_AMOUNT_CREATURES = 100;
 
 	// een aantal rekenkundige functies.
 
