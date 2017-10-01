@@ -7,12 +7,12 @@ import java.awt.geom.Line2D;
 
 public class Creature {
 
-	private static final double EAT_EFFICIENCY_STEEPNESS = 2;
-	private static final double WEIGHT_PER_FAT = 0.1;
-	private static final double BASE_FAT_CONSUMPTION = 0.5;
-	private double BASE_CREATURE_EFFICIENCY = 10;
-	private static final int DEFAULT_BRAIN_WIDTH = 1;
-	private static final int DEFAULT_BRAIN_HEIGHT = 20;
+	private static final double EAT_EFFICIENCY_STEEPNESS = Configuration.EAT_EFFICIENCY_STEEPNESS;
+	private static final double WEIGHT_PER_FAT = Configuration.WEIGHT_PER_FAT;
+	private static final double BASE_FAT_CONSUMPTION = Configuration.BASE_FAT_CONSUMPTION;
+	private static final double BASE_CREATURE_EFFICIENCY = Configuration.BASE_CREATURE_EFFICIENCY;
+	private static final int DEFAULT_BRAIN_WIDTH = Configuration.DEFAULT_BRAIN_WIDTH;
+	private static final int DEFAULT_BRAIN_HEIGHT = Configuration.DEFAULT_BRAIN_HEIGHT;
 
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
@@ -23,7 +23,7 @@ public class Creature {
 	private double totalFoodEaten;
 	private double fitness;
 	private double fat, weight, fatBurned; // Voedsel vooraad
-	
+
 	private double actualFoodAmount, foodInMouth;
 	private double eatEfficiency;
 
@@ -59,21 +59,20 @@ public class Creature {
 
 		setXPos(x);
 		setYPos(y);
-
 		direction = Math.random() * 360;
 
-		eyeDeviation = 45;
-
 		age = 0;
-		fat = 1000;
+		fat = Configuration.DEFAULT_STARTING_FAT;
+
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
+		eyeDeviation = Configuration.DEFAULT_EYE_DEVIATION;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
 		brain = new Brain(DEFAULT_BRAIN_HEIGHT, DEFAULT_BRAIN_WIDTH, this);
-		brainOutputs = new double[20];
+		brainOutputs = new double[DEFAULT_BRAIN_HEIGHT];
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
@@ -88,18 +87,18 @@ public class Creature {
 
 		direction = Math.random() * 360;
 
-		eyeDeviation = 45;
-
 		age = 0;
-		fat = 1000;
+		fat = Configuration.DEFAULT_STARTING_FAT;
+
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
+		eyeDeviation = Configuration.DEFAULT_EYE_DEVIATION;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
 		brain = new Brain(parentCreature.getBrain(), this, deviation);
-		brainOutputs = new double[20];
+		brainOutputs = new double[DEFAULT_BRAIN_HEIGHT];
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
@@ -142,25 +141,24 @@ public class Creature {
 	public void eat(double desiredFoodAmount) {
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
+
 		desiredFoodAmount = Math.max(desiredFoodAmount, 0);
 
 		if (desiredFoodAmount != 0) {
 			eatEfficiency = 1 / (EAT_EFFICIENCY_STEEPNESS * speed + 1);
+			actualFoodAmount = desiredFoodAmount * eatEfficiency;
+			foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(actualFoodAmount);
+			fat += foodInMouth;
+			setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
+			foodInMouth = 0;
+			fatBurned += desiredFoodAmount * 0.1;
 		}
-
-		actualFoodAmount = desiredFoodAmount * eatEfficiency;
-
-		foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(actualFoodAmount);
-		fat += foodInMouth;
-		setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
-		foodInMouth = 0;
-		fatBurned += desiredFoodAmount * 0.1;
 	}
 
 	public void move(double deltaSpeed, double deltaDirection) {
 
 		// rekent maxSpeed uit.
-		maxSpeed = (0.25 * creatureSize);
+		maxSpeed = Configuration.DEFAULT_MAX_SPEED;
 
 		// rekent speed uit
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -172,7 +170,7 @@ public class Creature {
 		}
 
 		// Rekent nieuwe kijkrichting/beweegrichting uit.
-		deltaDirection *= 10;
+		deltaDirection *= Configuration.MAX_DELTA_DIRECTION_PER_STEP;
 		direction -= deltaDirection;
 		direction %= 360;
 
@@ -198,8 +196,9 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= (BASE_FAT_CONSUMPTION + fatBurned) * age * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures een nadeel te geven dit
-																// verbeterd als het goed is
+		fat -= (BASE_FAT_CONSUMPTION + fatBurned) * age * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures
+																							// een nadeel te geven dit
+		// verbeterd als het goed is
 		weight = fat * WEIGHT_PER_FAT;
 		// de creatures sneller door een kans te geven aan nieuwe creature
 
@@ -208,7 +207,7 @@ public class Creature {
 			isDead = true;
 
 		} else {
-			age += 0.01d;
+			age += Configuration.AGE_PER_STEP;
 		}
 	}
 

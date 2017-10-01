@@ -114,28 +114,15 @@ public class Board {
 		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
 		ArrayList<Creature> newAllCreaturesOfGeneration = new ArrayList<Creature>();
 		ArrayList<Creature> sortedCreaturesOfGeneration = new ArrayList<Creature>(infoPanel.getCreatures());
-		// for (int i = 0; i < sortedCreaturesOfGeneration.size(); i++) {
-		// System.out.println(i + ": " +
-		// sortedCreaturesOfGeneration.get(i).getFitness());
-		// }
-		// for (int i = 0; i < BEGIN_AMOUNT_CREATURES / 2; i++) {
-		// int index =
-		// Configuration.distributedRandomNumber(sortedCreaturesOfGeneration.size() - 1,
-		// 0, 2);
-		// Creature parentCreature = sortedCreaturesOfGeneration.get(index);
-		// parentCreatures.add(parentCreature);
-		// sortedCreaturesOfGeneration.remove(parentCreature);
-		// }
+
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
-		// for (int i = 0; i < sortedCreaturesOfGeneration.size(); i++) {
-		// System.out.println(i + ": " +
-		// sortedCreaturesOfGeneration.get(i).getFitness());
-		// }
+
 		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT; i++) {
 			Creature parentCreature = sortedCreaturesOfGeneration.get(i);
 			parentCreatures.add(parentCreature);
 			sortedCreaturesOfGeneration.remove(parentCreature);
 		}
+		
 
 		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT
 				- AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION; i++) {
@@ -144,11 +131,12 @@ public class Board {
 				Point2D point = availableSpawnPoints
 						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 				Creature nextCreature = new Creature(parentCreatures.get(i), point.getX(), point.getY(), generation,
-						i * j + i, EVOLUTION_FACTOR);
+						i, EVOLUTION_FACTOR);
 				creatures.add(nextCreature);
 				newAllCreaturesOfGeneration.add(nextCreature);
 			}
 		}
+		
 		
 		allCreaturesOfGeneration.clear();
 		for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
@@ -159,8 +147,6 @@ public class Board {
 		}
 
 		generation++;
-		// System.out.println("New generation consist of " +
-		// allCreaturesOfGeneration.size() + " creatures");
 		System.out.println("Generation: " + generation + " spawned!");
 	}
 
