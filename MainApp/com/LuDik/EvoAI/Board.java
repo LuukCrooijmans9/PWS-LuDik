@@ -26,7 +26,7 @@ public class Board {
 	private ArrayList<Creature> tempList;
 	private ArrayList<Creature> allCreaturesOfGeneration;
 	private int generation;
-	private ArrayList<Number> averageFitness;
+	private ArrayList<Double> averageFitness;
 
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
@@ -89,7 +89,7 @@ public class Board {
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
 		tempList = new ArrayList<Creature>();
-		averageFitness = new ArrayList<Number>();
+		averageFitness = new ArrayList<Double>();
 		// spawnArea = landArea;
 
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
@@ -147,6 +147,7 @@ public class Board {
 		}
 
 		generation++;
+		System.out.println(" ");
 		System.out.println("Generation: " + generation + " spawned!");
 	}
 
@@ -195,6 +196,7 @@ public class Board {
 				System.out.println("improvement: " + (int) improvement);
 				improvement = (double) this.averageFitness.get(generation) - (double) this.averageFitness.get(0);
 				System.out.println("Total improvement: " + (int) improvement);
+				System.out.println("Index: " + ((this.averageFitness.get(generation) / this.averageFitness.get(0)) * 100));
 
 			}
 

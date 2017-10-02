@@ -16,7 +16,7 @@ public class Neuron {
 	Neuron(Neuron neuron, double deviation /* van 0 tot 1 waar 1 een volledig random weight maakt */) {
 		this.weights = neuron.getWeights();
 		for (int i = 0; i < this.weights.length; i++) {
-			double random = Math.random() * 2 - 1;
+			double random = Math.random();
 			if (random < deviation) {
 				weights[i] += (Math.random() * 2 - 1) * deviation;
 			}

@@ -12,7 +12,7 @@ public class Configuration {
 
 	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 100;
 
-	public static final double DEFAULT_EVOLUTION_FACTOR = 0.02; // 1 is maximale evolutio 0 is geen evolutie
+	public static final double DEFAULT_EVOLUTION_FACTOR = 0.002; // 1 is maximale evolutio 0 is geen evolutie
 	
 	public static int BEGIN_AMOUNT_CREATURES = 400;
 	public static int RATIO_CHILDS_PER_PARENT = 2; // 2 wil zeggen dat elke parent 2 childs krijgt
