@@ -89,7 +89,7 @@ public class Board {
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
 		tempList = new ArrayList<Creature>();
-		averageFitness = new ArrayList<Double>();
+		setAverageFitness(new ArrayList<Double>());
 		// spawnArea = landArea;
 
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
@@ -189,14 +189,14 @@ public class Board {
 			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
 			System.out.println("averageFitness: " + (int) averageFitness);
 
-			this.averageFitness.add(generation, averageFitness);
+			this.getAverageFitness().add(generation, averageFitness);
 			if (generation > 2) {
-				double improvement = (double) this.averageFitness.get(generation)
-						- (double) this.averageFitness.get(generation - 1);
+				double improvement = (double) this.getAverageFitness().get(generation)
+						- (double) this.getAverageFitness().get(generation - 1);
 				System.out.println("improvement: " + (int) improvement);
-				improvement = (double) this.averageFitness.get(generation) - (double) this.averageFitness.get(0);
+				improvement = (double) this.getAverageFitness().get(generation) - (double) this.getAverageFitness().get(0);
 				System.out.println("Total improvement: " + (int) improvement);
-				System.out.println("Index: " + ((this.averageFitness.get(generation) / this.averageFitness.get(0)) * 100));
+				System.out.println("Index: " + ((this.getAverageFitness().get(generation) / this.getAverageFitness().get(0)) * 100));
 
 			}
 
@@ -282,6 +282,22 @@ public class Board {
 
 	public void setAllCreaturesOfGeneration(ArrayList<Creature> allCreaturesOfGeneration) {
 		this.allCreaturesOfGeneration = allCreaturesOfGeneration;
+	}
+
+	public int getGeneration() {
+		return generation;
+	}
+
+	public void setGeneration(int generation) {
+		this.generation = generation;
+	}
+
+	public ArrayList<Double> getAverageFitness() {
+		return averageFitness;
+	}
+
+	public void setAverageFitness(ArrayList<Double> averageFitness) {
+		this.averageFitness = averageFitness;
 	}
 
 }

@@ -20,6 +20,8 @@ import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.jfree.data.xy.XYSeries;
+
 public class InfoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -33,6 +35,7 @@ public class InfoPanel extends JPanel {
 
 	private List<Creature> creatures;
 	private Creature selectedCreature;
+	private int currentGeneration;
 
 	private static int IPHeight;
 	private static final int IPWidth = 400;
@@ -41,6 +44,8 @@ public class InfoPanel extends JPanel {
 	private JPanel singleLineInfoPanel;
 	private JPanel listPanel;
 	private JPanel graphPanel;
+	
+	private LineChartPanel lineChartPanel;
 	
 	private JLabel stepLbl;
 	private JLabel timePerStepLbl;
@@ -51,6 +56,7 @@ public class InfoPanel extends JPanel {
 	private JLabel selectedCrtrAgeFatBurnedLbl;
 
 	private JList creaturesList;
+
 	
 
 	public InfoPanel(EvoAI parent) {
@@ -94,6 +100,8 @@ public class InfoPanel extends JPanel {
 				}
 			}
 		});
+		
+		lineChartPanel = new LineChartPanel(this, "Fitness in relation to generation", "Generation", "Fitness");
 
 		singleLineInfoPanel.add(stepLbl);
 		singleLineInfoPanel.add(timePerStepLbl);
@@ -103,6 +111,7 @@ public class InfoPanel extends JPanel {
 		singleLineInfoPanel.add(selectedCrtrFoodFitnessLbl);
 		singleLineInfoPanel.add(selectedCrtrAgeFatBurnedLbl);
 		listPanel.add(creaturesList);
+		graphPanel.add(lineChartPanel);
 
 	}
 
@@ -113,6 +122,7 @@ public class InfoPanel extends JPanel {
 
 	public void setBoard(Board brd) {
 		board = brd;
+		currentGeneration = board.getGeneration();
 
 	}
 
@@ -166,6 +176,29 @@ public class InfoPanel extends JPanel {
 
 			creaturesList.setModel(lModel);
 
+			
+			if (currentGeneration != board.getGeneration()) {
+				System.out.println("nieuwe generatie");
+				
+				ArrayList<Double> averageFitnessArray = board.getAverageFitness();
+//				double[][] averageFitnessDataset = new double[2][averageFitnessArray.size()];
+				
+				XYSeries averageFitnessSeries = new XYSeries("averageFitness");
+				
+				for (int i = 0; i < averageFitnessArray.size(); i++) {
+//					averageFitnessDataset[0][i] = (double) i;
+//					averageFitnessDataset[1][i] = averageFitnessArray.get(i);
+					
+					averageFitnessSeries.addOrUpdate(Double.valueOf(i), averageFitnessArray.get(i));
+				}
+				
+				
+				
+				lineChartPanel.updateDataset(averageFitnessSeries);
+				
+				currentGeneration = board.getGeneration();
+			}
+			
 		}
 	}
 
