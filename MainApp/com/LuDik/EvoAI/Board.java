@@ -26,7 +26,9 @@ public class Board {
 	private ArrayList<Creature> tempList;
 	private ArrayList<Creature> allCreaturesOfGeneration;
 	private int generation;
-	private ArrayList<Double> averageFitness;
+	private ArrayList<Double> averageFitnessArray;
+	private ArrayList<Double> averageAgeArray;
+	private ArrayList<Double> averageTotalFoodEatenArray;
 
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
@@ -89,7 +91,9 @@ public class Board {
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
 		tempList = new ArrayList<Creature>();
-		setAverageFitness(new ArrayList<Double>());
+		setAverageFitnessArray(new ArrayList<Double>());
+		setAverageAgeArray(new ArrayList<Double>());
+		setAverageTotalFoodEatenArray(new ArrayList<Double>());
 		// spawnArea = landArea;
 
 		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
@@ -181,22 +185,32 @@ public class Board {
 
 		if (creatures.size() == 0) {
 			double averageFitness = 0;
+			double averageAge = 0;
+			double averageTotalFoodEaten = 0;
 			for (int i = 0; i < allCreaturesOfGeneration.size(); i++) {
 				averageFitness += allCreaturesOfGeneration.get(i).getFitness();
+				averageAge += allCreaturesOfGeneration.get(i).getAge();
+				averageTotalFoodEaten += allCreaturesOfGeneration.get(i).getTotalFoodEaten();
 			}
 			averageFitness /= BEGIN_AMOUNT_CREATURES;
+			averageAge /= BEGIN_AMOUNT_CREATURES;
+			averageTotalFoodEaten /= BEGIN_AMOUNT_CREATURES;
 
+			this.getAverageFitnessArray().add(generation, averageFitness);
+			this.getAverageAgeArray().add(generation, averageAge);
+			this.getAverageTotalFoodEatenArray().add(generation, averageTotalFoodEaten);
+			
+			
 			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
 			System.out.println("averageFitness: " + (int) averageFitness);
 
-			this.getAverageFitness().add(generation, averageFitness);
 			if (generation > 2) {
-				double improvement = (double) this.getAverageFitness().get(generation)
-						- (double) this.getAverageFitness().get(generation - 1);
+				double improvement = (double) this.getAverageFitnessArray().get(generation)
+						- (double) this.getAverageFitnessArray().get(generation - 1);
 				System.out.println("improvement: " + (int) improvement);
-				improvement = (double) this.getAverageFitness().get(generation) - (double) this.getAverageFitness().get(0);
+				improvement = (double) this.getAverageFitnessArray().get(generation) - (double) this.getAverageFitnessArray().get(0);
 				System.out.println("Total improvement: " + (int) improvement);
-				System.out.println("Index: " + ((this.getAverageFitness().get(generation) / this.getAverageFitness().get(0)) * 100));
+				System.out.println("Index: " + ((this.getAverageFitnessArray().get(generation) / this.getAverageFitnessArray().get(0)) * 100));
 
 			}
 
@@ -292,12 +306,28 @@ public class Board {
 		this.generation = generation;
 	}
 
-	public ArrayList<Double> getAverageFitness() {
-		return averageFitness;
+	public ArrayList<Double> getAverageFitnessArray() {
+		return averageFitnessArray;
 	}
 
-	public void setAverageFitness(ArrayList<Double> averageFitness) {
-		this.averageFitness = averageFitness;
+	public void setAverageFitnessArray(ArrayList<Double> averageFitness) {
+		this.averageFitnessArray = averageFitness;
+	}
+
+	public ArrayList<Double> getAverageAgeArray() {
+		return averageAgeArray;
+	}
+
+	public void setAverageAgeArray(ArrayList<Double> averageAgeArray) {
+		this.averageAgeArray = averageAgeArray;
+	}
+
+	public ArrayList<Double> getAverageTotalFoodEatenArray() {
+		return averageTotalFoodEatenArray;
+	}
+
+	public void setAverageTotalFoodEatenArray(ArrayList<Double> averageTotalFoodEatenArray) {
+		this.averageTotalFoodEatenArray = averageTotalFoodEatenArray;
 	}
 
 }

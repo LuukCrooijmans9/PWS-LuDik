@@ -45,7 +45,9 @@ public class InfoPanel extends JPanel {
 	private JPanel listPanel;
 	private JPanel graphPanel;
 	
-	private LineChartPanel lineChartPanel;
+	private LineChartPanel fitnessLineChartPanel;
+	private LineChartPanel ageLineChartPanel;
+	private LineChartPanel totalFoodEatenLineChartPanel;
 	
 	private JLabel stepLbl;
 	private JLabel timePerStepLbl;
@@ -101,7 +103,9 @@ public class InfoPanel extends JPanel {
 			}
 		});
 		
-		lineChartPanel = new LineChartPanel(this, "Fitness in relation to generation", "Generation", "Fitness");
+		fitnessLineChartPanel = new LineChartPanel(this, "Fitness in relation to generation", "Generation", "Fitness");
+		ageLineChartPanel = new LineChartPanel(this, "Age in relation to generation", "Generation", "Age");
+		totalFoodEatenLineChartPanel = new LineChartPanel(this, "TotalFoodEaten in relation to generation", "Generation", "TotalFoodEaten");
 
 		singleLineInfoPanel.add(stepLbl);
 		singleLineInfoPanel.add(timePerStepLbl);
@@ -111,7 +115,9 @@ public class InfoPanel extends JPanel {
 		singleLineInfoPanel.add(selectedCrtrFoodFitnessLbl);
 		singleLineInfoPanel.add(selectedCrtrAgeFatBurnedLbl);
 		listPanel.add(creaturesList);
-		graphPanel.add(lineChartPanel);
+		graphPanel.add(fitnessLineChartPanel);
+		graphPanel.add(ageLineChartPanel);
+		graphPanel.add(totalFoodEatenLineChartPanel);
 
 	}
 
@@ -178,10 +184,13 @@ public class InfoPanel extends JPanel {
 
 			
 			if (currentGeneration != board.getGeneration()) {
-				System.out.println("nieuwe generatie");
 								
-				XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitness(), "averageFitness");
-				lineChartPanel.updateDataset(averageFitnessSeries);
+				XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitnessArray(), "averageFitness");
+				XYSeries averageAgeSeries = convertArrayListToXYSeries(board.getAverageAgeArray(), "averageAge");
+				XYSeries averageTotalFoodEatenSeries = convertArrayListToXYSeries(board.getAverageTotalFoodEatenArray(), "averageTotalFoodEaten");
+				fitnessLineChartPanel.updateDataset(averageFitnessSeries);
+				ageLineChartPanel.updateDataset(averageAgeSeries);
+				totalFoodEatenLineChartPanel.updateDataset(averageTotalFoodEatenSeries);
 				
 				currentGeneration = board.getGeneration();
 			}
