@@ -179,27 +179,27 @@ public class InfoPanel extends JPanel {
 			
 			if (currentGeneration != board.getGeneration()) {
 				System.out.println("nieuwe generatie");
-				
-				ArrayList<Double> averageFitnessArray = board.getAverageFitness();
-//				double[][] averageFitnessDataset = new double[2][averageFitnessArray.size()];
-				
-				XYSeries averageFitnessSeries = new XYSeries("averageFitness");
-				
-				for (int i = 0; i < averageFitnessArray.size(); i++) {
-//					averageFitnessDataset[0][i] = (double) i;
-//					averageFitnessDataset[1][i] = averageFitnessArray.get(i);
-					
-					averageFitnessSeries.addOrUpdate(Double.valueOf(i), averageFitnessArray.get(i));
-				}
-				
-				
-				
+								
+				XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitness(), "averageFitness");
 				lineChartPanel.updateDataset(averageFitnessSeries);
 				
 				currentGeneration = board.getGeneration();
 			}
 			
 		}
+	}
+	
+	private XYSeries convertArrayListToXYSeries(ArrayList<Double> arrayList, Comparable comparable) {		
+				
+		XYSeries xySeries = new XYSeries(comparable);
+		
+		for (int i = 0; i < arrayList.size(); i++) {
+			xySeries.add(
+					Double.valueOf(i), 
+					Double.valueOf(arrayList.get(i)));
+		}
+		
+		return xySeries;
 	}
 
 	public Creature getSelectedCreature() {
