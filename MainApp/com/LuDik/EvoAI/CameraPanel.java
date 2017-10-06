@@ -105,9 +105,9 @@ public class CameraPanel extends JPanel {
 		g2d.setTransform(saveXform);
 		
 //		debug lijnen, uncomment als je twee lijnen die door het midden van het scherm gaan wil hebben.
-		g2d.setColor(Color.green);
-		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
-		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
+//		g2d.setColor(Color.green);
+//		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
+//		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
 		 
 		
 		
@@ -147,30 +147,15 @@ public class CameraPanel extends JPanel {
 			y = e.getY();
 			ArrayList<Creature> creatures = mainFrame.getBoard().getCreatures();
 			
-			mainFrame.getInfoPanel().updateMousePos(x, y);
+			
 			for (Creature crtr : creatures) {
 				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
 					
 					setSelectedCreature(crtr);
-//					if (selectedCreature != null) {
-//						selectedCreature.setSelected(false);
-//						selectedCreature.setControlled(false);
-//						mainFrame.getActionPanel().setControlCrtr(false);
-//					} else {
-//						mainFrame.getActionPanel().setControlCrtrBtnEnabled(true);
-//						mainFrame.getActionPanel().setFollowCrtrBtnEnabled(true);
-//					}
-//					selectedCreature = crtr;
-//					
-//					mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
-////					selectedCreature.setCreatureColor(Color.blue);
-//					selectedCreature.setSelected(true);
 					break;
 				}
 			}
-//	           System.out.println(x+ " , "+ y);
 
-//			System.out.println("mousepressed");
 		}
 		
 		 @Override

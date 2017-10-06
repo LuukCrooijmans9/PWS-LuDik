@@ -24,7 +24,9 @@ import org.jfree.data.xy.XYSeries;
 
 public class InfoPanel extends JPanel {
 
+
 	private static final long serialVersionUID = 1L;
+	private static final int CREATURELIST_LENGTH = 5;
 
 	// UI containers:
 	private EvoAI mainFrame;
@@ -52,8 +54,7 @@ public class InfoPanel extends JPanel {
 	private JLabel stepLbl;
 	private JLabel timePerStepLbl;
 	private JLabel crtrAmountLbl;
-	private JLabel mousePosLbl;
-	private JLabel selectedCrtrPosFatLbl;
+	private JLabel selectedCrtrFatLbl;
 	private JLabel selectedCrtrFoodFitnessLbl;
 	private JLabel selectedCrtrAgeFatBurnedLbl;
 
@@ -74,21 +75,34 @@ public class InfoPanel extends JPanel {
 		mainFrame = parent;
 		
 		singleLineInfoPanel = new JPanel();
+		singleLineInfoPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/200));
+		
 //		singleLineInfoPanel.setLayout(new BoxLayout(singleLineInfoPanel, BoxLayout.PAGE_AXIS));
 		listPanel = new JPanel();
+		listPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/200));
+
+
 		graphPanel = new JPanel();
+		graphPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/2));
+
+//		singleLineInfoPanel.setBackground(Color.blue);
+//		listPanel.setBackground(Color.red);
+//		graphPanel.setBackground(Color.green);
+
 //		listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
 
+		
+		
 		
 		add(singleLineInfoPanel);
 		add(listPanel);
 		add(graphPanel);
+		
 
 		stepLbl = new JLabel("Step: " + 0);
 		timePerStepLbl = new JLabel("TimePerStep: " + 0);
 		crtrAmountLbl = new JLabel("Amount of creatures: " + 0);
-		mousePosLbl = new JLabel("mousePosX" + 0 + "mousePosY" + 0);
-		selectedCrtrPosFatLbl = new JLabel("selectedCreature: " + 0);
+		selectedCrtrFatLbl = new JLabel("selectedCreature: " + 0);
 		selectedCrtrFoodFitnessLbl = new JLabel("TotalFoodEaten: " + 0 + " Fitness: " + 0);
 		selectedCrtrAgeFatBurnedLbl = new JLabel("Age: " + 0 + " FatBurnedThisStep: " + 0);
 
@@ -110,31 +124,18 @@ public class InfoPanel extends JPanel {
 		singleLineInfoPanel.add(stepLbl);
 		singleLineInfoPanel.add(timePerStepLbl);
 		singleLineInfoPanel.add(crtrAmountLbl);
-		singleLineInfoPanel.add(mousePosLbl);
-		singleLineInfoPanel.add(selectedCrtrPosFatLbl);
+		singleLineInfoPanel.add(selectedCrtrFatLbl);
 		singleLineInfoPanel.add(selectedCrtrFoodFitnessLbl);
 		singleLineInfoPanel.add(selectedCrtrAgeFatBurnedLbl);
 		listPanel.add(creaturesList);
 		graphPanel.add(fitnessLineChartPanel);
 		graphPanel.add(ageLineChartPanel);
 		graphPanel.add(totalFoodEatenLineChartPanel);
+		
+		
 
 	}
 
-	public void setTimeKeeper(TimeKeeper tmkpr) {
-		timeKeeper = tmkpr;
-
-	}
-
-	public void setBoard(Board brd) {
-		board = brd;
-		currentGeneration = board.getGeneration();
-
-	}
-
-	public void updateMousePos(int x, int y) {
-		mousePosLbl.setText("mousePosX " + x + " mousePosY " + y);
-	}
 
 	public void update() {
 
@@ -152,7 +153,7 @@ public class InfoPanel extends JPanel {
 		}
 
 		if (selectedCreature != null) {
-			selectedCrtrPosFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX()
+			selectedCrtrFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX()
 					+ " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: "
 					+ (int) selectedCreature.getFat());
 			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + (int) selectedCreature.getTotalFoodEaten() + " Fitness: "
@@ -173,7 +174,7 @@ public class InfoPanel extends JPanel {
 
 			DefaultListModel lModel = new DefaultListModel();
 
-			int listSize = Math.min(creatures.size(), 10);
+			int listSize = Math.min(creatures.size(), CREATURELIST_LENGTH);
 
 			for (int i = 0; i < listSize; i++) {
 				// System.out.println("Fitness" + crtr.getFitness());
@@ -209,6 +210,17 @@ public class InfoPanel extends JPanel {
 		}
 		
 		return xySeries;
+	}
+
+	public void setTimeKeeper(TimeKeeper tmkpr) {
+		timeKeeper = tmkpr;
+		
+	}
+	
+	public void setBoard(Board brd) {
+		board = brd;
+		currentGeneration = board.getGeneration();
+		
 	}
 
 	public Creature getSelectedCreature() {
