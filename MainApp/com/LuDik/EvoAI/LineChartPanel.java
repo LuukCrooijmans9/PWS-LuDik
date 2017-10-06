@@ -13,6 +13,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class LineChartPanel extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private JFreeChart chart;
 	private ChartPanel chartPanel;
 	private XYSeriesCollection dataset;
