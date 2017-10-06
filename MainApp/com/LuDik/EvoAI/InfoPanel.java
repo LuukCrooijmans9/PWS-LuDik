@@ -58,7 +58,7 @@ public class InfoPanel extends JPanel {
 	private JLabel selectedCrtrFoodFitnessLbl;
 	private JLabel selectedCrtrAgeFatBurnedLbl;
 
-	private JList creaturesList;
+	private JList<String> creaturesList;
 
 	
 
@@ -139,28 +139,30 @@ public class InfoPanel extends JPanel {
 
 	public void update() {
 
+
+		updateTimeKeeperRelatedComponents();
+
+		updateBoardRelatedComponents();
+
+		updateSelectedCreatureRelatedComponents();
+		
+		updateCreaturesList();
+		
+		if (currentGeneration != board.getGeneration()) {
+			
+			XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitnessArray(), "averageFitness");
+			XYSeries averageAgeSeries = convertArrayListToXYSeries(board.getAverageAgeArray(), "averageAge");
+			XYSeries averageTotalFoodEatenSeries = convertArrayListToXYSeries(board.getAverageTotalFoodEatenArray(), "averageTotalFoodEaten");
+			fitnessLineChartPanel.updateDataset(averageFitnessSeries);
+			ageLineChartPanel.updateDataset(averageAgeSeries);
+			totalFoodEatenLineChartPanel.updateDataset(averageTotalFoodEatenSeries);
+			
+			currentGeneration = board.getGeneration();
+		}
+	}
+
+	private void updateCreaturesList() {
 		creatures = board.getAllCreaturesOfGeneration();
-
-		// selectedCreature = board.getCreatures().get(0);
-
-		if (timeKeeper != null) {
-			stepLbl.setText("Step: " + timeKeeper.getStep());
-			timePerStepLbl.setText("NanoTimePerStep: " + timeKeeper.getTimeDiffNano() / Math.pow(10, 6));
-		}
-
-		if (board != null && board.getCreatures() != null) {
-			crtrAmountLbl.setText("Amount of creatures: " + board.getCreatures().size());
-		}
-
-		if (selectedCreature != null) {
-			selectedCrtrFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX()
-					+ " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: "
-					+ (int) selectedCreature.getFat());
-			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + (int) selectedCreature.getTotalFoodEaten() + " Fitness: "
-					+ selectedCreature.getFitness());
-			selectedCrtrAgeFatBurnedLbl.setText(
-					"Age: " + (int) selectedCreature.getAge() + " FatBurnedThisStep: " + (int) selectedCreature.getFatBurned());
-		}
 
 		if (creatures != null) {
 			creatures.sort(new Comparator<Creature>() {
@@ -172,30 +174,47 @@ public class InfoPanel extends JPanel {
 
 			});
 
-			DefaultListModel lModel = new DefaultListModel();
+			DefaultListModel<String> lModel = new DefaultListModel<String>();
 
 			int listSize = Math.min(creatures.size(), CREATURELIST_LENGTH);
 
 			for (int i = 0; i < listSize; i++) {
-				// System.out.println("Fitness" + crtr.getFitness());
-				lModel.add(i, (int) creatures.get(i).getFitness());
+				Creature crtr = creatures.get(i);
+				lModel.add(i, "Creature" + crtr.getCreatureID() + " Fitness: " + (int) crtr.getFitness() + "Fat: " + (int) crtr.getFat() + " " + (int) crtr.getDesiredFood());
 			}
 
 			creaturesList.setModel(lModel);
 
 			
-			if (currentGeneration != board.getGeneration()) {
-								
-				XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitnessArray(), "averageFitness");
-				XYSeries averageAgeSeries = convertArrayListToXYSeries(board.getAverageAgeArray(), "averageAge");
-				XYSeries averageTotalFoodEatenSeries = convertArrayListToXYSeries(board.getAverageTotalFoodEatenArray(), "averageTotalFoodEaten");
-				fitnessLineChartPanel.updateDataset(averageFitnessSeries);
-				ageLineChartPanel.updateDataset(averageAgeSeries);
-				totalFoodEatenLineChartPanel.updateDataset(averageTotalFoodEatenSeries);
-				
-				currentGeneration = board.getGeneration();
-			}
 			
+		}
+	}
+
+	private void updateSelectedCreatureRelatedComponents() {
+		if (selectedCreature != null) {
+			
+			selectedCrtrFatLbl.setText("selectedCreature: " + (int) selectedCreature.getCreatureShape().getCenterX()
+					+ " , " + (int) selectedCreature.getCreatureShape().getCenterY() + " Fat: "
+					+ (int) selectedCreature.getFat());
+			
+			selectedCrtrFoodFitnessLbl.setText("TotalFoodEaten: " + (int) selectedCreature.getTotalFoodEaten() + " Fitness: "
+					+ selectedCreature.getFitness());
+			
+			selectedCrtrAgeFatBurnedLbl.setText(
+					"Age: " + (int) selectedCreature.getAge() + " FatBurnedThisStep: " + (int) selectedCreature.getFatBurned());
+		}
+	}
+
+	private void updateTimeKeeperRelatedComponents() {
+		if (timeKeeper != null) {
+			stepLbl.setText("Step: " + timeKeeper.getStep());
+			timePerStepLbl.setText("NanoTimePerStep: " + timeKeeper.getTimeDiffNano() / Math.pow(10, 6));
+		}
+	}
+
+	private void updateBoardRelatedComponents() {
+		if (board != null && board.getCreatures() != null) {
+			crtrAmountLbl.setText("Amount of creatures: " + board.getCreatures().size());
 		}
 	}
 	
