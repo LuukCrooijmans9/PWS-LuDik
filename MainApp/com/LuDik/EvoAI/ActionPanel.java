@@ -64,7 +64,7 @@ public class ActionPanel extends JPanel {
 		delaySlider.setPaintLabels(true);
 		delaySlider.setMajorTickSpacing(20);		
 		
-		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms");
+		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms Fps: " + 1000/delaySlider.getValue());
 
 		paused = false;
 		startBoardBtn = new Button("Start board");
@@ -201,7 +201,8 @@ public class ActionPanel extends JPanel {
 				JSlider source = (JSlider)e.getSource();
 			    if (source.getValueIsAdjusting()) {
 			    	timeKeeper.setDelay((int) source.getValue());
-			    	delaySliderLbl.setText("Delay: " + delaySlider.getValue() + " ms");
+			    	delaySliderLbl.setText("Delay: " + delaySlider.getValue() + " ms "
+			    			+ "Fps: " + (int) (1000/Math.max(delaySlider.getValue(), Double.MIN_VALUE)));
 			    }
 			}
 			
