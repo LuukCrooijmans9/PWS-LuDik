@@ -34,7 +34,7 @@ public class ActionPanel extends JPanel {
 	private Button followCrtrBtn;
 	private Button controlCrtrBtn;
 	private Button displayBoardBtn;
-	
+
 	private JSlider delaySlider;
 	private JLabel delaySliderLbl;
 
@@ -43,9 +43,6 @@ public class ActionPanel extends JPanel {
 	private boolean controlCrtr;
 
 	private boolean displayBoard;
-
-
-
 
 	public ActionPanel(EvoAI parent) {
 		initActionPanel(parent);
@@ -58,42 +55,39 @@ public class ActionPanel extends JPanel {
 		setPreferredSize(new Dimension(APWidth, APHeight));
 
 		mainFrame = parent;
-		
+
 		delaySlider = new JSlider(0, 200, 25);
 		delaySlider.setPaintTicks(true);
 		delaySlider.setPaintLabels(true);
-		delaySlider.setMajorTickSpacing(20);		
-		
-		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms Fps: " + 1000/delaySlider.getValue());
+		delaySlider.setMajorTickSpacing(20);
+
+		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms Fps: " + 1000 / delaySlider.getValue());
 
 		paused = false;
 		startBoardBtn = new Button("Start board");
 
 		pauseBtn = new Button("Paused: " + paused);
 		pauseBtn.setEnabled(false);
-		
+
 		displayBoard = true;
 		displayBoardBtn = new Button("DisplayBoard: " + displayBoard);
-		
 
 		followCrtr = false;
 		followCrtrBtn = new Button("followCreature: " + followCrtr);
 		followCrtrBtn.setEnabled(false);
-		
+
 		controlCrtrBtn = new Button("controlCreature: " + isControlCrtr());
 		controlCrtrBtn.setEnabled(false);
 		setControlCrtr(false);
-		
+
 		add(delaySliderLbl);
 		add(delaySlider);
-		
+
 		add(startBoardBtn);
 		add(pauseBtn);
 		add(displayBoardBtn);
 		add(followCrtrBtn);
 		add(controlCrtrBtn);
-		
-		
 
 		startBoardBtn.addActionListener(new ActionListener() {
 
@@ -101,116 +95,105 @@ public class ActionPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				infoPanel = mainFrame.getInfoPanel();
 				cameraPanel = mainFrame.getCameraPanel();
-				
+
 				if (timeKeeper != null) {
 					timeKeeper = null;
 				}
-				
-			
-					board = new Board(
-							Configuration.DEFAULT_TILE_SIZE,
-							Configuration.DEFAULT_MAP_SIZE_IN_TILES,
-							Configuration.DEFAULT_SEED,
-							Configuration.DEFAULT_SMOOTHNESS,
-							mainFrame
-							);
 
-				
+				board = new Board(Configuration.DEFAULT_TILE_SIZE, Configuration.DEFAULT_MAP_SIZE_IN_TILES,
+						Configuration.DEFAULT_SEED, Configuration.DEFAULT_SMOOTHNESS, mainFrame);
+
 				infoPanel.setBoard(board);
-				
+
 				board.spawnFirstCreatures();
 				cameraPanel.update();
-				
-				timeKeeper = board.getTimeKeeper();				
+
+				timeKeeper = board.getTimeKeeper();
 				timeKeeper.start();
-				
+
 				pauseBtn.setEnabled(true);
 
+			};
+		});
+
+		displayBoardBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				displayBoard = !displayBoard;
+
+				cameraPanel.setDisplayBoard(displayBoard);
+				displayBoardBtn.setLabel("displayBoard: " + displayBoard);
 
 			};
 		});
-		
-		displayBoardBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				displayBoard = !displayBoard;	
-				
-				cameraPanel.setDisplayBoard(displayBoard);
-				displayBoardBtn.setLabel("displayBoard: " + displayBoard);
-				
-				
-				
-			};
-		});
-		
+
 		pauseBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				paused = !paused;
-				
-				synchronized(timeKeeper) {
+
+				synchronized (timeKeeper) {
 					timeKeeper.setPaused(paused);
 				}
-				
-				if(!paused) {
-					synchronized(timeKeeper) {
+
+				if (!paused) {
+					synchronized (timeKeeper) {
 						timeKeeper.notify();
 					}
 				}
-				
+
 				pauseBtn.setLabel("Paused: " + paused);
-				
-				
+
 			};
 		});
-		
+
 		followCrtrBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				followCrtr = !followCrtr;
-				
+
 				cameraPanel.setFollowSelectedCreature(followCrtr);
-				
+
 				followCrtrBtn.setLabel("followCreature: " + followCrtr);
-				
-				
+
 			};
 		});
-		
+
 		controlCrtrBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				setControlCrtr(!isControlCrtr());
-				
+
 				cameraPanel.setControlCrtr(isControlCrtr());
-				
+
 				controlCrtrBtn.setLabel("controlCreature: " + isControlCrtr());
-				
-				
+
 			};
 		});
-		
+
 		delaySlider.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				JSlider source = (JSlider)e.getSource();
-			    if (source.getValueIsAdjusting()) {
-			    	timeKeeper.setDelay((int) source.getValue());
-			    	delaySliderLbl.setText("Delay: " + delaySlider.getValue() + " ms "
-			    			+ "Fps: " + (int) (1000/Math.max(delaySlider.getValue(), Double.MIN_VALUE)));
-			    }
+				JSlider source = (JSlider) e.getSource();
+				if (source.getValueIsAdjusting()) {
+					if (timeKeeper != null) {
+						timeKeeper.setDelay((int) source.getValue());
+						delaySliderLbl.setText("Delay: " + delaySlider.getValue() + " ms " + "Fps: "
+								+ (int) (1000 / Math.max(delaySlider.getValue(), Double.MIN_VALUE)));
+					}
+				}
 			}
-			
+
 		});
 	}
 
 	public TimeKeeper getTimeKeeper() {
-		
+
 		return timeKeeper;
 	}
 
@@ -221,7 +204,7 @@ public class ActionPanel extends JPanel {
 	public void setFollowCrtrBtnEnabled(boolean bool) {
 		followCrtrBtn.setEnabled(bool);
 	}
-	
+
 	public void setControlCrtrBtnEnabled(boolean bool) {
 		controlCrtrBtn.setEnabled(bool);
 	}
