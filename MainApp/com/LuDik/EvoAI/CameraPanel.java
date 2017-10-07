@@ -32,6 +32,7 @@ public class CameraPanel extends JPanel {
 	
 	private boolean followSelectedCreature;
 	private boolean controlCrtr;
+	private boolean displayBoard;
 	
 	private AffineTransform saveXform;
 	private AffineTransform scaleT;
@@ -50,10 +51,13 @@ public class CameraPanel extends JPanel {
 	private int x,y;
 
 
+
 	
 	public CameraPanel(EvoAI parent) {
 		mainFrame = parent;
 		setBackground(Color.white);
+		
+		setDisplayBoard(true);
 
 		setPreferredSize(new Dimension(CPWIDTH, CPHEIGHT));
 		setFocusable(true);
@@ -79,6 +83,11 @@ public class CameraPanel extends JPanel {
 
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		
+		if (!isDisplayBoard()) {
+			g2d.drawString("displayBoard = false", CPWIDTH/2, CPWIDTH/2);
+			return;
+		}
 		
 		AffineTransform saveXform = g2d.getTransform();
 		
@@ -147,6 +156,9 @@ public class CameraPanel extends JPanel {
 			y = e.getY();
 			ArrayList<Creature> creatures = mainFrame.getBoard().getCreatures();
 			
+			if (!isDisplayBoard()) {
+				return;
+			}
 			
 			for (Creature crtr : creatures) {
 				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
@@ -346,6 +358,14 @@ public class CameraPanel extends JPanel {
 
 	public void setRcFoodAmount(double rcFoodAmount) {
 		this.rcFoodAmount = rcFoodAmount;
+	}
+
+	public boolean isDisplayBoard() {
+		return displayBoard;
+	}
+
+	public void setDisplayBoard(boolean displayBoard) {
+		this.displayBoard = displayBoard;
 	}
 
 }

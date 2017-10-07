@@ -33,6 +33,7 @@ public class ActionPanel extends JPanel {
 	private Button pauseBtn;
 	private Button followCrtrBtn;
 	private Button controlCrtrBtn;
+	private Button displayBoardBtn;
 	
 	private JSlider delaySlider;
 	private JLabel delaySliderLbl;
@@ -40,6 +41,8 @@ public class ActionPanel extends JPanel {
 	private boolean paused;
 	private boolean followCrtr;
 	private boolean controlCrtr;
+
+	private boolean displayBoard;
 
 
 
@@ -55,7 +58,6 @@ public class ActionPanel extends JPanel {
 		setPreferredSize(new Dimension(APWidth, APHeight));
 
 		mainFrame = parent;
-		paused = false;
 		
 		delaySlider = new JSlider(0, 200, 25);
 		delaySlider.setPaintTicks(true);
@@ -64,14 +66,19 @@ public class ActionPanel extends JPanel {
 		
 		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms");
 
+		paused = false;
 		startBoardBtn = new Button("Start board");
 
 		pauseBtn = new Button("Paused: " + paused);
 		pauseBtn.setEnabled(false);
+		
+		displayBoard = true;
+		displayBoardBtn = new Button("DisplayBoard: " + displayBoard);
+		
 
+		followCrtr = false;
 		followCrtrBtn = new Button("followCreature: " + followCrtr);
 		followCrtrBtn.setEnabled(false);
-		followCrtr = false;
 		
 		controlCrtrBtn = new Button("controlCreature: " + isControlCrtr());
 		controlCrtrBtn.setEnabled(false);
@@ -82,6 +89,7 @@ public class ActionPanel extends JPanel {
 		
 		add(startBoardBtn);
 		add(pauseBtn);
+		add(displayBoardBtn);
 		add(followCrtrBtn);
 		add(controlCrtrBtn);
 		
@@ -106,13 +114,7 @@ public class ActionPanel extends JPanel {
 							Configuration.DEFAULT_SMOOTHNESS,
 							mainFrame
 							);
-					startBoardBtn.setLabel("Taking default values...");
 
-				
-				
-//				boardTileSizeTF.setEditable(false);
-//				boardMapSizeInTilesTF.setEditable(false);
-//				startBoardBtn.setEnabled(false);
 				
 				infoPanel.setBoard(board);
 				
@@ -125,6 +127,20 @@ public class ActionPanel extends JPanel {
 				pauseBtn.setEnabled(true);
 
 
+			};
+		});
+		
+		displayBoardBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				displayBoard = !displayBoard;	
+				
+				cameraPanel.setDisplayBoard(displayBoard);
+				displayBoardBtn.setLabel("displayBoard: " + displayBoard);
+				
+				
+				
 			};
 		});
 		
