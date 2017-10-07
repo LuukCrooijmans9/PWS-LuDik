@@ -51,16 +51,7 @@ public class EvoAI extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-
-				new EvoAI().setVisible(true); 
-			}
-		});
-	}
+	
 
 	public CameraPanel getCameraPanel() {
 		return cameraPanel;
