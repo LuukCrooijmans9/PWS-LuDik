@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,6 +29,8 @@ public class InfoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int CREATURELIST_LENGTH = 5;
+	private static final int IPWidth = 400;
+	private static final int TIMEDIFF_SAMPLESIZE = 1000;
 
 	// UI containers:
 	private EvoAI mainFrame;
@@ -40,7 +44,6 @@ public class InfoPanel extends JPanel {
 	private int currentGeneration;
 
 	private static int IPHeight;
-	private static final int IPWidth = 400;
 	private double averageFitnessOfPreviousGeneration;
 	
 	private JPanel singleLineInfoPanel;
@@ -59,6 +62,8 @@ public class InfoPanel extends JPanel {
 	private JLabel selectedCrtrAgeFatBurnedLbl;
 
 	private JList<String> creaturesList;
+	private ArrayList<Long> timeDiffArray;
+	private double timeDiff;
 
 	
 
@@ -131,6 +136,8 @@ public class InfoPanel extends JPanel {
 		graphPanel.add(fitnessLineChartPanel);
 		graphPanel.add(ageLineChartPanel);
 		graphPanel.add(totalFoodEatenLineChartPanel);
+		
+		timeDiffArray = new ArrayList<Long>();
 		
 		
 
@@ -207,8 +214,23 @@ public class InfoPanel extends JPanel {
 
 	private void updateTimeKeeperRelatedComponents() {
 		if (timeKeeper != null) {
+			
+			if (timeDiffArray.size() > TIMEDIFF_SAMPLESIZE) {
+				timeDiff -= timeDiffArray.get(0);
+				timeDiffArray.remove(0);
+			}
+			
+			timeDiffArray.add(timeKeeper.getTimeDiffNano());
+			timeDiff += timeKeeper.getTimeDiffNano();
+			
+			double avgTimeDiff = timeDiff / timeDiffArray.size();
+			
+			DecimalFormat df = new DecimalFormat("#.##");
+			df.setRoundingMode(RoundingMode.CEILING);
 			stepLbl.setText("Step: " + timeKeeper.getStep());
-			timePerStepLbl.setText("NanoTimePerStep: " + timeKeeper.getTimeDiffNano() / Math.pow(10, 6));
+			if (timeKeeper.getStep() % TIMEDIFF_SAMPLESIZE == 0){
+				timePerStepLbl.setText("NanoTimePerStep: " + df.format(avgTimeDiff / Math.pow(10, 6)));
+			}
 		}
 	}
 

@@ -36,10 +36,6 @@ public class ActionPanel extends JPanel {
 	
 	private JSlider delaySlider;
 	private JLabel delaySliderLbl;
-	
-	private TextField boardTileSizeTF;
-	private TextField boardMapSizeInTilesTF;
-	private TextField smoothnessTF;
 
 	private boolean paused;
 	private boolean followCrtr;
@@ -60,12 +56,6 @@ public class ActionPanel extends JPanel {
 
 		mainFrame = parent;
 		paused = false;
-
-		boardTileSizeTF = new TextField("" + Configuration.DEFAULT_TILE_SIZE);
-
-		boardMapSizeInTilesTF = new TextField("" + Configuration.DEFAULT_MAP_SIZE_IN_TILES);
-		
-		smoothnessTF = new TextField("" + Configuration.DEFAULT_SMOOTHNESS);
 		
 		delaySlider = new JSlider(0, 200, 25);
 		delaySlider.setPaintTicks(true);
@@ -86,10 +76,6 @@ public class ActionPanel extends JPanel {
 		controlCrtrBtn = new Button("controlCreature: " + isControlCrtr());
 		controlCrtrBtn.setEnabled(false);
 		setControlCrtr(false);
-		
-		add(boardTileSizeTF);
-		add(boardMapSizeInTilesTF);
-		add(smoothnessTF);
 		
 		add(delaySliderLbl);
 		add(delaySlider);
@@ -112,27 +98,18 @@ public class ActionPanel extends JPanel {
 					timeKeeper = null;
 				}
 				
-				try {
-					board = new Board(
-							Integer.valueOf(boardTileSizeTF.getText()),
-							Integer.valueOf(boardMapSizeInTilesTF.getText()),
-							Configuration.DEFAULT_SEED,
-							Double.valueOf(smoothnessTF.getText()),
-							mainFrame
-							);
-					
-				} catch (NumberFormatException e) {
+			
 					board = new Board(
 							Configuration.DEFAULT_TILE_SIZE,
 							Configuration.DEFAULT_MAP_SIZE_IN_TILES,
 							Configuration.DEFAULT_SEED,
+							Configuration.DEFAULT_SMOOTHNESS,
 							mainFrame
 							);
 					startBoardBtn.setLabel("Taking default values...");
 
-				} 
-				boardTileSizeTF.setText("" + Configuration.tileSize);
-				boardMapSizeInTilesTF.setText("" + Configuration.mapSizeInTiles);
+				
+				
 //				boardTileSizeTF.setEditable(false);
 //				boardMapSizeInTilesTF.setEditable(false);
 //				startBoardBtn.setEnabled(false);
