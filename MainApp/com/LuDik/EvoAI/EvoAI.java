@@ -5,6 +5,11 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+/**
+ * This class functions as the frame in which all the graphical components are contained and as the startup for the EvoAI program.
+ * It contains three panels: the cameraPanel, the infoPanel, and the actionPanel.
+ * It also has a reference to the Board this program simulates.
+ */
 
 public class EvoAI extends JFrame {
 	
@@ -26,22 +31,14 @@ public class EvoAI extends JFrame {
 	
 	private void initUI() {
 		setLayout(new FlowLayout());
-		
-		
-		cameraPanel = new CameraPanel(this);
-		
+			
+		cameraPanel = new CameraPanel(this);		
 		infoPanel = new InfoPanel(this);
-
-		
 		actionPanel = new ActionPanel(this);
+		
 		add(actionPanel);
 		add(cameraPanel);
-		
-
 		add(infoPanel);
-
-				
-		setSize(2000, 2000);
 		
 		setResizable(false);
 		pack();
