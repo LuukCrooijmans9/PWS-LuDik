@@ -256,7 +256,7 @@ public class Creature {
 	}
 
 	public double getFitness() {
-		fitness = getTotalFoodEaten();
+		fitness =  getTotalFoodEaten();
 		return fitness;
 	}
 

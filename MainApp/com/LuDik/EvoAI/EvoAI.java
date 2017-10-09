@@ -8,14 +8,14 @@ import javax.swing.SwingUtilities;
 
 public class EvoAI extends JFrame {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
+	// The panels in which the frame is divided:
 	private CameraPanel cameraPanel;
 	private InfoPanel infoPanel;
 	private ActionPanel actionPanel;
+	
+	
 	private Board board;
 	
 	
