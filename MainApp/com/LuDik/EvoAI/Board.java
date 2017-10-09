@@ -8,77 +8,53 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
- * Deze class houdt de staat van de map en de creatures bij.
+ * This class coordinates the interaction between a Map object, a TimeKeeper object, and an array of Creature objects. 
+ * The board class can be seen as a world, in which the Map object is this world's space, the Creature objects are its inhabitants, and the TimeKeeper object is its time.
+ * It only has one Map object, one TimeKeeper object, but a varying amount of Creature objects, who are constantly being replaced by new objects.
  * 
- * @author Luuk
- *
+ * Additionally, it contains information about its past Creature objects.
  */
 
 public class Board {
 
 	private Map map;
+	private TimeKeeper timeKeeper;
+	
 	private ArrayList<LandTile> landTiles;
-	private int mapLength;
 
 	EvoAI mainFrame;
 
 	private ArrayList<Creature> creatures;
-	private ArrayList<Creature> tempList;
 	private ArrayList<Creature> allCreaturesOfGeneration;
 	private int generation;
 	private ArrayList<Double> averageFitnessArray;
 	private ArrayList<Double> averageAgeArray;
 	private ArrayList<Double> averageTotalFoodEatenArray;
 
+	private final int tileSize;
+
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
 	private double EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
 	private int RATIO_CHILDS_PER_PARENT = Configuration.RATIO_CHILDS_PER_PARENT;
 	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
-	private Integer tileSize;
 
-	private Area landArea;
-	private Area spawnArea;
-	private TimeKeeper timeKeeper;
 	private InfoPanel infoPanel;
+	private ArrayList<Point2D> spawnPoints;
 
-	public Board(Integer tileSize, Integer mapSize, EvoAI evoAI) {
+	public Board(int tileSize, int mapSize, double seed, double smoothness, EvoAI evoAI) {
+		
 		evoAI.setBoard(this);
-
-		map = new Map(tileSize, mapSize);
-
-	}
-
-	public Board(Integer tileSize, Integer mapSize, double seed, EvoAI evoAI) {
-		evoAI.setBoard(this);
-
-		this.tileSize = tileSize;
-
-		map = new Map(tileSize, mapSize, seed);
-
-	}
-
-	public Board(Integer tileSize, Integer mapSize, double seed, double smoothness, EvoAI eAI) {
-		eAI.setBoard(this);
-
-		this.tileSize = tileSize;
-		mainFrame = eAI;
+		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
+
+		this.tileSize = tileSize;
+		
 		map = new Map(tileSize, mapSize, seed, smoothness);
 
 		landTiles = map.getLandTiles();
-
-		landArea = new Area();
-
-		// System.out.println(map.getLandTiles());
-
-		for (LandTile landTile : landTiles) {
-
-			if (landTile.getTileRect() != null) {
-				landArea.add(new Area(landTile.getTileRect()));
-
-			}
-		}
+		
+		spawnPoints = this.generateSpawnPoints();
 
 		timeKeeper = new TimeKeeper(this);
 		timeKeeper.setInfoPanel(infoPanel);
@@ -86,19 +62,23 @@ public class Board {
 
 	}
 
+	/**
+	 * 
+	 */
+	
 	public void spawnFirstCreatures() {
 
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
-		tempList = new ArrayList<Creature>();
+		
 		setAverageFitnessArray(new ArrayList<Double>());
 		setAverageAgeArray(new ArrayList<Double>());
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
-		// spawnArea = landArea;
 
-		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
-		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
-		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
+		
+		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
+		
+		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size()); // makes sure that not more creatures are spawned than there are spawnpoints
 
 		for (int i = 0; i < creaturesToSpawn; i++) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
@@ -113,8 +93,8 @@ public class Board {
 
 	public void spawnCreatures() {
 
-		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
-		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
+//		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
+		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
 		ArrayList<Creature> newAllCreaturesOfGeneration = new ArrayList<Creature>();
 		ArrayList<Creature> sortedCreaturesOfGeneration = new ArrayList<Creature>(infoPanel.getCreatures());
@@ -156,7 +136,7 @@ public class Board {
 	}
 
 	public Creature spawnRandomCreature(int id) {
-		ArrayList<Point2D> availableSpawnPoints = this.generateSpawnPoints();
+		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);	
 		return randomCreature;
@@ -168,6 +148,7 @@ public class Board {
 
 		spawnPoints.ensureCapacity(
 				(int) (landTiles.size() * (tileSize / (CREATURE_SIZE + 2)) * (tileSize / (CREATURE_SIZE + 2))));
+		
 		for (LandTile landTile : landTiles) {
 			for (int i = 0; i < tileSize / (CREATURE_SIZE + 2) - 1; i++) {
 				for (int k = 0; k < tileSize / (CREATURE_SIZE + 2) - 1; k++) {
@@ -219,6 +200,8 @@ public class Board {
 			this.spawnCreatures();
 		}
 
+		ArrayList<Creature> tempList = new ArrayList<Creature>();
+		
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
@@ -238,7 +221,6 @@ public class Board {
 			creatures.remove(crtr);
 		}
 
-		tempList.clear();
 
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
