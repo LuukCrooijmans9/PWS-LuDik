@@ -5,8 +5,15 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
+/**
+ * 
+ * This class contains the body and the action off the creature.
+ * 
+ */
+
 public class Creature {
 
+	// Copied from configuration
 	private static final double EAT_EFFICIENCY_STEEPNESS = Configuration.EAT_EFFICIENCY_STEEPNESS;
 	private static final double WEIGHT_PER_FAT = Configuration.WEIGHT_PER_FAT;
 	private static final double BASE_FAT_CONSUMPTION = Configuration.BASE_FAT_CONSUMPTION;
@@ -15,45 +22,54 @@ public class Creature {
 	private static final int DEFAULT_BRAIN_HEIGHT = Configuration.DEFAULT_BRAIN_HEIGHT;
 	private static final double BASE_WATER_CONSUMPTION = Configuration.BASE_WATER_CONSUMPTION;
 
-	private final long creatureID; // ID om creature aan te herkennen
-	private Creature parent; // de parent van deze creature
+	private final long creatureID;
+	private Creature parent;
+
+	// The brain and it's outputs are stored in these variables.
 	private Brain brain;
 	private double[] brainOutputs;
 
 	private double age;
-	private double totalFoodEaten;
 	private double fitness;
-	private double fat, weight, fatBurned; // Voedsel vooraad
+
+	private double totalFoodEaten;
+	private double fat, weight, fatBurned;
 	private double water, actualWaterAmount, waterInMouth;
 	private double totalWaterDrunk;
-
 	private double actualFoodAmount, foodInMouth;
 	private double eatEfficiency;
 
-	private double xPos, deltaXPos, deltaYPos, yPos, direction; // Positie en draaing
+	// Position, speed and direction of this creature and the changes.
+	private double xPos, deltaXPos, deltaYPos, yPos, direction;
 	private double speed, maxSpeed;
+	private double deltaDirection, deltaSpeed;
 	private double totalDistanceTravelled;
 
 	private double creatureSize;
 	private int xTile, yTile;
 	private boolean isDead = false;
 
+	// It's eyes
 	private Color leftEyeColor, rightEyeColor;
 	private double eyeDeviation, eyeLength, rightEyeX, rightEyeY, leftEyeX, leftEyeY;
 	private Eye eye;
 
+	// Where it is ALIVE
 	private Board board;
 
-	// Door brain bepaalt
-	private double deltaDirection, deltaSpeed; // waarde tussen -1 en 1
-
+	// Visuals
 	private Color creatureColor;
 	Ellipse2D creatureShape;
-
 	private boolean selected;
 	private boolean controlled;
 	private int amountOfChilderen;
 
+	// Translates the x and y values to the x and y values of the tile they are in.
+	static public int posToTile(double x) {
+		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
+	}
+
+	// Totally random creature
 	Creature(double x, double y, Board brd, int creatureNumber) {
 
 		board = brd;
@@ -80,6 +96,7 @@ public class Creature {
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
+	// Creature based of 1 parent
 	Creature(Creature parentCreature, double x, double y, int generation, int creatureNumber, double deviation) {
 		parent = parentCreature;
 		board = parent.getBoard();
@@ -107,6 +124,7 @@ public class Creature {
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
+	// notification for creature to do it's stuff.
 	public void doStep() {
 		this.beginStep();
 		this.brainStep();
@@ -114,6 +132,7 @@ public class Creature {
 		this.endStep();
 	}
 
+	// If we want to controll it it does stuff based on the inputs.
 	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
 		eye.look();
 		move(deltaSpeed, deltaDirection);
@@ -121,6 +140,7 @@ public class Creature {
 		this.endStep();
 	}
 
+	// Some things that needs to be done before everything else.
 	public void beginStep() {
 		fatBurned = 0;
 		eye.look();
@@ -128,12 +148,14 @@ public class Creature {
 		yTile = Creature.posToTile(getYPos());
 	}
 
+	// The brain does it's magic here
 	public void brainStep() {
 		brain.generateInputs();
 		brainOutputs = brain.feedForward();
 
 	}
 
+	// The creature takes action based on the outputs of the brain.
 	private void actionStep() {
 		this.move(brainOutputs[0], brainOutputs[1]);
 		this.eat(brainOutputs[2]);
@@ -144,10 +166,7 @@ public class Creature {
 		}
 	}
 
-	static public int posToTile(double x) {
-		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
-	}
-
+	// Gathering food from the tile it is on.
 	public void eat(double desiredFoodAmount) {
 
 		desiredFoodAmount = Math.max(desiredFoodAmount, 0);
@@ -163,6 +182,7 @@ public class Creature {
 		}
 	}
 
+	// Drinking water from the tile it is on.
 	public void drink(double desiredDrinkAmount) {
 
 		desiredDrinkAmount = Math.max(desiredDrinkAmount, 0);
@@ -176,12 +196,12 @@ public class Creature {
 		}
 	}
 
+	// Moves the creature.
 	public void move(double deltaSpeed, double deltaDirection) {
 
-		// rekent maxSpeed uit.
 		maxSpeed = Configuration.DEFAULT_MAX_SPEED;
 
-		// rekent speed uit
+		// Calculates new speed
 		if (speed + deltaSpeed >= maxSpeed) {
 			speed = maxSpeed;
 		} else if (speed + deltaSpeed <= 0) {
@@ -190,7 +210,7 @@ public class Creature {
 			speed = speed + deltaSpeed;
 		}
 
-		// Rekent nieuwe kijkrichting/beweegrichting uit.
+		// Calculates new direction
 		deltaDirection *= Configuration.MAX_DELTA_DIRECTION_PER_STEP;
 		direction -= deltaDirection;
 		direction %= 360;
@@ -198,7 +218,8 @@ public class Creature {
 		deltaXPos = Math.sin(Math.toRadians(direction)) * speed;
 		deltaYPos = Math.cos(Math.toRadians(direction)) * speed;
 
-		// Kijkt of de move binnen het veld blijft en voert uit.
+		// Checks if the move is not invalid (Does it stay within the borders of the
+		// field)
 		if (getXPos() + deltaXPos - (creatureSize / 2) > 0 && getXPos() + deltaXPos
 				+ (creatureSize / 2) < Configuration.DEFAULT_MAP_SIZE_IN_TILES * Configuration.DEFAULT_TILE_SIZE) {
 			setXPos(getXPos() + deltaXPos);
@@ -209,18 +230,20 @@ public class Creature {
 			setYPos(getYPos() + deltaYPos);
 		}
 
+		// Statistics
 		setTotalDistanceTravelled(getTotalDistanceTravelled() + speed);
-		// hoeveel vet creature verbrandt met de beweging. Later exp functie van maken.
+
+		// Calculates the fatBurned.
 		fatBurned += speed * weight;
 		fatBurned += Math.abs(deltaDirection) * weight;
 	}
-
+		
+		//Finishes this step and checks if the creature survived this day
 	public void endStep() {
 
 		fat -= BASE_FAT_CONSUMPTION;
-		
+
 		weight = fat * WEIGHT_PER_FAT;
-		
 
 		if (fat <= 0 || water <= 0) {
 			isDead = true;
@@ -228,7 +251,8 @@ public class Creature {
 			age += Configuration.AGE_PER_STEP;
 		}
 	}
-
+	
+	//Draws the creature
 	void draw(Graphics2D g2d) {
 		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
@@ -254,9 +278,10 @@ public class Creature {
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
-
+	
+	//Calculates the fitness
 	public double getFitness() {
-		fitness =  getTotalFoodEaten();
+		fitness = getTotalFoodEaten();
 		return fitness;
 	}
 
