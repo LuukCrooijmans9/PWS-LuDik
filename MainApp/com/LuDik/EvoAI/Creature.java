@@ -219,7 +219,7 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= BASE_FAT_CONSUMPTION + fatBurned * age * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures
+		fat -= BASE_FAT_CONSUMPTION; // *age om oudere creatures
 																							// een nadeel te geven dit
 		// verbeterd als het goed is
 		weight = fat * WEIGHT_PER_FAT;
@@ -259,7 +259,7 @@ public class Creature {
 	}
 
 	public double getFitness() {
-		fitness = age * getTotalFoodEaten() + age;
+		fitness = getTotalFoodEaten();
 		return fitness;
 	}
 

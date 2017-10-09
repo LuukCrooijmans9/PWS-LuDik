@@ -26,8 +26,12 @@ public class LandTile extends Tile {
 		if (foodValue >= tileMaxFoodValue) {
 			foodValue = tileMaxFoodValue;
 		}
-		foodColor = foodValue / (Configuration.globalMaxFood);
-		//System.out.println(foodColor);
+		System.out.println(foodValue);
+		foodColor = foodValue / (Configuration.DEFAULT_MAX_FOOD);
+		System.out.println(foodColor);
+		if(foodColor > 1) {
+			foodColor = 1;
+		}
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 
 	}
