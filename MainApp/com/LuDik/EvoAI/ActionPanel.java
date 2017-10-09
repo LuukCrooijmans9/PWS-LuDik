@@ -97,7 +97,7 @@ public class ActionPanel extends JPanel {
 		});
 		
 		/**
-		 * The code below creates a button with wich the simulation of the board can be started.
+		 * The code below creates a button with which the simulation of the board can be started.
 		 */
 		
 		startBoardBtn = new Button("Start board");
