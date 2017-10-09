@@ -20,19 +20,25 @@ public class Configuration {
 																		// per generatie
 
 	// globalFertility bepaalt
-	public static double globalFertility = 10, globalMaxFood = 10000;
+	public static double globalFertility = 10, globalMaxFood = 100;
 	public static double MaxFoodPerConsume = 10; // exacte waarde later bepalen
+	public static double DEFAULT_MAX_WATER = 100;
+	public static double DEFAULT_MAX_FOOD = 100;
+	public static double MAX_FOOD_PER_CONSUME = 100;
+	public static boolean NEED_DRINKING = false;
 
 	// Waarde van creature
 	public static double DEFAULT_CREATURE_SIZE = 10;
 	public static double DEFAULT_MAX_FOOD_IN_MOUTH = 10;
 	public static double DEFAULT_MAX_WATER_IN_MOUTH = 5;
-	public static double DEFAULT_EYE_LENGTH = 10;
-	public static double DEFAULT_EYE_DEVIATION = 45;
+	public static double DEFAULT_EYE_LENGTH = 35;
+	public static double DEFAULT_EYE_DEVIATION = 35;
 	public static double EAT_EFFICIENCY_STEEPNESS = 2;
 	public static double DEFAULT_STARTING_FAT = 1000;
+	public static double DEFAULT_STARTING_WATER = 1000;
 	public static double WEIGHT_PER_FAT = 0.1;
 	public static double BASE_FAT_CONSUMPTION = 0.5;
+	public static double BASE_WATER_CONSUMPTION = 0.5;
 	public static double BASE_CREATURE_EFFICIENCY = 10;
 	public static double DEFAULT_MAX_SPEED = 5;
 	public static double MAX_DELTA_DIRECTION_PER_STEP = 10;

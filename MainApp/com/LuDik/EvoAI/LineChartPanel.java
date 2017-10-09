@@ -46,7 +46,6 @@ public class LineChartPanel extends JPanel {
 	
 	public void updateDataset(XYSeries series) {
 		dataset.removeAllSeries();
-		
 		dataset.addSeries(series);
 	}
 

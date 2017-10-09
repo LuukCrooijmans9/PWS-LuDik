@@ -40,6 +40,9 @@ public abstract class Tile {
 		return 0;
 	}
 	
+	public double drinkWaterTile(double DesiredWater) {
+		return 0;
+	}
 
 	public void calculateNextFood() {
 		
