@@ -83,15 +83,16 @@ public class Brain {
 		}
 
 		inputs[6] = creature.getSpeed();
-		// inputs[7] = creature.getDirection();
+		inputs[7] = creature.getDirection();
 		inputs[8] = creature.getAge();
 		inputs[9] = creature.getFat();
+		inputs[10] = creature.getWater();
 
 		// Als alle andere waardes 0 zijn kan het nogsteeds acties uitvoeren door de
 		// constante 1
-		inputs[10] = 1d;
+		inputs[11] = 1d;
 
-		for (int i = 11; i < brainHeight; i++) {
+		for (int i = 12; i < brainHeight; i++) {
 			inputs[i] = outputs[i];
 		}
 

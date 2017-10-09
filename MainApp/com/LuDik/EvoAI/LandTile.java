@@ -11,9 +11,9 @@ public class LandTile extends Tile {
 
 		isWaterTile = false;
 		fertility = frtlty;
-		tileMaxFoodValue = (double) (fertility * Configuration.globalMaxFood);
+		tileMaxFoodValue = (double) (fertility * Configuration.DEFAULT_MAX_FOOD);
 		foodValue = tileMaxFoodValue;
-		foodColor = (double) Math.min(foodValue / (Configuration.globalMaxFood), 1);
+		foodColor = (double) Math.min(foodValue / Configuration.DEFAULT_MAX_FOOD, 1);
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
 
@@ -26,8 +26,12 @@ public class LandTile extends Tile {
 		if (foodValue >= tileMaxFoodValue) {
 			foodValue = tileMaxFoodValue;
 		}
-		foodColor = foodValue / (Configuration.globalMaxFood);
-		//System.out.println(foodColor);
+		System.out.println(foodValue);
+		foodColor = foodValue / (Configuration.DEFAULT_MAX_FOOD);
+		System.out.println(foodColor);
+		if(foodColor > 1) {
+			foodColor = 1;
+		}
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 
 	}

@@ -13,6 +13,7 @@ public class Creature {
 	private static final double BASE_CREATURE_EFFICIENCY = Configuration.BASE_CREATURE_EFFICIENCY;
 	private static final int DEFAULT_BRAIN_WIDTH = Configuration.DEFAULT_BRAIN_WIDTH;
 	private static final int DEFAULT_BRAIN_HEIGHT = Configuration.DEFAULT_BRAIN_HEIGHT;
+	private static final double BASE_WATER_CONSUMPTION = Configuration.BASE_WATER_CONSUMPTION;
 
 	private final long creatureID; // ID om creature aan te herkennen
 	private Creature parent; // de parent van deze creature
@@ -23,6 +24,8 @@ public class Creature {
 	private double totalFoodEaten;
 	private double fitness;
 	private double fat, weight, fatBurned; // Voedsel vooraad
+	private double water, actualWaterAmount, waterInMouth;
+	private double totalWaterDrunk;
 
 	private double actualFoodAmount, foodInMouth;
 	private double eatEfficiency;
@@ -63,6 +66,7 @@ public class Creature {
 
 		age = 0;
 		fat = Configuration.DEFAULT_STARTING_FAT;
+		water = Configuration.DEFAULT_STARTING_WATER;
 
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
@@ -89,6 +93,7 @@ public class Creature {
 
 		age = 0;
 		fat = Configuration.DEFAULT_STARTING_FAT;
+		water = Configuration.DEFAULT_STARTING_WATER;
 
 		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
 		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
@@ -119,6 +124,8 @@ public class Creature {
 	public void beginStep() {
 		fatBurned = 0;
 		eye.look();
+		xTile = Creature.posToTile(getXPos());
+		yTile = Creature.posToTile(getYPos());
 	}
 
 	public void brainStep() {
@@ -132,6 +139,9 @@ public class Creature {
 		this.eat(brainOutputs[2]);
 		creatureColor = new Color((float) brainOutputs[3] / 2 + .5f, (float) brainOutputs[4] / 2 + .5f,
 				(float) brainOutputs[5] / 2 + .5f);
+		if (Configuration.NEED_DRINKING) {
+			this.drink(brainOutputs[6]);
+		}
 	}
 
 	static public int posToTile(double x) {
@@ -139,8 +149,6 @@ public class Creature {
 	}
 
 	public void eat(double desiredFoodAmount) {
-		xTile = Creature.posToTile(getXPos());
-		yTile = Creature.posToTile(getYPos());
 
 		desiredFoodAmount = Math.max(desiredFoodAmount, 0);
 
@@ -152,6 +160,21 @@ public class Creature {
 			setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);
 			foodInMouth = 0;
 			fatBurned += desiredFoodAmount * 0.1;
+		}
+	}
+
+	public void drink(double desiredDrinkAmount) {
+
+		desiredDrinkAmount = Math.max(desiredDrinkAmount, 0);
+
+		if (desiredDrinkAmount != 0) {
+			eatEfficiency = 1 / (EAT_EFFICIENCY_STEEPNESS * speed + 1);
+			actualWaterAmount = desiredDrinkAmount * eatEfficiency;
+			waterInMouth = board.getMap().getTiles()[xTile][yTile].drinkWaterTile(actualWaterAmount);
+			water += waterInMouth;
+			setTotalWaterDrunk(getTotalWaterDrunk() + waterInMouth);
+			waterInMouth = 0;
+			fatBurned += desiredDrinkAmount * 0.1;
 		}
 	}
 
@@ -196,16 +219,14 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= BASE_FAT_CONSUMPTION + fatBurned* 0 * age * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures
+		fat -= BASE_FAT_CONSUMPTION; // *age om oudere creatures
 																							// een nadeel te geven dit
 		// verbeterd als het goed is
 		weight = fat * WEIGHT_PER_FAT;
 		// de creatures sneller door een kans te geven aan nieuwe creature
 
-		if (fat <= 0) {
-
+		if (fat <= 0 || water <= 0) {
 			isDead = true;
-
 		} else {
 			age += Configuration.AGE_PER_STEP;
 		}
@@ -240,6 +261,22 @@ public class Creature {
 	public double getFitness() {
 		fitness =  getTotalFoodEaten();
 		return fitness;
+	}
+
+	public Creature getParent() {
+		return parent;
+	}
+
+	public void setParent(Creature parent) {
+		this.parent = parent;
+	}
+
+	public double getWater() {
+		return water;
+	}
+
+	public void setWater(double water) {
+		this.water = water;
 	}
 
 	public Ellipse2D getCreatureShape() {
@@ -577,4 +614,13 @@ public class Creature {
 	public void setTotalDistanceTravelled(double totalDistanceTravelled) {
 		this.totalDistanceTravelled = totalDistanceTravelled;
 	}
+
+	public double getTotalWaterDrunk() {
+		return totalWaterDrunk;
+	}
+
+	public void setTotalWaterDrunk(double totalWaterDrunk) {
+		this.totalWaterDrunk = totalWaterDrunk;
+	}
+
 }
