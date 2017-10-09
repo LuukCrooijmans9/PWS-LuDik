@@ -14,19 +14,33 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * This class is the panel that contains all the interactive graphical components that interact with EvoAI or its components.
+ * Some examples of interactive graphical components are buttons, sliders, textfields, etc.
+ * 
+ *
+ */
+
 public class ActionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	// These contants determine the behaviour and the appearance of the delaySlider
+	private static final int DELAY_SLIDER_STARTVALUE = 25;
+	private static final int DELAY_SLIDER_MINVALUE = 0;
+	private static final int DELAY_SLIDER_MAXVALUE = 200;
+	private static final int DELAY_SLIDER_TICKINGSPACE = 20;
 
-	// UI containers:
+
+	// The other main graphical containers:
 	private EvoAI mainFrame;
 	private CameraPanel cameraPanel;
 	private InfoPanel infoPanel;
 
-	private Board board;
+	private Board board; 
 	private TimeKeeper timeKeeper;
 
-	private static int APHeight;
+	private static int APHeight = CameraPanel.getCPHEIGHT(); 
 	private static final int APWidth = 400;
 
 	private Button startBoardBtn;
@@ -48,135 +62,26 @@ public class ActionPanel extends JPanel {
 		initActionPanel(parent);
 	}
 
-	private void initActionPanel(EvoAI parent) {
-		APHeight = parent.getCameraPanel().getCPHEIGHT();
+	private void initActionPanel(EvoAI evoAI) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(APWidth, APHeight));
+		mainFrame = evoAI;
 
-		mainFrame = parent;
-
-		delaySlider = new JSlider(0, 200, 25);
+		/**
+		 * The code below creates a slider with which the delay in ms of the timeKeeper can be adjusted during runtime.
+		 */
+		
+		
+		delaySlider = new JSlider(DELAY_SLIDER_MINVALUE, DELAY_SLIDER_MAXVALUE, DELAY_SLIDER_STARTVALUE);
 		delaySlider.setPaintTicks(true);
 		delaySlider.setPaintLabels(true);
-		delaySlider.setMajorTickSpacing(20);
+		delaySlider.setMajorTickSpacing(DELAY_SLIDER_TICKINGSPACE);
 
 		delaySliderLbl = new JLabel("Delay: " + delaySlider.getValue() + " ms Fps: " + 1000 / delaySlider.getValue());
 
-		paused = false;
-		startBoardBtn = new Button("Start board");
-
-		pauseBtn = new Button("Paused: " + paused);
-		pauseBtn.setEnabled(false);
-
-		displayBoard = true;
-		displayBoardBtn = new Button("DisplayBoard: " + displayBoard);
-
-		followCrtr = false;
-		followCrtrBtn = new Button("followCreature: " + followCrtr);
-		followCrtrBtn.setEnabled(false);
-
-		controlCrtrBtn = new Button("controlCreature: " + isControlCrtr());
-		controlCrtrBtn.setEnabled(false);
-		setControlCrtr(false);
-
-		add(delaySliderLbl);
-		add(delaySlider);
-
-		add(startBoardBtn);
-		add(pauseBtn);
-		add(displayBoardBtn);
-		add(followCrtrBtn);
-		add(controlCrtrBtn);
-
-		startBoardBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				infoPanel = mainFrame.getInfoPanel();
-				cameraPanel = mainFrame.getCameraPanel();
-
-				if (timeKeeper != null) {
-					timeKeeper = null;
-				}
-
-				board = new Board(Configuration.DEFAULT_TILE_SIZE, Configuration.DEFAULT_MAP_SIZE_IN_TILES,
-						Configuration.DEFAULT_SEED, Configuration.DEFAULT_SMOOTHNESS, mainFrame);
-
-				infoPanel.setBoard(board);
-
-				board.spawnFirstCreatures();
-				cameraPanel.update();
-
-				timeKeeper = board.getTimeKeeper();
-				timeKeeper.start();
-
-				pauseBtn.setEnabled(true);
-
-			};
-		});
-
-		displayBoardBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				displayBoard = !displayBoard;
-
-				cameraPanel.setDisplayBoard(displayBoard);
-				displayBoardBtn.setLabel("displayBoard: " + displayBoard);
-
-			};
-		});
-
-		pauseBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				paused = !paused;
-
-				synchronized (timeKeeper) {
-					timeKeeper.setPaused(paused);
-				}
-
-				if (!paused) {
-					synchronized (timeKeeper) {
-						timeKeeper.notify();
-					}
-				}
-
-				pauseBtn.setLabel("Paused: " + paused);
-
-			};
-		});
-
-		followCrtrBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				followCrtr = !followCrtr;
-
-				cameraPanel.setFollowSelectedCreature(followCrtr);
-
-				followCrtrBtn.setLabel("followCreature: " + followCrtr);
-
-			};
-		});
-
-		controlCrtrBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				setControlCrtr(!isControlCrtr());
-
-				cameraPanel.setControlCrtr(isControlCrtr());
-
-				controlCrtrBtn.setLabel("controlCreature: " + isControlCrtr());
-
-			};
-		});
-
 		delaySlider.addChangeListener(new ChangeListener() {
-
+			
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider) e.getSource();
@@ -188,8 +93,144 @@ public class ActionPanel extends JPanel {
 					}
 				}
 			}
+			
+		});
+		
+		/**
+		 * The code below creates a button with wich the simulation of the board can be started.
+		 */
+		
+		startBoardBtn = new Button("Start board");
+
+		startBoardBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				infoPanel = mainFrame.getInfoPanel();
+				cameraPanel = mainFrame.getCameraPanel();
+				
+				if (timeKeeper != null) {
+					timeKeeper = null;
+				}
+				
+				board = new Board(Configuration.DEFAULT_TILE_SIZE, Configuration.DEFAULT_MAP_SIZE_IN_TILES,
+						Configuration.DEFAULT_SEED, Configuration.DEFAULT_SMOOTHNESS, mainFrame);
+				
+				infoPanel.setBoard(board);
+				
+				board.spawnFirstCreatures();
+				cameraPanel.update();
+				
+				timeKeeper = board.getTimeKeeper();
+				timeKeeper.start();
+				
+				pauseBtn.setEnabled(true);
+				
+			};
+		});
+		
+		/**
+		 * The code below creates a button with which the simulation of the board can be paused and resumed.
+		 */
+
+		paused = false;
+		pauseBtn = new Button("Paused: " + paused);
+		pauseBtn.setEnabled(false);
+
+		pauseBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				paused = !paused;
+				
+				synchronized (timeKeeper) {
+					timeKeeper.setPaused(paused);
+				}
+				
+				if (!paused) {
+					synchronized (timeKeeper) {
+						timeKeeper.notify();
+					}
+				}
+				
+				pauseBtn.setLabel("Paused: " + paused);
+				
+			};
+		});
+		
+		/**
+		 * The code below creates a button with which the drawing of the board can be stopped and resumed.
+		 */
+
+		displayBoard = true;
+		displayBoardBtn = new Button("DisplayBoard: " + displayBoard);
+
+		displayBoardBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				displayBoard = !displayBoard;
+				
+				cameraPanel.setDisplayBoard(displayBoard);
+				displayBoardBtn.setLabel("displayBoard: " + displayBoard);
+				
+			};
 
 		});
+		/**
+		 * The code below creates a button that determines if the cameraPanel follows the selected creature.
+		 */
+		
+		followCrtr = false;
+		followCrtrBtn = new Button("followCreature: " + followCrtr);
+		followCrtrBtn.setEnabled(false);
+
+		followCrtrBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				followCrtr = !followCrtr;
+				
+				cameraPanel.setFollowSelectedCreature(followCrtr);
+				
+				followCrtrBtn.setLabel("followCreature: " + followCrtr);
+				
+			};
+		});
+		
+		/**
+		 * The code below creates a button that determines if the selected creature can be controlled by the user using keyboard inputs.
+		 */
+		
+		controlCrtrBtn = new Button("controlCreature: " + isControlCrtr());
+		controlCrtrBtn.setEnabled(false);
+		setControlCrtr(false);
+
+		controlCrtrBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				setControlCrtr(!isControlCrtr());
+				
+				cameraPanel.setControlCrtr(isControlCrtr());
+				
+				controlCrtrBtn.setLabel("controlCreature: " + isControlCrtr());
+				
+			};
+		});
+
+		/**
+		 * The code below adds the buttons and sliders to the actionPanel in a specific order.
+		 */
+		
+		add(delaySliderLbl);
+		add(delaySlider);
+
+		add(startBoardBtn);
+		add(pauseBtn);
+		add(displayBoardBtn);
+		add(followCrtrBtn);
+		add(controlCrtrBtn);
 	}
 
 	public TimeKeeper getTimeKeeper() {
