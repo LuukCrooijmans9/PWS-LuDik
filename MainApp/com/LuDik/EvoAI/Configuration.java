@@ -12,7 +12,7 @@ public class Configuration {
 
 	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 100;
 
-	public static final double DEFAULT_EVOLUTION_FACTOR = 0.002; // 1 is maximale evolutio 0 is geen evolutie
+	public static final double DEFAULT_EVOLUTION_FACTOR = 0.02; // 1 is maximale evolution 0 is geen evolutie
 	
 	public static int BEGIN_AMOUNT_CREATURES = 400;
 	public static int RATIO_CHILDS_PER_PARENT = 2; // 2 wil zeggen dat elke parent 2 childs krijgt
@@ -22,8 +22,8 @@ public class Configuration {
 	// globalFertility bepaalt
 	public static double DEFAULT_FERTILITY_BONUS = 0.01;
 	public static double DEFAULT_MAX_WATER = 100;
-	public static double DEFAULT_MAX_FOOD = 3;
-	public static double MAX_FOOD_PER_CONSUME = 10;
+	public static double DEFAULT_MAX_FOOD = 4;
+	public static double MAX_FOOD_PER_CONSUME = 2;
 	public static boolean NEED_DRINKING = false;
 
 	// Waarde van creature
@@ -33,9 +33,10 @@ public class Configuration {
 	public static double DEFAULT_EYE_LENGTH = 35;
 	public static double DEFAULT_EYE_DEVIATION = 35;
 	public static double EAT_EFFICIENCY_STEEPNESS = 2000;
-	public static double DEFAULT_STARTING_FAT = 100;
-	public static double DEFAULT_STARTING_WATER = 100;
+	public static double DEFAULT_STARTING_FAT = 10;
+	public static double DEFAULT_STARTING_WATER = 10;
 	public static double WEIGHT_PER_FAT = 0.001;
+	public static double WEIGHT_PER_WATER = 0.001;
 	public static double BASE_FAT_CONSUMPTION = 0.1;
 	public static double BASE_WATER_CONSUMPTION = 0.5;
 	public static double BASE_CREATURE_EFFICIENCY = 10;

@@ -16,6 +16,7 @@ public class Creature {
 	// Copied from configuration
 	private static final double EAT_EFFICIENCY_STEEPNESS = Configuration.EAT_EFFICIENCY_STEEPNESS;
 	private static final double WEIGHT_PER_FAT = Configuration.WEIGHT_PER_FAT;
+	private static final double WEIGHT_PER_WATER = Configuration.WEIGHT_PER_WATER;
 	private static final double BASE_FAT_CONSUMPTION = Configuration.BASE_FAT_CONSUMPTION;
 	private static final double BASE_CREATURE_EFFICIENCY = Configuration.BASE_CREATURE_EFFICIENCY;
 	private static final int DEFAULT_BRAIN_WIDTH = Configuration.DEFAULT_BRAIN_WIDTH;
@@ -237,22 +238,25 @@ public class Creature {
 		fatBurned += speed * weight;
 		fatBurned += Math.abs(deltaDirection) * weight;
 	}
-		
-		//Finishes this step and checks if the creature survived this day
+
+	// Finishes this step and checks if the creature survived this day
 	public void endStep() {
 
 		fat -= BASE_FAT_CONSUMPTION;
 
-		weight = fat * WEIGHT_PER_FAT;
-
+		if (Configuration.NEED_DRINKING) {
+			weight = fat * WEIGHT_PER_FAT + water * WEIGHT_PER_WATER;
+		} else {
+			weight = fat * WEIGHT_PER_FAT;
+		}
 		if (fat <= 0 || water <= 0) {
 			isDead = true;
 		} else {
 			age += Configuration.AGE_PER_STEP;
 		}
 	}
-	
-	//Draws the creature
+
+	// Draws the creature
 	void draw(Graphics2D g2d) {
 		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
@@ -278,8 +282,8 @@ public class Creature {
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
-	
-	//Calculates the fitness
+
+	// Calculates the fitness
 	public double getFitness() {
 		fitness = getTotalFoodEaten();
 		return fitness;
