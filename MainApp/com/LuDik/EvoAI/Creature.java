@@ -238,7 +238,7 @@ public class Creature {
 	}
 
 	public double getFitness() {
-		fitness = age * getTotalFoodEaten() + getTotalDistanceTravelled() * getTotalFoodEaten();
+		fitness = age * getTotalFoodEaten();
 		return fitness;
 	}
 
