@@ -20,11 +20,10 @@ public class Configuration {
 																		// per generatie
 
 	// globalFertility bepaalt
-	public static double globalFertility = 0.01;
-	public static double MaxFoodPerConsume = 10; // exacte waarde later bepalen
+	public static double DEFAULT_FERTILITY_BONUS = 0.01;
 	public static double DEFAULT_MAX_WATER = 100;
 	public static double DEFAULT_MAX_FOOD = 3;
-	public static double MAX_FOOD_PER_CONSUME = 100;
+	public static double MAX_FOOD_PER_CONSUME = 10;
 	public static boolean NEED_DRINKING = false;
 
 	// Waarde van creature
@@ -44,7 +43,7 @@ public class Configuration {
 	public static double MAX_DELTA_DIRECTION_PER_STEP = 10;
 	public static double AGE_PER_STEP = 0.0001;
 	public static int DEFAULT_BRAIN_WIDTH = 3;
-	public static int DEFAULT_BRAIN_HEIGHT = 20;
+	public static int DEFAULT_BRAIN_HEIGHT = 15;
 
 	
 	

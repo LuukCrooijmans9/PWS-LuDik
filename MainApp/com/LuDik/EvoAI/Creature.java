@@ -168,13 +168,11 @@ public class Creature {
 		desiredDrinkAmount = Math.max(desiredDrinkAmount, 0);
 
 		if (desiredDrinkAmount != 0) {
-			eatEfficiency = 1 / (EAT_EFFICIENCY_STEEPNESS * speed + 1);
-			actualWaterAmount = desiredDrinkAmount * eatEfficiency;
+			actualWaterAmount = desiredDrinkAmount;
 			waterInMouth = board.getMap().getTiles()[xTile][yTile].drinkWaterTile(actualWaterAmount);
 			water += waterInMouth;
 			setTotalWaterDrunk(getTotalWaterDrunk() + waterInMouth);
 			waterInMouth = 0;
-			fatBurned += desiredDrinkAmount * 0.1;
 		}
 	}
 
@@ -219,11 +217,10 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= BASE_FAT_CONSUMPTION; // *age om oudere creatures
-																							// een nadeel te geven dit
-		// verbeterd als het goed is
+		fat -= BASE_FAT_CONSUMPTION;
+		
 		weight = fat * WEIGHT_PER_FAT;
-		// de creatures sneller door een kans te geven aan nieuwe creature
+		
 
 		if (fat <= 0 || water <= 0) {
 			isDead = true;

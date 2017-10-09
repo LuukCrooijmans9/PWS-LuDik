@@ -21,23 +21,21 @@ public class LandTile extends Tile {
 
 	public void calculateNextFood() {
 
-		foodValue = (float) (foodValue + fertility * Configuration.globalFertility);
+		foodValue = (float) (foodValue + fertility * Configuration.DEFAULT_FERTILITY_BONUS);
 
 		if (foodValue >= tileMaxFoodValue) {
 			foodValue = tileMaxFoodValue;
 		}
-		System.out.println(foodValue);
+		
 		foodColor = foodValue / (Configuration.DEFAULT_MAX_FOOD);
-		System.out.println(foodColor);
-		if(foodColor > 1) {
-			foodColor = 1;
-		}
+		
+
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 
 	}
 //	desiredFood moet hier een getal tussen -1 en 1 zijn
 	public double eatFoodTile(double foodAmount) {
-		double tempFood = foodAmount * Configuration.MaxFoodPerConsume;
+		double tempFood = foodAmount * Configuration.MAX_FOOD_PER_CONSUME;
 		//System.out.println("foodEaten = " + foodEaten);
 		double foodEaten = Math.min(foodValue, tempFood);
 		//System.out.println("foodValue before eaten = " + foodValue);
