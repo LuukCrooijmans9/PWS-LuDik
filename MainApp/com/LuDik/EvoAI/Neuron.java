@@ -1,11 +1,19 @@
 package com.LuDik.EvoAI;
 
+/**
+ * This is the basis of the brain class. A neuron gets inputs and multiplies
+ * them by their weights wich are predefined when initalising this class. The
+ * sum of this is normalized between -1 and 1 with the use of a sigmoid
+ * function. This sigmoidedSum + the bias of this neuron is returned as output
+ * from this neuron.
+ */
+
 public class Neuron {
 	double[] weights;
 	double bias;
 
 	Neuron(int heightPreviousLayer) {
-		// geeft elke input een random weight
+		// This assigns random values to each weight and the bias.
 		weights = new double[heightPreviousLayer];
 		for (int i = 0; i < heightPreviousLayer; i++) {
 			weights[i] = Math.random() * 2 - 1;
@@ -14,6 +22,9 @@ public class Neuron {
 	}
 
 	Neuron(Neuron neuron, double deviation /* van 0 tot 1 waar 1 een volledig random weight maakt */) {
+		// Instead of assigning a random value it takes an predefined value from the
+		// Parent neuron and changes it based on a random value between -1 and 1 and
+		// multiplies this with the deviation.
 		this.weights = neuron.getWeights();
 		for (int i = 0; i < this.weights.length; i++) {
 			double random = Math.random();
@@ -21,14 +32,14 @@ public class Neuron {
 				weights[i] += (Math.random() * 2 - 1) * deviation;
 			}
 		}
-		double random =Math.random();
+		double random = Math.random();
 		if (random < deviation) {
 			deviation = (Math.random() * 2 - 1) * deviation;
 			this.bias += deviation;
 		}
 	}
 
-	// genereert de output van de neuron voor de gegeven inputs
+	// Generates the output of the neuron
 	double processNeuron(double[] inputs) {
 		double weightedSum = this.bias;
 		for (int i = 0; i < inputs.length; i++) {
@@ -39,8 +50,8 @@ public class Neuron {
 		return Neuron.sigmoid(weightedSum);
 	}
 
-	// zorgt dat de neuron waardes tussen de -1 en 1 heeft
-	// Dit wordt ook wel de activation function genoemd
+	// This is a simplified sigmoid function due to the processing requirements. It
+	// returns values between -1 and 1.
 	static double sigmoid(double input) {
 		if (input < -10) {
 			return -1;
