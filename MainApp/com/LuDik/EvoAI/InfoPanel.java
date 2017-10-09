@@ -30,7 +30,7 @@ public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final int CREATURELIST_LENGTH = 5;
 	private static final int IPWidth = 400;
-	private static final int TIMEDIFF_SAMPLESIZE = 1000;
+	private static final int TIMEDIFF_SAMPLESIZE = 100;
 
 	// UI containers:
 	private EvoAI mainFrame;

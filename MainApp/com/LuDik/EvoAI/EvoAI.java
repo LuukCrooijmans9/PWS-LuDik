@@ -6,7 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 /**
- * This class functions as the frame in which all the graphical components are contained and as the startup for the EvoAI program.
+ * This class functions as the frame in which all the graphical components 
+ * are contained and as the startup for the EvoAI program.
  * It contains three panels: the cameraPanel, the infoPanel, and the actionPanel.
  * It also has a reference to the Board this program simulates.
  */
