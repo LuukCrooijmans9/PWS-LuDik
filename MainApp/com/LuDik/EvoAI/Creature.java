@@ -88,6 +88,7 @@ public class Creature {
 
 		setXPos(x);
 		setYPos(y);
+
 		direction = Math.random() * 360;
 
 		age = 0;
@@ -218,11 +219,11 @@ public class Creature {
 
 	public void endStep() {
 
-		fat -= (BASE_FAT_CONSUMPTION + fatBurned) * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures
-		if (Configuration.NEED_DRINKING) {
-			water -= (BASE_WATER_CONSUMPTION);
-		}
+		fat -= BASE_FAT_CONSUMPTION + fatBurned * age * age / BASE_CREATURE_EFFICIENCY; // *age om oudere creatures
+																							// een nadeel te geven dit
+		// verbeterd als het goed is
 		weight = fat * WEIGHT_PER_FAT;
+		// de creatures sneller door een kans te geven aan nieuwe creature
 
 		if (fat <= 0 || water <= 0) {
 			isDead = true;
