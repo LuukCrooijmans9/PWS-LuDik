@@ -245,6 +245,7 @@ public class Creature {
 		fat -= BASE_FAT_CONSUMPTION;
 
 		if (Configuration.NEED_DRINKING) {
+			water -= BASE_WATER_CONSUMPTION;
 			weight = fat * WEIGHT_PER_FAT + water * WEIGHT_PER_WATER;
 		} else {
 			weight = fat * WEIGHT_PER_FAT;
