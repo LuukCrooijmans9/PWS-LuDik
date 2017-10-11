@@ -7,7 +7,7 @@ import java.awt.geom.Line2D;
 
 /**
  * 
- * This class contains the body and the action off the creature.
+ * This class contains the body and the action of the creature.
  * 
  */
 
@@ -135,7 +135,7 @@ public class Creature {
 
 	// If we want to controll it it does stuff based on the inputs.
 	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
-		eye.look();
+		this.beginStep();
 		move(deltaSpeed, deltaDirection);
 		eat(amount);
 		this.endStep();
@@ -286,7 +286,7 @@ public class Creature {
 
 	// Calculates the fitness
 	public double getFitness() {
-		fitness = getTotalFoodEaten();
+		fitness = getTotalFoodEaten() + 100 * age;
 		return fitness;
 	}
 
