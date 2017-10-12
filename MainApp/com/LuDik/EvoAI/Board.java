@@ -23,13 +23,24 @@ public class Board {
 	EvoAI mainFrame;
 	private InfoPanel infoPanel;
 	
+	
+	/**
+	 * Map specific variables
+	 */
+	private Map map;
+	private ArrayList<LandTile> landTiles;
+	private ArrayList<Point2D> spawnPoints; // this variable is also dependant on the CREATURE_SIZE variable
+
+	/**
+	 * This board's TimeKeeper object
+	 */
 	private TimeKeeper timeKeeper;
 	
-
+	
 	/**
 	 * Variables for the creatures:
 	 */
-	private ArrayList<Creature> creatures; // all creatures currently living in this Board
+	private ArrayList<Creature> creatures; // all creatures currently alive in this Board
 	private ArrayList<Creature> allCreaturesOfGeneration; // all creatures that are part of the current generation, dead or alive
 	
 	/**
@@ -40,12 +51,6 @@ public class Board {
 	private ArrayList<Double> averageAgeArray;
 	private ArrayList<Double> averageTotalFoodEatenArray;
 
-	/**
-	 * Map specific variables
-	 */
-	private Map map;
-	private ArrayList<LandTile> landTiles;
-	private ArrayList<Point2D> spawnPoints; // this variable is also dependant on the CREATURE_SIZE variable
 
 	
 	/**
@@ -56,18 +61,18 @@ public class Board {
 	private double EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
 	private int RATIO_CHILDS_PER_PARENT = Configuration.RATIO_CHILDS_PER_PARENT;
 	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
-	private final int TILE_SIZE ;//= Configuration.tileSize;
+	private final int TILE_SIZE = Configuration.DEFAULT_TILE_SIZE;
 
 
-	public Board(int tileSize, int mapSize, double seed, double smoothness, EvoAI evoAI) {
+	public Board(int mapSize, double seed, double smoothness, EvoAI evoAI) {
 		
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
 
-		this.TILE_SIZE = tileSize;
+//		this.TILE_SIZE = tileSize;
 		
-		map = new Map(tileSize, mapSize, seed, smoothness);
+		map = new Map(TILE_SIZE, mapSize, seed, smoothness);
 
 		landTiles = map.getLandTiles();
 		
@@ -76,15 +81,7 @@ public class Board {
 		timeKeeper = new TimeKeeper(this);
 		timeKeeper.setInfoPanel(infoPanel);
 		infoPanel.setTimeKeeper(timeKeeper);
-
-	}
-
-	/**
-	 * 
-	 */
-	
-	public void spawnFirstCreatures() {
-
+		
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
 		
@@ -92,7 +89,13 @@ public class Board {
 		setAverageAgeArray(new ArrayList<Double>());
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
 
-		
+	}
+
+	/**
+	 * This method 
+	 */
+	public void spawnFirstCreatures() {
+
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size()); // makes sure that not more creatures are spawned than there are spawnpoints
