@@ -7,7 +7,7 @@ public class Eye {
 	Board board;
 	double eyeLength, eyeDeviation, rightX, rightY, leftX, leftY;
 	int xTile, yTile;
-	Color rightEyeColor, leftEyeColor;
+	Color rightEyeColor, centerEyeColor, leftEyeColor;
 
 	Eye(Creature creature, Board board, double eyeLength, double eyeDeviation) {
 		this.creature = creature;
@@ -47,6 +47,10 @@ public class Eye {
 			creature.setLeftEyeColor(board.getMap().getTiles()[xTile][yTile].getTileColor());
 		}
 
+		xTile = creature.getxTile();
+		yTile = creature.getyTile();
+		creature.setCenterEyeColor(board.getMap().getTiles()[xTile][yTile].getTileColor());
+		
 	}
 
 	public double getRightX() {
