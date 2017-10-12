@@ -14,27 +14,17 @@ public class Brain {
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
 
-	/** inputs indecis
-	 * 0 to 3: RGB values of the lefteye.
-	 * 3 to 6: RGB values of the righteye.
-	 * 6: current speed.
-	 * 7: current direction.
-	 * 8: age.
-	 * 9: fat.
-	 * 10: constant value 1.
-	 * 11>: memorycels.
+	/**
+	 * inputs indecis 0 to 3: RGB values of the lefteye. 3 to 6: RGB values of the
+	 * centereye. 6 to 9: RGB values of the
+	 * righteye. 10: current speed.  11: fat. 12:
+	 * constant value 1. 13>: memorycels.
 	 * 
-	 * outputs indecis
-	 * 0: deltaspeed. 
-	 * 1: deltadirection. 
-	 * 2: amount to eat. 
-	 * 3 to 6: RGB values for the bodycolor. 
-	 * 6 to 10: Not used atm. 
-	 * 11>: memorycels
+	 * outputs indecis 0: deltaspeed. 1: deltadirection. 2: amount to eat. 3 to 6:
+	 * RGB values for the bodycolor. 6 to 10: Not used atm. 13>: memorycels
 	 */
-	
-	
-	//Generates a new random brain.
+
+	// Generates a new random brain.
 	Brain(int brainHeight, int brainWidth, Creature creature) {
 		this.brainHeight = brainHeight;
 		this.brainWidth = brainWidth;
@@ -49,8 +39,8 @@ public class Brain {
 			}
 		}
 	}
-	
-	//Generates a brain based on a parentbrain
+
+	// Generates a brain based on a parentbrain
 	Brain(Brain parentBrain, Creature creature, double deviation) {
 		this.brainHeight = parentBrain.getBrainHeight();
 		this.brainWidth = parentBrain.getBrainWidth();
@@ -65,43 +55,47 @@ public class Brain {
 			}
 		}
 	}
-	
-	//Calculates and orders the inputs for the neuron
+
+	// Calculates and orders the inputs for the neuron
 	public void generateInputs() {
 
-		Color leftEyeColor = creature.getLeftEyeColor();
-		if (leftEyeColor != null) {
-			rgbColor = leftEyeColor.getRGBColorComponents(null);
+		Color rightEyeColor = creature.getRightEyeColor();
+		if (rightEyeColor != null) {
+			rgbColor = rightEyeColor.getRGBColorComponents(null);
 			for (int i = 0; i < rgbColor.length; i++) {
 				inputs[i] = rgbColor[i];
 			}
 		}
 
-		Color rightEyeColor = creature.getRightEyeColor();
-		if (rightEyeColor != null) {
-			rgbColor = rightEyeColor.getRGBColorComponents(null);
+		Color centerEyeColor = creature.getCenterEyeColor();
+		if (centerEyeColor != null) {
+			rgbColor = centerEyeColor.getRGBColorComponents(null);
+			for (int i = 0; i < rgbColor.length; i++) {
+				inputs[i + 3] = rgbColor[i];
+			}
 		}
 
-		for (int i = 0; i < rgbColor.length; i++) {
-			inputs[i + 3] = rgbColor[i];
+		Color leftEyeColor = creature.getLeftEyeColor();
+		if (leftEyeColor != null) {
+			rgbColor = leftEyeColor.getRGBColorComponents(null);
+			for (int i = 0; i < rgbColor.length; i++) {
+				inputs[i + 6] = rgbColor[i];
+			}
 		}
 
-		inputs[6] = creature.getSpeed();
-		//inputs[7] = creature.getDirection();
-		inputs[8] = creature.getAge();
-		inputs[9] = creature.getFat();
-		inputs[10] = creature.getWater();
+		inputs[9] = creature.getSpeed();
+		inputs[10] = creature.getFat();
+		inputs[11] = creature.getWater();
 
+		inputs[12] = 1d;
 
-		inputs[11] = 1d;
-
-		for (int i = 12; i < brainHeight; i++) {
+		for (int i = 13; i < brainHeight; i++) {
 			inputs[i] = outputs[i];
 		}
 
 	}
-	
-	//proccesses the neurons and calculates the brainOutputs
+
+	// proccesses the neurons and calculates the brainOutputs
 	public double[] feedForward() {
 		hiddenOutputs = new double[brainHeight];
 		hiddenInputs = new double[brainHeight];

@@ -51,7 +51,8 @@ public class Creature {
 	private boolean isDead = false;
 
 	// It's eyes
-	private Color leftEyeColor, rightEyeColor;
+
+	private Color rightEyeColor, centerEyeColor, leftEyeColor;
 	private double eyeDeviation, eyeLength, rightEyeX, rightEyeY, leftEyeX, leftEyeY;
 	private Eye eye;
 
@@ -648,6 +649,14 @@ public class Creature {
 
 	public void setTotalWaterDrunk(double totalWaterDrunk) {
 		this.totalWaterDrunk = totalWaterDrunk;
+	}
+
+	public Color getCenterEyeColor() {
+		return centerEyeColor;
+	}
+
+	public void setCenterEyeColor(Color centerEyeColor) {
+		this.centerEyeColor = centerEyeColor;
 	}
 
 }
