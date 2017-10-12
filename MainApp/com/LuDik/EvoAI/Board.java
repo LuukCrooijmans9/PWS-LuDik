@@ -111,7 +111,7 @@ public class Board {
 		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT
 				- AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION; i++) {
 			parentCreatures.get(i);
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
 				Point2D point = availableSpawnPoints
 						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 				Creature nextCreature = new Creature(parentCreatures.get(i), point.getX(), point.getY(), generation,
