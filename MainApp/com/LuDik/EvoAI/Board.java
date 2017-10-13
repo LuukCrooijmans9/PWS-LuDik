@@ -8,9 +8,12 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
- * This class coordinates the interaction between a Map object, a TimeKeeper object, and an array of Creature objects. 
- * The board class can be seen as a world, in which the Map object is this world's space, the Creature objects are its inhabitants, and the TimeKeeper object is its time.
- * It only has one Map object, one TimeKeeper object, but a varying amount of Creature objects, who are constantly being replaced by new objects.
+ * This class coordinates the interaction between a Map object, a TimeKeeper
+ * object, and an array of Creature objects. The board class can be seen as a
+ * world, in which the Map object is this world's space, the Creature objects
+ * are its inhabitants, and the TimeKeeper object is its time. It only has one
+ * Map object, one TimeKeeper object, but a varying amount of Creature objects,
+ * who are constantly being replaced by new objects.
  * 
  * 
  */
@@ -22,8 +25,7 @@ public class Board {
 	 */
 	EvoAI mainFrame;
 	private InfoPanel infoPanel;
-	
-	
+
 	/**
 	 * Map specific variables
 	 */
@@ -35,14 +37,14 @@ public class Board {
 	 * This board's TimeKeeper object
 	 */
 	private TimeKeeper timeKeeper;
-	
-	
+
 	/**
 	 * Variables for the creatures:
 	 */
 	private ArrayList<Creature> creatures; // all creatures currently alive in this Board
-	private ArrayList<Creature> allCreaturesOfGeneration; // all creatures that are part of the current generation, dead or alive
-	
+	private ArrayList<Creature> allCreaturesOfGeneration; // all creatures that are part of the current generation, dead
+															// or alive
+
 	/**
 	 * Statistics about previous generations:
 	 */
@@ -51,8 +53,6 @@ public class Board {
 	private ArrayList<Double> averageAgeArray;
 	private ArrayList<Double> averageTotalFoodEatenArray;
 
-
-	
 	/**
 	 * Constants determined by the Configuration class:
 	 */
@@ -63,28 +63,27 @@ public class Board {
 	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
 	private final int TILE_SIZE = Configuration.DEFAULT_TILE_SIZE;
 
-
 	public Board(int mapSize, double seed, double smoothness, EvoAI evoAI) {
-		
+
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
 
-//		this.TILE_SIZE = tileSize;
-		
+		// this.TILE_SIZE = tileSize;
+
 		map = new Map(TILE_SIZE, mapSize, seed, smoothness);
 
 		landTiles = map.getLandTiles();
-		
+
 		spawnPoints = this.generateSpawnPoints();
 
 		timeKeeper = new TimeKeeper(this);
 		timeKeeper.setInfoPanel(infoPanel);
 		infoPanel.setTimeKeeper(timeKeeper);
-		
+
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
-		
+
 		setAverageFitnessArray(new ArrayList<Double>());
 		setAverageAgeArray(new ArrayList<Double>());
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
@@ -92,13 +91,15 @@ public class Board {
 	}
 
 	/**
-	 * This method 
+	 * This method
 	 */
 	public void spawnFirstCreatures() {
 
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
-		
-		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size()); // makes sure that not more creatures are spawned than there are spawnpoints
+
+		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size()); // makes sure that not more
+																						// creatures are spawned than
+																						// there are spawnpoints
 
 		for (int i = 0; i < creaturesToSpawn; i++) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
@@ -112,8 +113,9 @@ public class Board {
 	}
 
 	public void spawnCreatures() {
-
-//		ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
+		int evolvingCreatures = 0;
+		int randomCreatures = 0;
+		// ArrayList<Point2D> spawnPoints = this.generateSpawnPoints();
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
 		ArrayList<Creature> newAllCreaturesOfGeneration = new ArrayList<Creature>();
@@ -126,22 +128,29 @@ public class Board {
 			parentCreatures.add(parentCreature);
 			sortedCreaturesOfGeneration.remove(parentCreature);
 		}
-		
 
-		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT
-				- AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION; i++) {
+		for (int i = 0; i < (creaturesToSpawn - AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION)
+				/ RATIO_CHILDS_PER_PARENT; i++) {
 			parentCreatures.get(i);
 			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
 				Point2D point = availableSpawnPoints
 						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-				Creature nextCreature = new Creature(parentCreatures.get(i), point.getX(), point.getY(), generation,
-						i, EVOLUTION_FACTOR);
+				Creature nextCreature = new Creature(parentCreatures.get(i), point.getX(), point.getY(), generation, i,
+						EVOLUTION_FACTOR);
 				creatures.add(nextCreature);
 				newAllCreaturesOfGeneration.add(nextCreature);
+				evolvingCreatures++;
 			}
 		}
-		
-		
+
+		for (int i = 0; i < AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION; i++) {
+			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+			Creature nextCreature = new Creature(point.getX(), point.getY(), this, i);
+			creatures.add(nextCreature);
+			newAllCreaturesOfGeneration.add(nextCreature);
+			randomCreatures++;
+		}
+
 		allCreaturesOfGeneration.clear();
 		for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
 			allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
@@ -151,14 +160,15 @@ public class Board {
 		}
 
 		generation++;
-		System.out.println(" ");
+		System.out.println(evolvingCreatures + " " + randomCreatures);
+		
 		System.out.println("Generation: " + generation + " spawned!");
 	}
 
 	public Creature spawnRandomCreature(int id) {
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);	
+		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);
 		return randomCreature;
 	}
 
@@ -168,7 +178,7 @@ public class Board {
 
 		spawnPoints.ensureCapacity(
 				(int) (landTiles.size() * (TILE_SIZE / (CREATURE_SIZE + 2)) * (TILE_SIZE / (CREATURE_SIZE + 2))));
-		
+
 		for (LandTile landTile : landTiles) {
 			for (int i = 0; i < TILE_SIZE / (CREATURE_SIZE + 2) - 1; i++) {
 				for (int k = 0; k < TILE_SIZE / (CREATURE_SIZE + 2) - 1; k++) {
@@ -200,8 +210,7 @@ public class Board {
 			this.getAverageFitnessArray().add(generation, averageFitness);
 			this.getAverageAgeArray().add(generation, averageAge);
 			this.getAverageTotalFoodEatenArray().add(generation, averageTotalFoodEaten);
-			
-			
+
 			infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness);
 			System.out.println("averageFitness: " + (int) averageFitness);
 
@@ -209,9 +218,12 @@ public class Board {
 				double improvement = (double) this.getAverageFitnessArray().get(generation)
 						- (double) this.getAverageFitnessArray().get(generation - 1);
 				System.out.println("improvement: " + (int) improvement);
-				improvement = (double) this.getAverageFitnessArray().get(generation) - (double) this.getAverageFitnessArray().get(0);
+				improvement = (double) this.getAverageFitnessArray().get(generation)
+						- (double) this.getAverageFitnessArray().get(0);
 				System.out.println("Total improvement: " + (int) improvement);
-				System.out.println("Index: " + ((this.getAverageFitnessArray().get(generation) / this.getAverageFitnessArray().get(0)) * 100));
+				System.out.println("Index: "
+						+ ((this.getAverageFitnessArray().get(generation) / this.getAverageFitnessArray().get(0))
+								* 100));
 
 			}
 
@@ -221,7 +233,7 @@ public class Board {
 		}
 
 		ArrayList<Creature> tempList = new ArrayList<Creature>();
-		
+
 		for (Creature crtr : creatures) {
 
 			if (crtr.isControlled()) {
@@ -240,7 +252,6 @@ public class Board {
 		for (Creature crtr : tempList) {
 			creatures.remove(crtr);
 		}
-
 
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
