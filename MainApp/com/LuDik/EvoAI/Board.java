@@ -12,45 +12,67 @@ import java.util.ArrayList;
  * The board class can be seen as a world, in which the Map object is this world's space, the Creature objects are its inhabitants, and the TimeKeeper object is its time.
  * It only has one Map object, one TimeKeeper object, but a varying amount of Creature objects, who are constantly being replaced by new objects.
  * 
- * Additionally, it contains information about its past Creature objects.
+ * 
  */
 
 public class Board {
 
+	/**
+	 * UI elements:
+	 */
+	EvoAI mainFrame;
+	private InfoPanel infoPanel;
+	
+	
+	/**
+	 * Map specific variables
+	 */
 	private Map map;
+	private ArrayList<LandTile> landTiles;
+	private ArrayList<Point2D> spawnPoints; // this variable is also dependant on the CREATURE_SIZE variable
+
+	/**
+	 * This board's TimeKeeper object
+	 */
 	private TimeKeeper timeKeeper;
 	
-	private ArrayList<LandTile> landTiles;
-
-	EvoAI mainFrame;
-
-	private ArrayList<Creature> creatures;
-	private ArrayList<Creature> allCreaturesOfGeneration;
+	
+	/**
+	 * Variables for the creatures:
+	 */
+	private ArrayList<Creature> creatures; // all creatures currently alive in this Board
+	private ArrayList<Creature> allCreaturesOfGeneration; // all creatures that are part of the current generation, dead or alive
+	
+	/**
+	 * Statistics about previous generations:
+	 */
 	private int generation;
 	private ArrayList<Double> averageFitnessArray;
 	private ArrayList<Double> averageAgeArray;
 	private ArrayList<Double> averageTotalFoodEatenArray;
 
-	private final int tileSize;
 
+	
+	/**
+	 * Constants determined by the Configuration class:
+	 */
 	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
 	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
 	private double EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
 	private int RATIO_CHILDS_PER_PARENT = Configuration.RATIO_CHILDS_PER_PARENT;
 	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
+	private final int TILE_SIZE = Configuration.DEFAULT_TILE_SIZE;
 
-	private InfoPanel infoPanel;
-	private ArrayList<Point2D> spawnPoints;
 
-	public Board(int tileSize, int mapSize, double seed, double smoothness, EvoAI evoAI) {
+	public Board(int mapSize, double seed, double smoothness, EvoAI evoAI) {
 		
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
 
-		this.tileSize = tileSize;
+//		this.TILE_SIZE = tileSize;
 		
-		map = new Map(tileSize, mapSize, seed, smoothness);
+		map = new Map(TILE_SIZE, mapSize, seed, smoothness);
 
 		landTiles = map.getLandTiles();
 		
@@ -59,15 +81,7 @@ public class Board {
 		timeKeeper = new TimeKeeper(this);
 		timeKeeper.setInfoPanel(infoPanel);
 		infoPanel.setTimeKeeper(timeKeeper);
-
-	}
-
-	/**
-	 * 
-	 */
-	
-	public void spawnFirstCreatures() {
-
+		
 		creatures = new ArrayList<Creature>();
 		allCreaturesOfGeneration = new ArrayList<Creature>();
 		
@@ -75,7 +89,13 @@ public class Board {
 		setAverageAgeArray(new ArrayList<Double>());
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
 
-		
+	}
+
+	/**
+	 * This method 
+	 */
+	public void spawnFirstCreatures() {
+
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size()); // makes sure that not more creatures are spawned than there are spawnpoints
@@ -147,11 +167,11 @@ public class Board {
 		ArrayList<Point2D> spawnPoints = new ArrayList<Point2D>();
 
 		spawnPoints.ensureCapacity(
-				(int) (landTiles.size() * (tileSize / (CREATURE_SIZE + 2)) * (tileSize / (CREATURE_SIZE + 2))));
+				(int) (landTiles.size() * (TILE_SIZE / (CREATURE_SIZE + 2)) * (TILE_SIZE / (CREATURE_SIZE + 2))));
 		
 		for (LandTile landTile : landTiles) {
-			for (int i = 0; i < tileSize / (CREATURE_SIZE + 2) - 1; i++) {
-				for (int k = 0; k < tileSize / (CREATURE_SIZE + 2) - 1; k++) {
+			for (int i = 0; i < TILE_SIZE / (CREATURE_SIZE + 2) - 1; i++) {
+				for (int k = 0; k < TILE_SIZE / (CREATURE_SIZE + 2) - 1; k++) {
 					spawnPoints
 							.add(new Point2D.Double(landTile.getTileRect().getX() + (i + 0.5d) * ((CREATURE_SIZE + 2d)),
 									landTile.getTileRect().getY() + (k + 0.5d) * ((CREATURE_SIZE + 2d))));
