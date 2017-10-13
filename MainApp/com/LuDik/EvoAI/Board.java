@@ -160,8 +160,7 @@ public class Board {
 		}
 
 		generation++;
-		System.out.println(evolvingCreatures + " " + randomCreatures);
-		
+		System.out.println(" ");
 		System.out.println("Generation: " + generation + " spawned!");
 	}
 
