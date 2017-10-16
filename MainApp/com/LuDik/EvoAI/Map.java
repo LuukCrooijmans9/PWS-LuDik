@@ -21,7 +21,8 @@ public class Map {
 		mapSize = mapSizeInTiles;
 		Configuration.mapSizeInTiles = mapSizeInTiles;
 		tiles = new Tile[mapSize][mapSize];
-		setLandTiles(new ArrayList<LandTile>());
+		landTiles = new ArrayList<LandTile>();
+		waterTiles = new ArrayList<WaterTile>();
 
 		double randomValue;
 
@@ -36,7 +37,7 @@ public class Map {
 					landTiles.add((LandTile) tiles[i][k]);
 				} else {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
-					getWaterTiles().add((WaterTile) tiles[i][k]);
+					waterTiles.add((WaterTile) tiles[i][k]);
 				}
 			}
 
@@ -105,6 +106,7 @@ public class Map {
 			double perlin;
 			
 			setLandTiles(new ArrayList<LandTile>());
+			waterTiles = new ArrayList<WaterTile>();
 			
 			for (int i = 0; i < mapSize; i++) {
 				
@@ -119,6 +121,7 @@ public class Map {
 						landTiles.add((LandTile) tiles[i][k]);
 					} else {
 						tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
+						waterTiles.add((WaterTile) tiles[i][k]);
 					}
 				}
 				
