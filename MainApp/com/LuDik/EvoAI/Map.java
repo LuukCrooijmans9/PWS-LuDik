@@ -11,6 +11,7 @@ public class Map {
 	private Tile[][] tiles;
 	private double smoothness;
 	private ArrayList<LandTile> landTiles;
+	private ArrayList<WaterTile> waterTiles;
 
 	public Map(int tSize, int mapSizeInTiles) {
 
@@ -35,6 +36,7 @@ public class Map {
 					landTiles.add((LandTile) tiles[i][k]);
 				} else {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
+					getWaterTiles().add((WaterTile) tiles[i][k]);
 				}
 			}
 
@@ -151,6 +153,14 @@ public class Map {
 
 	public void setLandTiles(ArrayList<LandTile> landTiles) {
 		this.landTiles = landTiles;
+	}
+
+	public ArrayList<WaterTile> getWaterTiles() {
+		return waterTiles;
+	}
+
+	public void setWaterTiles(ArrayList<WaterTile> waterTiles) {
+		this.waterTiles = waterTiles;
 	}
 
 
