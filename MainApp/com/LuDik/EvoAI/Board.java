@@ -145,7 +145,8 @@ public class Board {
 		}
 
 		/**
-		 * The code below spawns the creatures 
+		 * The code below spawns a number of creatures for each parent. This number is
+		 * determined by RATIO_CHILDS_PER_PARENT. The spawned creatures are based upon their parent.
 		 */
 		
 		for (int i = 0; i < (creaturesToSpawn - AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION)
@@ -154,7 +155,10 @@ public class Board {
 			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
 				Point2D point = availableSpawnPoints
 						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-				Creature nextCreature = new Creature(parentCreatures.get(i), point.getX(), point.getY(), generation, i,
+				Creature nextCreature = new Creature(
+						parentCreatures.get(i), 
+						point.getX(), point.getY(),
+						generation, RATIO_CHILDS_PER_PARENT * i + j,
 						EVOLUTION_FACTOR);
 				livingCreatures.add(nextCreature);
 				newAllCreaturesOfGeneration.add(nextCreature);
@@ -162,14 +166,12 @@ public class Board {
 			}
 		}
 
-		for (int i = 0; i < AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION; i++) {
-			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-			Creature nextCreature = new Creature(point.getX(), point.getY(), this, i);
-			livingCreatures.add(nextCreature);
-			newAllCreaturesOfGeneration.add(nextCreature);
-			randomCreatures++;
-		}
-
+		/**
+		 * The code below adds newAllcreaturesOfGeneration to the cleared 
+		 * allCreaturesOfGeneration arraylist, and spawns a number of random creatures, 
+		 * determined by the AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION constant.
+		 */
+		
 		allCreaturesOfGeneration.clear();
 		for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
 			allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
