@@ -27,7 +27,7 @@ public class TimeKeeper implements Runnable {
 	}
 
 	private void makeStep() {
-		board.updateStep();
+		board.doStep();
 		getInfoPanel().update();
 	}
 

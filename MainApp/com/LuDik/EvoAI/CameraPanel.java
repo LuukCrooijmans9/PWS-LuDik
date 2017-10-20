@@ -154,7 +154,7 @@ public class CameraPanel extends JPanel {
 		public void mousePressed(MouseEvent e) {
 			x = e.getX();
 			y = e.getY();
-			ArrayList<Creature> creatures = mainFrame.getBoard().getCreatures();
+			ArrayList<Creature> creatures = mainFrame.getBoard().getLivingCreatures();
 			
 			if (!isDisplayBoard()) {
 				return;

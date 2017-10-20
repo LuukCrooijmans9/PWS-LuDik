@@ -235,8 +235,8 @@ public class InfoPanel extends JPanel {
 	}
 
 	private void updateBoardRelatedComponents() {
-		if (board != null && board.getCreatures() != null) {
-			crtrAmountLbl.setText("Amount of creatures: " + board.getCreatures().size());
+		if (board != null && board.getLivingCreatures() != null) {
+			crtrAmountLbl.setText("Amount of creatures: " + board.getLivingCreatures().size());
 		}
 	}
 	
