@@ -3,6 +3,9 @@ package com.LuDik.EvoAI;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
  * This class contains a 2 dimensional array of Tiles, and additional
@@ -19,7 +22,9 @@ public class Map {
 	private double seed; // the seed for the layout of this map. The same seed
 							// will result in the same map, if no other
 							// variables are changed.
-	private double waterPercentage = 0.25; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles)
+	private double waterSeed;
+	private double fertilitySeed; // the 
+	private double waterPercentage = 99.9; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles * 100% )
 	private double smoothness;
 	/**
 	 * Smoothness can be seen as how smooth the transition between adjacent
@@ -47,6 +52,11 @@ public class Map {
 			seed = Math.random() * 255d;
 		}
 
+		Random seedGenerator = new Random((long) seed);
+		waterSeed = seedGenerator.nextDouble() * 255d;
+		fertilitySeed = seedGenerator.nextDouble() * 255d;
+		
+		
 		smoothness = smthnss;
 		mapSize = mapSizeInTiles;
 		this.seed = seed;
@@ -75,7 +85,7 @@ public class Map {
 			for (int k = 0; k < tilesValues[0].length; k++) {
 
 				perlinNumber = (float) 1f
-						* ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness, seed));
+						* ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness, waterSeed));
 				tilesValues[i][k] = perlinNumber;
 			}
 		}
@@ -84,10 +94,19 @@ public class Map {
 		
 		System.out.println("standard deviation: " + standardDeviation);
 		
-		double borderLandWater = calcBorderWithDesiredSurface(standardDeviation, waterPercentage);
+		DescriptiveStatistics stats = new DescriptiveStatistics();
 		
-		double maxShift = 0.5;
-		
+		for (int i = 0; i < tilesValues.length; i++) {
+			for (int k = 0; k < tilesValues[0].length; k++) {
+				stats.addValue(tilesValues[i][k]);
+			}
+		}
+
+		System.out.println("standard deviation with apache: " + stats.getStandardDeviation());
+		System.out.println("median with apache: " + stats.getPercentile(waterPercentage));
+
+		double borderLandWater = stats.getPercentile(waterPercentage);
+				
 		for (int i = 0; i < tilesValues.length; i++) {
 
 			for (int k = 0; k < tilesValues[0].length; k++) {
@@ -105,8 +124,11 @@ public class Map {
 				// maxShift);
 //				System.out.println("" + perlinNumberRedistributed);
 
-				if (perlinNumberRedistributed >= 0) {
-					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) perlinNumberRedistributed);
+				if (perlinNumberRedistributed >= borderLandWater) {
+					double fertility = (float) 1f
+							* ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness, fertilitySeed));
+					fertility = (fertility + 1) / 2;
+					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) fertility);
 					landTiles.add((LandTile) tiles[i][k]);
 				} else {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
@@ -119,9 +141,6 @@ public class Map {
 		System.out.println("waterTiles: " + waterTiles.size());
 	}
 	
-	private double calcBorderWithDesiredSurface(double standDev, double desiredSurface) {
-		return 0;
-	}
 
 	/**
 	 * This method calculates the standard deviation of the numbers in the given 2D array.
