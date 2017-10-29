@@ -44,8 +44,8 @@ public class Configuration {
 	public static double MAX_DELTA_DIRECTION_PER_STEP = 10;
 	public static double AGE_PER_STEP = 0.0001;
 	public static int DEFAULT_BRAIN_WIDTH = 3;
-	public static int DEFAULT_INPUT_HEIGHT = 12;
-	public static int DEFAULT_HIDDEN_HEIGHT = 5;
+	public static int DEFAULT_INPUT_HEIGHT = 13;
+	public static int DEFAULT_HIDDEN_HEIGHT = 13;
 
 	
 	
