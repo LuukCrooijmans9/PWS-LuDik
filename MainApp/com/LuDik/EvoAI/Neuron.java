@@ -11,20 +11,30 @@ package com.LuDik.EvoAI;
 public class Neuron {
 	double[] weights;
 	double bias;
+	boolean isActive;
 
-	Neuron(int heightPreviousLayer) {
-		// This assigns random values to each weight and the bias.
+	/**
+	 * Creates a random Neuron
+	 */
+	Neuron(int heightPreviousLayer, boolean isActive) {
+
 		weights = new double[heightPreviousLayer];
 		for (int i = 0; i < heightPreviousLayer; i++) {
 			weights[i] = Math.random() * 2 - 1;
 		}
 		bias = Math.random() * 2 - 1;
+		this.isActive = isActive;
 	}
 
-	Neuron(Neuron neuron, double deviation /* van 0 tot 1 waar 1 een volledig random weight maakt */) {
-		// Instead of assigning a random value it takes an predefined value from the
-		// Parent neuron and changes it based on a random value between -1 and 1 and
-		// multiplies this with the deviation.
+	/**
+	 * Creates a Neuron based on another "parent" Neuron. how much they differ is
+	 * defined by the deviation.
+	 * 
+	 * @parameter Parent Neuron, Deviation
+	 */
+
+	Neuron(Neuron neuron, double deviation) {
+
 		this.weights = neuron.getWeights();
 		for (int i = 0; i < this.weights.length; i++) {
 			double random = Math.random();
@@ -37,21 +47,26 @@ public class Neuron {
 			deviation = (Math.random() * 2 - 1) * deviation;
 			this.bias += deviation;
 		}
+		this.isActive = neuron.isActive;
 	}
 
-	// Generates the output of the neuron
+	/** Generates the output of the neuron */
 	double processNeuron(double[] inputs) {
+		if (!isActive) {
+			return 0d;
+		}
 		double weightedSum = this.bias;
 		for (int i = 0; i < inputs.length; i++) {
-
 			weightedSum += inputs[i] * weights[i];
-
 		}
 		return Neuron.sigmoid(weightedSum);
 	}
 
-	// This is a simplified sigmoid function due to the processing requirements. It
-	// returns values between -1 and 1.
+	/**
+	 * This is a simplified sigmoid function due to the processing requirements. It
+	 * 
+	 * @parameter output values between -1 and 1.
+	 */
 	static double sigmoid(double input) {
 		if (input < -10) {
 			return -1;
@@ -76,6 +91,14 @@ public class Neuron {
 
 	public void setBias(double bias) {
 		this.bias = bias;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

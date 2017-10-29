@@ -20,7 +20,8 @@ public class Creature {
 	private static final double BASE_FAT_CONSUMPTION = Configuration.BASE_FAT_CONSUMPTION;
 	private static final double BASE_CREATURE_EFFICIENCY = Configuration.BASE_CREATURE_EFFICIENCY;
 	private static final int DEFAULT_BRAIN_WIDTH = Configuration.DEFAULT_BRAIN_WIDTH;
-	private static final int DEFAULT_BRAIN_HEIGHT = Configuration.DEFAULT_BRAIN_HEIGHT;
+	private static final int DEFAULT_INPUT_HEIGHT = Configuration.DEFAULT_INPUT_HEIGHT;
+	private static final int DEFAULT_HIDDEN_HEIGHT = Configuration.DEFAULT_HIDDEN_HEIGHT;
 	private static final double BASE_WATER_CONSUMPTION = Configuration.BASE_WATER_CONSUMPTION;
 
 	private final long creatureID;
@@ -93,8 +94,8 @@ public class Creature {
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
-		brain = new Brain(DEFAULT_BRAIN_HEIGHT, DEFAULT_BRAIN_WIDTH, this);
-		brainOutputs = new double[DEFAULT_BRAIN_HEIGHT];
+		brain = new Brain(DEFAULT_INPUT_HEIGHT, DEFAULT_HIDDEN_HEIGHT, DEFAULT_BRAIN_WIDTH, this);
+		brainOutputs = new double[brain.getHeight()];
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
@@ -122,7 +123,7 @@ public class Creature {
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
 				creatureSize, creatureSize);
 		brain = new Brain(parentCreature.getBrain(), this, deviation);
-		brainOutputs = new double[DEFAULT_BRAIN_HEIGHT];
+		brainOutputs = new double[brain.getHeight()];
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 

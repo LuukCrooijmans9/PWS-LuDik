@@ -20,7 +20,7 @@ public class Configuration {
 																		// per generatie
 
 	// globalFertility bepaalt
-	public static double DEFAULT_FERTILITY_BONUS = 0.01;
+	public static double DEFAULT_FERTILITY_BONUS = 0.001;
 	public static double DEFAULT_MAX_WATER = 100;
 	public static double DEFAULT_MAX_FOOD = 4;
 	public static double MAX_FOOD_PER_CONSUME = 2;
@@ -32,7 +32,7 @@ public class Configuration {
 	public static double DEFAULT_MAX_WATER_IN_MOUTH = 5;
 	public static double DEFAULT_EYE_LENGTH = 35;
 	public static double DEFAULT_EYE_DEVIATION = 35;
-	public static double EAT_EFFICIENCY_STEEPNESS = 2000;
+	public static double EAT_EFFICIENCY_STEEPNESS = 20;
 	public static double DEFAULT_STARTING_FAT = 10;
 	public static double DEFAULT_STARTING_WATER = 10;
 	public static double WEIGHT_PER_FAT = 0.001;
@@ -44,7 +44,8 @@ public class Configuration {
 	public static double MAX_DELTA_DIRECTION_PER_STEP = 10;
 	public static double AGE_PER_STEP = 0.0001;
 	public static int DEFAULT_BRAIN_WIDTH = 3;
-	public static int DEFAULT_BRAIN_HEIGHT = 15;
+	public static int DEFAULT_INPUT_HEIGHT = 12;
+	public static int DEFAULT_HIDDEN_HEIGHT = 5;
 
 	
 	

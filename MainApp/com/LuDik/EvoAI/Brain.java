@@ -8,7 +8,8 @@ import java.awt.Color;
  *
  */
 public class Brain {
-	private int brainHeight, brainWidth;
+	private int inputHeight, hiddenHeight, brainWidth;
+	private int height; // heighest layer
 	private Neuron[][] neurons;
 	private Creature creature;
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
@@ -16,47 +17,60 @@ public class Brain {
 
 	/**
 	 * inputs indecis 0 to 3: RGB values of the lefteye. 3 to 6: RGB values of the
-	 * centereye. 6 to 9: RGB values of the
-	 * righteye. 10: current speed.  11: fat. 12:
-	 * constant value 1. 13>: memorycels.
+	 * centereye. 6 to 9: RGB values of the righteye. 10: current speed. 11: fat.
+	 * 12: constant value 1. 13>: memorycels.
 	 * 
 	 * outputs indecis 0: deltaspeed. 1: deltadirection. 2: amount to eat. 3 to 6:
 	 * RGB values for the bodycolor. 6 to 10: Not used atm. 13>: memorycels
 	 */
 
-	// Generates a new random brain.
-	Brain(int brainHeight, int brainWidth, Creature creature) {
-		this.brainHeight = brainHeight;
+	/**
+	 * Generates a new random brain.
+	 * 
+	 * @parameters The height of the brain, The width of the brain, The creature of
+	 *             the brain
+	 */
+	Brain(int inputHeight, int hiddenHeight, int brainWidth, Creature creature) {
+		this.inputHeight = inputHeight;
+		this.hiddenHeight = hiddenHeight;
 		this.brainWidth = brainWidth;
-		neurons = new Neuron[brainWidth][brainHeight];
+		this.height = Math.max(inputHeight, Math.max(hiddenHeight, 13));
+		neurons = new Neuron[brainWidth][height];
 		this.creature = creature;
-		outputs = new double[brainHeight];
-		inputs = new double[brainHeight];
+		outputs = new double[height];
+		inputs = new double[height];
 		rgbColor = new float[2];
 		for (int i = 0; i < this.brainWidth; i++) {
-			for (int j = 0; j < this.brainHeight; j++) {
-				neurons[i][j] = new Neuron(brainHeight);
+			for (int j = 0; j < height; j++) {
+				if (((i == 0 || i == this.height -1 )&& j > this.inputHeight - 1) || ((i == 0 || i == this.height -1 ) && j > this.hiddenHeight - 1)) {
+					neurons[i][j] = new Neuron(height, false);
+				} else {
+					neurons[i][j] = new Neuron(height, true);
+				}
 			}
 		}
 	}
 
-	// Generates a brain based on a parentbrain
+	/** Generates a brain based on a parentbrain */
 	Brain(Brain parentBrain, Creature creature, double deviation) {
-		this.brainHeight = parentBrain.getBrainHeight();
+		this.inputHeight = parentBrain.getInputHeight();
+		this.inputHeight = parentBrain.getHiddenHeight();
+		this.height = parentBrain.getHeight();
 		this.brainWidth = parentBrain.getBrainWidth();
 		this.neurons = parentBrain.getNeurons();
 		this.creature = creature;
-		outputs = new double[this.brainHeight];
-		inputs = new double[this.brainHeight];
+
+		outputs = new double[height];
+		inputs = new double[height];
 		rgbColor = new float[2];
 		for (int i = 0; i < this.brainWidth; i++) {
-			for (int j = 0; j < this.brainHeight; j++) {
-				this.neurons[i][j] = new Neuron(this.neurons[i][j], deviation);
+			for (int j = 0; j < height; j++) {
+				neurons[i][j] = new Neuron(neurons[i][j], deviation);
 			}
 		}
 	}
 
-	// Calculates and orders the inputs for the neuron
+	/** Calculates and orders the inputs for the neuron */
 	public void generateInputs() {
 
 		Color rightEyeColor = creature.getRightEyeColor();
@@ -86,42 +100,33 @@ public class Brain {
 		inputs[9] = creature.getSpeed();
 		inputs[10] = creature.getFat();
 		inputs[11] = creature.getWater();
-
 		inputs[12] = 1d;
 
-		for (int i = 13; i < brainHeight; i++) {
+		for (int i = 13; i < height; i++) {
 			inputs[i] = outputs[i];
 		}
 
 	}
 
-	// proccesses the neurons and calculates the brainOutputs
+	/** proccesses the neurons and calculates the brainOutputs */
 	public double[] feedForward() {
-		hiddenOutputs = new double[brainHeight];
-		hiddenInputs = new double[brainHeight];
+		hiddenOutputs = new double[height];
+		hiddenInputs = new double[height];
 
 		// loop voor eerste layer van neuralnet
-		for (int i = 0; i < brainHeight; i++) {
+		for (int i = 0; i < height; i++) {
 			hiddenOutputs[i] = neurons[0][i].processNeuron(inputs);
 		}
 
 		// loop voor hiddenlayers van neuralnet
 		for (int i = 1; i < brainWidth; i++) {
 			hiddenInputs = hiddenOutputs;
-			for (int j = 0; j < brainHeight; j++) {
+			for (int j = 0; j < height; j++) {
 				hiddenOutputs[i] = neurons[i][j].processNeuron(hiddenInputs);
 			}
 		}
 		outputs = hiddenOutputs;
 		return outputs;
-	}
-
-	public int getBrainHeight() {
-		return brainHeight;
-	}
-
-	public void setBrainHeight(int brainHeight) {
-		this.brainHeight = brainHeight;
 	}
 
 	public int getBrainWidth() {
@@ -186,6 +191,30 @@ public class Brain {
 
 	public void setRgbColor(float[] rgbColor) {
 		this.rgbColor = rgbColor;
+	}
+
+	public int getInputHeight() {
+		return inputHeight;
+	}
+
+	public void setInputHeight(int inputHeight) {
+		this.inputHeight = inputHeight;
+	}
+
+	public int getHiddenHeight() {
+		return hiddenHeight;
+	}
+
+	public void setHiddenHeight(int hiddenHeight) {
+		this.hiddenHeight = hiddenHeight;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 }
