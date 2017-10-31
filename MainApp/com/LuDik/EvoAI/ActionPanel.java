@@ -114,7 +114,7 @@ public class ActionPanel extends JPanel {
 				}
 				
 				board = new Board(Configuration.DEFAULT_MAP_SIZE_IN_TILES,
-						Configuration.DEFAULT_SEED, Configuration.DEFAULT_SMOOTHNESS, mainFrame);
+						Configuration.DEFAULT_MAIN_SEED, Configuration.DEFAULT_SMOOTHNESS, mainFrame);
 				
 				infoPanel.setBoard(board);
 				

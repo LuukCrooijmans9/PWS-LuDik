@@ -19,12 +19,13 @@ public class Map {
 	 */
 	private int mapSize; // this is the value for the dimensions in tiles
 	private int tileSize; // the size of eacht tile in this Map
-	private double seed; // the seed for the layout of this map. The same seed
+	private double mapGenSeed; // the seed for the layout of this map. The same seed
 							// will result in the same map, if no other
 							// variables are changed.
-	private double waterSeed;
+	private double heightSeed;
 	private double fertilitySeed; // the 
-	private double waterPercentage = 99.9; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles * 100% )
+	private double waterLevel;
+	private double waterPercentage = 20; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles * 100% )
 	private double smoothness;
 	/**
 	 * Smoothness can be seen as how smooth the transition between adjacent
@@ -32,7 +33,7 @@ public class Map {
 	 * between adjacent tiles is likely low, and vice-versa.
 	 */
 	private Tile[][] tiles;
-	private Double[][] tilesValues;
+	private Double[][] tileHeights;
 	private ArrayList<LandTile> landTiles;
 	private ArrayList<WaterTile> waterTiles;
 
@@ -43,102 +44,98 @@ public class Map {
 	 * 
 	 * @param tSize
 	 * @param mapSizeInTiles
-	 * @param seed
+	 * @param mapGenSeed
 	 * @param smthnss
 	 */
 
-	public Map(int tSize, int mapSizeInTiles, double seed, double smthnss) {
-		if (seed <= 0) {
-			seed = Math.random() * 255d;
-		}
+	public Map(int tSize, int mapSizeInTiles, long mapGenSeed, double smthnss) {
 
-		Random seedGenerator = new Random((long) seed);
-		waterSeed = seedGenerator.nextDouble() * 255d;
+		Random seedGenerator = new Random(mapGenSeed); // is used to ensure that one seed leads to the same map everytime
+		heightSeed = seedGenerator.nextDouble() * 255d;
 		fertilitySeed = seedGenerator.nextDouble() * 255d;
 		
 		
 		smoothness = smthnss;
 		mapSize = mapSizeInTiles;
-		this.seed = seed;
+		this.mapGenSeed = mapGenSeed;
 		tileSize = tSize;
 
 		Configuration.tileSize = tileSize;
 		Configuration.mapSizeInTiles = mapSizeInTiles;
 
-		tilesValues = new Double[mapSize][mapSize];
+		tileHeights = new Double[mapSize][mapSize];
 		tiles = new Tile[mapSize][mapSize];
 		landTiles = new ArrayList<LandTile>();
 		waterTiles = new ArrayList<WaterTile>();
 
 		/**
-		 * The code below decides whether a tile is a WaterTile or a LandTile
-		 * based on its position in the 2D field. If it's a LandTile, it also
-		 * assigns a fertility to the LandTile based on its position. The first
-		 * for loop is for the x-direction, the second one for the y-direction.
+		 * The code below generates the height (altitude) of all the tiles, and determines the height of the waterlevel.
+		 * Every tile with a height lower than the waterlevel is a WaterTile. If it's not a waterlevel, a fertility for that tile
+		 * is generated and that tile becomes a LandTile. In this way, a 2D grid of LandTiles and WaterTiles is achieved.
 		 */
 
-		double perlinNumberRedistributed;
-		double perlinNumber;
-
-
-		for (int i = 0; i < tilesValues.length; i++) {
-			for (int k = 0; k < tilesValues[0].length; k++) {
-
-				perlinNumber = (float) 1f
-						* ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness, waterSeed));
-				tilesValues[i][k] = perlinNumber;
-			}
-		}
-
-		double standardDeviation = calcStandardDeviation(tilesValues);
+		generateTileHeights(tileHeights, smoothness, heightSeed);
 		
-		System.out.println("standard deviation: " + standardDeviation);
-		
-		DescriptiveStatistics stats = new DescriptiveStatistics();
-		
-		for (int i = 0; i < tilesValues.length; i++) {
-			for (int k = 0; k < tilesValues[0].length; k++) {
-				stats.addValue(tilesValues[i][k]);
-			}
-		}
+		DescriptiveStatistics tileHeightsStats = getArray2DStats(tileHeights);
 
-		System.out.println("standard deviation with apache: " + stats.getStandardDeviation());
-		System.out.println("median with apache: " + stats.getPercentile(waterPercentage));
+		System.out.println("standard deviation with apache: " + tileHeightsStats.getStandardDeviation());
+		System.out.println("median with apache: " + tileHeightsStats.getPercentile(waterPercentage));
 
-		double borderLandWater = stats.getPercentile(waterPercentage);
+		waterLevel = tileHeightsStats.getPercentile(waterPercentage); // determines how high the waterlevel should be in order to get the desired water percentage
 				
-		for (int i = 0; i < tilesValues.length; i++) {
-
-			for (int k = 0; k < tilesValues[0].length; k++) {
-
-				perlinNumber = tilesValues[i][k];
-				if (perlinNumber <= -0.95 || perlinNumber >= 0.95)
-					System.out.println("before " + perlinNumber);
-				// perlin = (float) (1 / (2 + Math.expm1(-perlin)));
-				// System.out.println("after " + maxShift);
-				// System.out.println("" );
-				// perlinNumberRedistributed = (perlin * (4d / 3d)) - (1d / 3d);
-				perlinNumberRedistributed = perlinNumber;
-
-				// perlinNumberRedistributed = redistribute(perlinNumber,
-				// maxShift);
-//				System.out.println("" + perlinNumberRedistributed);
-
-				if (perlinNumberRedistributed >= borderLandWater) {
-					double fertility = (float) 1f
-							* ((float) ImprovedNoise.noise((float) i * smoothness, (float) k * smoothness, fertilitySeed));
-					fertility = (fertility + 1) / 2;
-					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) fertility);
-					landTiles.add((LandTile) tiles[i][k]);
-				} else {
+		for (int i = 0; i < tileHeights.length; i++) {
+			for (int k = 0; k < tileHeights[0].length; k++) {
+				
+				if (tileHeights[i][k] < waterLevel) {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
 					waterTiles.add((WaterTile) tiles[i][k]);
+					
+				} else {
+					double fertility = ImprovedNoise.noise( i * smoothness, k * smoothness, fertilitySeed); // the same way of generating a value as the height, only with a different seed
+					fertility = (fertility + 1) / 2; // ensures that the fertility ranges from 0 to 1
+					
+					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) fertility);
+					landTiles.add((LandTile) tiles[i][k]);
 				}
 			}
 
 		}
 		System.out.println("landTiles: " + landTiles.size());
 		System.out.println("waterTiles: " + waterTiles.size());
+	}
+
+
+	/**
+	 * Uses the improved perlin noise algorithm to generate the double height values for the 2D double array, with a given smoothness
+	 * and a seed between 0 and 255.
+	 * @param tileHeights
+	 * @param smoothness
+	 * @param seed
+	 */
+	
+	private void generateTileHeights(Double[][] tileHeights, double smoothness, double seed) {
+		for (int i = 0; i < tileHeights.length; i++) {
+			for (int k = 0; k < tileHeights[0].length; k++) {
+				tileHeights[i][k] = ImprovedNoise.noise(i * smoothness, k * smoothness, seed);
+			}
+		}
+	}
+
+	/**
+	 * Puts the contents of the array2D in the DescriptiveStatistics object.
+	 * @param array2D
+	 * @return a DescriptiveStatistics object of the array2D
+	 */
+
+	private DescriptiveStatistics getArray2DStats(Double[][] array2D) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		
+		for (int i = 0; i < array2D.length; i++) {
+			for (int k = 0; k < array2D[0].length; k++) {
+				stats.addValue(array2D[i][k]);
+			}
+		}
+		return stats;
 	}
 	
 
@@ -176,13 +173,13 @@ public class Map {
 		return standardDeviation;
 	}
 
-	private double redistribute(double number, double maxShift) {
-
-		double p = maxShift;
-		double divisor = 1 - (p * p);
-		double numberRedistributed = ((p + number) / divisor) - Math.abs(((p * p) + (p * number)) / divisor);
-		return numberRedistributed;
-	}
+//	private double redistribute(double number, double maxShift) {
+//
+//		double p = maxShift;
+//		double divisor = 1 - (p * p);
+//		double numberRedistributed = ((p + number) / divisor) - Math.abs(((p * p) + (p * number)) / divisor);
+//		return numberRedistributed;
+//	}
 
 	/**
 	 * this method sets all landTiles to their maximum foodValue.

@@ -6,6 +6,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class coordinates the interaction between a Map object, a TimeKeeper
@@ -62,25 +63,37 @@ public class Board {
 	private int RATIO_CHILDS_PER_PARENT = Configuration.RATIO_CHILDS_PER_PARENT;
 	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
 	private final int TILE_SIZE = Configuration.DEFAULT_TILE_SIZE;
+	
+	private long evolutionSeed;
+	private long mapGenSeed;
 
 	/**
 	 * Constructor for Board. Creates the map and the spawnpoints and the timekeeper, and sets up variables for . 
 	 * It doesn't create the creature objects, this is done in a different method.
 	 * @param mapSize
-	 * @param seed
+	 * @param mainSeed
 	 * @param smoothness
 	 * @param evoAI
 	 */
 	
-	public Board(int mapSize, double seed, double smoothness, EvoAI evoAI) {
+	public Board(int mapSize, long mainSeed, double smoothness, EvoAI evoAI) {
 
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
 
+		if (mainSeed == 0) mainSeed = new Random().nextLong();
+		
+		Random mainSeedRNG = new Random(mainSeed);
+		evolutionSeed = mainSeedRNG.nextLong();
+		
+		if (Configuration.DEFAULT_MAPGEN_SEED == 0) mapGenSeed = mainSeedRNG.nextLong();
+		else mapGenSeed = Configuration.DEFAULT_MAPGEN_SEED;
+		
+		
 		// this.TILE_SIZE = tileSize;
 
-		map = new Map(TILE_SIZE, mapSize, seed, smoothness);
+		map = new Map(TILE_SIZE, mapSize, mapGenSeed, smoothness);
 
 		landTiles = map.getLandTiles();
 
