@@ -190,7 +190,9 @@ public class Board {
 			allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
 		}
 		for (int i = newAllCreaturesOfGeneration.size(); i < creaturesToSpawn; i++) {
-			allCreaturesOfGeneration.add(spawnRandomCreature(i));
+			Creature nextCreature = spawnRandomCreature(i);
+			allCreaturesOfGeneration.add(nextCreature);
+			livingCreatures.add(nextCreature);
 		}
 
 		generation++;
