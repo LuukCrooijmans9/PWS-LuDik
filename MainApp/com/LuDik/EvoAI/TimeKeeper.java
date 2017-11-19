@@ -56,7 +56,7 @@ public class TimeKeeper implements Runnable {
 			makeStep();
 
 			timeDiffNano = System.nanoTime() - beforeTime;
-			timeDiff = (long) (System.nanoTime() - beforeTime) / (long) Math.pow(10, 6) ; //calculates timeDiff and converts it to ms
+			timeDiff = (long) timeDiffNano / (long) Math.pow(10, 6) ; //calculates timeDiff and converts it to ms
 			sleep = delay - timeDiff;
 			
 
