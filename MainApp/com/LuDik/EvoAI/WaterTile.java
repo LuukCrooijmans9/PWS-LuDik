@@ -3,6 +3,12 @@ package com.LuDik.EvoAI;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * An instance of this class is a tile with a blue color, and if NEED_DRINKING is true, the method drinkWaterTile can return
+ * something other than 0.
+ *
+ */
+
 public class WaterTile extends Tile {
 
 	boolean isActive;
@@ -15,6 +21,11 @@ public class WaterTile extends Tile {
 		isActive = Configuration.NEED_DRINKING;
 	}
 
+	/**
+	 * This method returns 0 if drinking is disabled, and it returns the amount parameter if drinking is enabled and
+	 * this double is not higher than DEFAULT_MAX_WATER.
+	 */
+	
 	public double drinkWaterTile(double amount) {
 		if (isActive) {
 			return Math.min(amount, Configuration.DEFAULT_MAX_WATER);
