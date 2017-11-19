@@ -18,6 +18,7 @@ public class Creature {
 	private static final double WEIGHT_PER_FAT = Configuration.WEIGHT_PER_FAT;
 	private static final double WEIGHT_PER_WATER = Configuration.WEIGHT_PER_WATER;
 	private static final double BASE_FAT_CONSUMPTION = Configuration.BASE_FAT_CONSUMPTION;
+	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = Configuration.DEFAULT_MAX_FOOD_IN_MOUTH;
 	private static final double BASE_CREATURE_EFFICIENCY = Configuration.BASE_CREATURE_EFFICIENCY;
 	private static final int DEFAULT_BRAIN_WIDTH = Configuration.DEFAULT_BRAIN_WIDTH;
 	private static final int DEFAULT_INPUT_HEIGHT = Configuration.DEFAULT_INPUT_HEIGHT;
@@ -176,7 +177,7 @@ public class Creature {
 
 		if (desiredFoodAmount != 0) {
 			eatEfficiency = 1 / (EAT_EFFICIENCY_STEEPNESS * speed + 1);
-			actualFoodAmount = desiredFoodAmount * eatEfficiency;
+			actualFoodAmount = desiredFoodAmount * eatEfficiency * DEFAULT_MAX_FOOD_IN_MOUTH;
 			foodInMouth = board.getMap().getTiles()[xTile][yTile].eatFoodTile(actualFoodAmount);
 			fat += foodInMouth;
 			setTotalFoodEaten(getTotalFoodEaten() + foodInMouth);

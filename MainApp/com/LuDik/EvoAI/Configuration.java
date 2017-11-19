@@ -23,7 +23,7 @@ public class Configuration {
 	// globalFertility bepaalt
 	public static double DEFAULT_FERTILITY_MULTIPLIER = 0.001;
 	public static double DEFAULT_MAX_WATER = 100;
-	public static double DEFAULT_MAX_FOOD = 4;
+	public static double DEFAULT_MAX_FOOD = 10;
 	public static double MAX_FOOD_PER_CONSUME = 2;
 	public static boolean NEED_DRINKING = false;
 
@@ -33,7 +33,7 @@ public class Configuration {
 	public static double DEFAULT_MAX_WATER_IN_MOUTH = 5;
 	public static double DEFAULT_EYE_LENGTH = 35;
 	public static double DEFAULT_EYE_DEVIATION = 35;
-	public static double EAT_EFFICIENCY_STEEPNESS = 20;
+	public static double EAT_EFFICIENCY_STEEPNESS = 200;
 	public static double DEFAULT_STARTING_FAT = 10;
 	public static double DEFAULT_STARTING_WATER = 10;
 	public static double WEIGHT_PER_FAT = 0.001;
