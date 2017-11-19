@@ -58,7 +58,8 @@ public class LandTile extends Tile {
 	}
 	
 	/**
-	 * This method returns
+	 * This method deducts the foodAmount from foodValue and then returns the amount it deducted from foodvalue.
+	 * If foodAmount is higher than foodValue, then foodValue is deducted from foodValue and foodValue is returned.
 	 */
 	public double eatFoodTile(double foodAmount) {
 		
