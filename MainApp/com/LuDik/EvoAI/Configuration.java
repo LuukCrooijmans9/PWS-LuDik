@@ -13,7 +13,7 @@ public class Configuration {
 
 	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 100;
 
-	public static final double DEFAULT_EVOLUTION_FACTOR = 0.0002; // 1 is maximale evolution 0 is geen evolutie
+	public static final double DEFAULT_EVOLUTION_FACTOR = 0.002; // 1 is maximale evolution 0 is geen evolutie
 	
 	public static int BEGIN_AMOUNT_CREATURES = 400;
 	public static int RATIO_CHILDS_PER_PARENT = 2; // 2 wil zeggen dat elke parent 2 childs krijgt
@@ -21,7 +21,7 @@ public class Configuration {
 																		// per generatie
 
 	// globalFertility bepaalt
-	public static double DEFAULT_FERTILITY_BONUS = 0.001;
+	public static double DEFAULT_FERTILITY_MULTIPLIER = 0.001;
 	public static double DEFAULT_MAX_WATER = 100;
 	public static double DEFAULT_MAX_FOOD = 4;
 	public static double MAX_FOOD_PER_CONSUME = 2;

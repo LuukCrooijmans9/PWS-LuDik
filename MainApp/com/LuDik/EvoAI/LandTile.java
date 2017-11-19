@@ -3,48 +3,76 @@ package com.LuDik.EvoAI;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
-public class LandTile extends Tile {
-	private double fertility, foodValue, foodColor;
-	private double tileMaxFoodValue;
+/**
+ * An instance of this class is a tile with a fertility and a foodValue. The foodValue can be influenced from without.
+ * 
+ *
+ */
 
-	public LandTile(int upperLeftCornerX, int upperLeftCornerY, float frtlty) {
+public class LandTile extends Tile {
+	private double fertility; // how quickly the foodvalue increases
+	private double foodValue; // how much food there is on this LandTile
+	private double foodColor; // the green component of the tileColor, which is determined by the foodvalue
+	private double tileMaxFoodValue; // the maximum value of foodvalue
+	
+	private static double GLOBAL_MAX_FOOD = Configuration.DEFAULT_MAX_FOOD;
+	private static double GLOBAL_FERTILITY = Configuration.DEFAULT_FERTILITY_MULTIPLIER;
+
+	/**
+	 * This method initializes a LandTile with the given variables 
+	 * @param upperLeftCornerX
+	 * @param upperLeftCornerY
+	 * @param fertility
+	 */
+	
+	public LandTile(int upperLeftCornerX, int upperLeftCornerY, float fertility) {
 
 		isWaterTile = false;
-		fertility = frtlty;
-		tileMaxFoodValue = (double) (fertility * Configuration.DEFAULT_MAX_FOOD);
+		this.fertility = fertility;
+		tileMaxFoodValue = (double) (fertility * GLOBAL_MAX_FOOD);
 		foodValue = tileMaxFoodValue;
-		foodColor = (double) Math.min(foodValue / Configuration.DEFAULT_MAX_FOOD, 1);
+		foodColor = (double) Math.min(foodValue / GLOBAL_MAX_FOOD, 1);
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
 
 	}
 
+	/**
+	 * This method lets the LandTile know that a step has passed and it is time to check
+	 * how much food needs to be added according to the fertility and the tileMaxFoodValue
+	 */
+	
 	public void calculateNextFood() {
 
-		foodValue = (float) (foodValue + fertility * Configuration.DEFAULT_FERTILITY_BONUS);
+		foodValue += fertility * GLOBAL_FERTILITY;
 
 		if (foodValue >= tileMaxFoodValue) {
 			foodValue = tileMaxFoodValue;
 		}
 		
-		foodColor = foodValue / (Configuration.DEFAULT_MAX_FOOD);
+		foodColor = foodValue / GLOBAL_MAX_FOOD;
 		
 
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
 
 	}
-//	desiredFood moet hier een getal tussen -1 en 1 zijn
+	
+	/**
+	 * This method returns
+	 */
 	public double eatFoodTile(double foodAmount) {
-		double tempFood = foodAmount * Configuration.MAX_FOOD_PER_CONSUME;
-		//System.out.println("foodEaten = " + foodEaten);
-		double foodEaten = Math.min(foodValue, tempFood);
-		//System.out.println("foodValue before eaten = " + foodValue);
+		
+		
+		double foodEaten = Math.min(foodValue, foodAmount);
 		foodValue -= foodEaten;
-		//System.out.println("foodValue after eaten = " + foodValue);
 		
 		return foodEaten;
 	}
 
+	/**
+	 * this method resets the tile to its maximum foodValue.
+	 */
+	
 	public void refill() {
 		foodValue = tileMaxFoodValue;
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);

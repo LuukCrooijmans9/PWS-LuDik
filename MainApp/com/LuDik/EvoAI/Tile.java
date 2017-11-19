@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * This class is the superclass of WaterTile and LandTile. It provides some methods and variables 
+ * which must be present in every Tile. A tile is a square with a certain color, size and position.
+ */
+
 public abstract class Tile {
-
-
 
 	int upperLeftX, upperLeftY;
 	static int tileSize = Configuration.tileSize;
@@ -35,12 +38,11 @@ public abstract class Tile {
 		return tileRect;
 	}
 
-	public double eatFoodTile(double DesiredFood) {
-//		System.out.println("WaterTile");
+	public double eatFoodTile(double desiredFood) {
 		return 0;
 	}
 	
-	public double drinkWaterTile(double DesiredWater) {
+	public double drinkWaterTile(double desiredWater) {
 		return 0;
 	}
 

@@ -39,26 +39,26 @@ public class Map {
 
 	/**
 	 * This constructor constructs a new map with a height and width of
-	 * mapSizeInTiles amount of tiles, with a tileSize of tSize, a seed for the
+	 * mapSizeInTiles amount of tiles, with a tileSize of tileSize, a seed for the
 	 * layout of the map, and with a smoothness of smthnss.
 	 * 
-	 * @param tSize
+	 * @param tileSize
 	 * @param mapSizeInTiles
 	 * @param mapGenSeed
-	 * @param smthnss
+	 * @param smoothness
 	 */
 
-	public Map(int tSize, int mapSizeInTiles, long mapGenSeed, double smthnss) {
+	public Map(int tileSize, int mapSizeInTiles, long mapGenSeed, double smoothness) {
 
 		Random seedGenerator = new Random(mapGenSeed); // is used to ensure that one seed leads to the same map everytime
 		heightSeed = seedGenerator.nextDouble() * 255d;
 		fertilitySeed = seedGenerator.nextDouble() * 255d;
 		
 		
-		smoothness = smthnss;
+		this.smoothness = smoothness;
 		mapSize = mapSizeInTiles;
 		this.mapGenSeed = mapGenSeed;
-		tileSize = tSize;
+		this.tileSize = tileSize;
 
 		Configuration.tileSize = tileSize;
 		Configuration.mapSizeInTiles = mapSizeInTiles;
@@ -70,7 +70,7 @@ public class Map {
 
 		/**
 		 * The code below generates the height (altitude) of all the tiles, and determines the height of the waterlevel.
-		 * Every tile with a height lower than the waterlevel is a WaterTile. If it's not a waterlevel, a fertility for that tile
+		 * Every tile with a height lower than or equal to the waterlevel is a WaterTile. If the height is higher than the waterlevel, a fertility for that tile
 		 * is generated and that tile becomes a LandTile. In this way, a 2D grid of LandTiles and WaterTiles is achieved.
 		 */
 
@@ -86,7 +86,7 @@ public class Map {
 		for (int i = 0; i < tileHeights.length; i++) {
 			for (int k = 0; k < tileHeights[0].length; k++) {
 				
-				if (tileHeights[i][k] < waterLevel) {
+				if (tileHeights[i][k] <= waterLevel) {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
 					waterTiles.add((WaterTile) tiles[i][k]);
 					
@@ -172,14 +172,6 @@ public class Map {
 		double standardDeviation = Math.sqrt(meanDevSquared);
 		return standardDeviation;
 	}
-
-//	private double redistribute(double number, double maxShift) {
-//
-//		double p = maxShift;
-//		double divisor = 1 - (p * p);
-//		double numberRedistributed = ((p + number) / divisor) - Math.abs(((p * p) + (p * number)) / divisor);
-//		return numberRedistributed;
-//	}
 
 	/**
 	 * this method sets all landTiles to their maximum foodValue.

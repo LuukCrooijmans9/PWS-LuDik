@@ -127,7 +127,7 @@ public class Creature {
 		eye = new Eye(this, this.board, this.eyeLength, eyeDeviation);
 	}
 
-	// notification for creature to do it's stuff.
+	// notification for creature to do its stuff.
 	public void doStep() {
 		this.beginStep();
 		this.brainStep();
@@ -135,7 +135,7 @@ public class Creature {
 		this.endStep();
 	}
 
-	// If we want to controll it it does stuff based on the inputs.
+	// If we want to control it it does stuff based on the inputs.
 	public void doStep(double deltaSpeed, double deltaDirection, double amount) {
 		this.beginStep();
 		move(deltaSpeed, deltaDirection);
@@ -143,7 +143,7 @@ public class Creature {
 		this.endStep();
 	}
 
-	// Some things that needs to be done before everything else.
+	// Some things that need to be done before everything else.
 	public void beginStep() {
 		fatBurned = 0;
 		eye.look();
