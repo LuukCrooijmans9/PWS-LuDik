@@ -55,14 +55,14 @@ public class Board {
 	private ArrayList<Double> averageTotalFoodEatenArray;
 
 	/**
-	 * Constants determined by the Configuration class:
+	 * Constants determined by the ConfigSingleton.INSTANCE class:
 	 */
-	private int BEGIN_AMOUNT_CREATURES = Configuration.beginAmountCreatures;
-	private double CREATURE_SIZE = Configuration.crtrSize;
-	private double EVOLUTION_FACTOR = Configuration.evolutionFactor;
-	private int RATIO_CHILDS_PER_PARENT = Configuration.ratioChildsPerParent;
-	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.randomCreaturesPerGeneration;
-	private final int TILE_SIZE = Configuration.tileSize;
+	private int BEGIN_AMOUNT_CREATURES = ConfigSingleton.INSTANCE.beginAmountCreatures;
+	private double CREATURE_SIZE = ConfigSingleton.INSTANCE.crtrSize;
+	private double EVOLUTION_FACTOR = ConfigSingleton.INSTANCE.evolutionFactor;
+	private int RATIO_CHILDS_PER_PARENT = ConfigSingleton.INSTANCE.ratioChildsPerParent;
+	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = ConfigSingleton.INSTANCE.randomCreaturesPerGeneration;
+	private final int TILE_SIZE = ConfigSingleton.INSTANCE.tileSize;
 	
 	private long evolutionSeed;
 	private long mapGenSeed;
@@ -90,8 +90,8 @@ public class Board {
 		Random mainSeedRNG = new Random(mainSeed);
 		evolutionSeed = mainSeedRNG.nextLong();
 		
-		if (Configuration.mapGenSeed == 0) mapGenSeed = mainSeedRNG.nextLong();
-		else mapGenSeed = Configuration.mapGenSeed;
+		if (ConfigSingleton.INSTANCE.mapGenSeed == 0) mapGenSeed = mainSeedRNG.nextLong();
+		else mapGenSeed = ConfigSingleton.INSTANCE.mapGenSeed;
 		
 		
 		// this.TILE_SIZE = tileSize;

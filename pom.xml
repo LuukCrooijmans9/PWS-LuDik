@@ -9,10 +9,10 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
-        <configuration>
+        <ConfigSingleton.INSTANCE>
           <source/>
           <target/>
-        </configuration>
+        </ConfigSingleton.INSTANCE>
       </plugin>
     </plugins>
   </build>

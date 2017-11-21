@@ -18,7 +18,7 @@ public class WaterTile extends Tile {
 		isWaterTile = true;
 		tileColor = new Color(0f, 0f, 1f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
-		isActive = Configuration.needDrinking;
+		isActive = ConfigSingleton.INSTANCE.needDrinking;
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class WaterTile extends Tile {
 	
 	public double drinkWaterTile(double amount) {
 		if (isActive) {
-			return Math.min(amount, Configuration.maxWater);
+			return Math.min(amount, ConfigSingleton.INSTANCE.maxWater);
 		}
 		else {
 			return 0;

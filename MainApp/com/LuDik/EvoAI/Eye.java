@@ -26,8 +26,8 @@ public class Eye {
 		xTile = Creature.posToTile(rightX);
 		yTile = Creature.posToTile(rightY);
 
-		if (xTile < 0 || yTile < 0 || xTile > Configuration.mapSizeInTiles - 1
-				|| yTile > Configuration.mapSizeInTiles - 1) {
+		if (xTile < 0 || yTile < 0 || xTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1
+				|| yTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1) {
 			rightEyeColor = Color.WHITE;
 		} else {
 			creature.setRightEyeColor(board.getMap().getTiles()[xTile][yTile].getTileColor());
@@ -40,8 +40,8 @@ public class Eye {
 		xTile = Creature.posToTile(leftX);
 		yTile = Creature.posToTile(leftY);
 
-		if (xTile < 0 || yTile < 0 || xTile > Configuration.mapSizeInTiles - 1
-				|| yTile > Configuration.mapSizeInTiles - 1) {
+		if (xTile < 0 || yTile < 0 || xTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1
+				|| yTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1) {
 			creature.setLeftEyeColor(Color.WHITE);
 		} else {
 			creature.setLeftEyeColor(board.getMap().getTiles()[xTile][yTile].getTileColor());

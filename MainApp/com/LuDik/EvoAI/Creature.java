@@ -13,16 +13,16 @@ import java.awt.geom.Line2D;
 
 public class Creature {
 
-	// Copied from configuration
-	private static final double EAT_EFFICIENCY_STEEPNESS = Configuration.eatEfficiencySteepness;
-	private static final double WEIGHT_PER_FAT = Configuration.weightPerFat;
-	private static final double WEIGHT_PER_WATER = Configuration.weightPerWater;
-	private static final double BASE_FAT_CONSUMPTION = Configuration.baseFatConsumption;
-	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = Configuration.maxFoodInMouth;
-	private static final int DEFAULT_BRAIN_WIDTH = Configuration.brainWidth;
-	private static final int DEFAULT_INPUT_HEIGHT = Configuration.inputLayerHeight;
-	private static final int DEFAULT_HIDDEN_HEIGHT = Configuration.hiddenLayerHeight;
-	private static final double BASE_WATER_CONSUMPTION = Configuration.baseWaterConsumption;
+	// Copied from ConfigSingleton.INSTANCE
+	private static final double EAT_EFFICIENCY_STEEPNESS = ConfigSingleton.INSTANCE.eatEfficiencySteepness;
+	private static final double WEIGHT_PER_FAT = ConfigSingleton.INSTANCE.weightPerFat;
+	private static final double WEIGHT_PER_WATER = ConfigSingleton.INSTANCE.weightPerWater;
+	private static final double BASE_FAT_CONSUMPTION = ConfigSingleton.INSTANCE.baseFatConsumption;
+	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = ConfigSingleton.INSTANCE.maxFoodInMouth;
+	private static final int DEFAULT_BRAIN_WIDTH = ConfigSingleton.INSTANCE.brainWidth;
+	private static final int DEFAULT_INPUT_HEIGHT = ConfigSingleton.INSTANCE.inputLayerHeight;
+	private static final int DEFAULT_HIDDEN_HEIGHT = ConfigSingleton.INSTANCE.hiddenLayerHeight;
+	private static final double BASE_WATER_CONSUMPTION = ConfigSingleton.INSTANCE.baseWaterConsumption;
 
 	private final long creatureID;
 	private Creature parent;
@@ -69,7 +69,7 @@ public class Creature {
 
 	// Translates the x and y values to the x and y values of the tile they are in.
 	static public int posToTile(double x) {
-		return (int) Math.round((x / Configuration.tileSize) - 0.5d);
+		return (int) Math.round((x / ConfigSingleton.INSTANCE.tileSize) - 0.5d);
 	}
 
 	// Totally random creature
@@ -84,12 +84,12 @@ public class Creature {
 		direction = Math.random() * 360;
 
 		age = 0;
-		fat = Configuration.startingFat;
-		water = Configuration.startingWater;
+		fat = ConfigSingleton.INSTANCE.startingFat;
+		water = ConfigSingleton.INSTANCE.startingWater;
 
-		creatureSize = Configuration.crtrSize;
-		eyeLength = Configuration.eyeLength;
-		eyeDeviation = Configuration.eyeDeviation;
+		creatureSize = ConfigSingleton.INSTANCE.crtrSize;
+		eyeLength = ConfigSingleton.INSTANCE.eyeLength;
+		eyeDeviation = ConfigSingleton.INSTANCE.eyeDeviation;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
@@ -104,7 +104,7 @@ public class Creature {
 		parent = parentCreature;
 		board = parent.getBoard();
 
-		creatureID = creatureNumber + Configuration.beginAmountCreatures * generation;
+		creatureID = creatureNumber + ConfigSingleton.INSTANCE.beginAmountCreatures * generation;
 
 		setXPos(x);
 		setYPos(y);
@@ -112,12 +112,12 @@ public class Creature {
 		direction = Math.random() * 360;
 
 		age = 0;
-		fat = Configuration.startingFat;
-		water = Configuration.startingWater;
+		fat = ConfigSingleton.INSTANCE.startingFat;
+		water = ConfigSingleton.INSTANCE.startingWater;
 
-		creatureSize = Configuration.crtrSize;
-		eyeLength = Configuration.eyeLength;
-		eyeDeviation = Configuration.eyeDeviation;
+		creatureSize = ConfigSingleton.INSTANCE.crtrSize;
+		eyeLength = ConfigSingleton.INSTANCE.eyeLength;
+		eyeDeviation = ConfigSingleton.INSTANCE.eyeDeviation;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
@@ -164,7 +164,7 @@ public class Creature {
 		this.eat(brainOutputs[2]);
 		creatureColor = new Color((float) brainOutputs[3] / 2 + .5f, (float) brainOutputs[4] / 2 + .5f,
 				(float) brainOutputs[5] / 2 + .5f);
-		if (Configuration.needDrinking) {
+		if (ConfigSingleton.INSTANCE.needDrinking) {
 			this.drink(brainOutputs[6]);
 		}
 	}
@@ -202,7 +202,7 @@ public class Creature {
 	// Moves the creature.
 	public void move(double deltaSpeed, double deltaDirection) {
 
-		maxSpeed = Configuration.maxSpeed;
+		maxSpeed = ConfigSingleton.INSTANCE.maxSpeed;
 
 		// Calculates new speed
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -214,7 +214,7 @@ public class Creature {
 		}
 
 		// Calculates new direction
-		deltaDirection *= Configuration.maxDeltaDirection;
+		deltaDirection *= ConfigSingleton.INSTANCE.maxDeltaDirection;
 		direction -= deltaDirection;
 		direction %= 360;
 
@@ -224,12 +224,12 @@ public class Creature {
 		// Checks if the move is not invalid (Does it stay within the borders of the
 		// field)
 		if (getXPos() + deltaXPos - (creatureSize / 2) > 0 && getXPos() + deltaXPos
-				+ (creatureSize / 2) < Configuration.mapSizeInTiles * Configuration.tileSize) {
+				+ (creatureSize / 2) < ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) {
 			setXPos(getXPos() + deltaXPos);
 		}
 
 		if (getYPos() + deltaYPos - (creatureSize / 2) > 0 && getYPos() + deltaYPos
-				+ (creatureSize / 2) < Configuration.mapSizeInTiles * Configuration.tileSize) {
+				+ (creatureSize / 2) < ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) {
 			setYPos(getYPos() + deltaYPos);
 		}
 
@@ -246,7 +246,7 @@ public class Creature {
 
 		fat -= BASE_FAT_CONSUMPTION;
 
-		if (Configuration.needDrinking) {
+		if (ConfigSingleton.INSTANCE.needDrinking) {
 			water -= BASE_WATER_CONSUMPTION;
 			weight = fat * WEIGHT_PER_FAT + water * WEIGHT_PER_WATER;
 		} else {
@@ -255,7 +255,7 @@ public class Creature {
 		if (fat <= 0 || water <= 0) {
 			isDead = true;
 		} else {
-			age += Configuration.agePerStep;
+			age += ConfigSingleton.INSTANCE.agePerStep;
 		}
 	}
 

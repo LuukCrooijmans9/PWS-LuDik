@@ -60,8 +60,8 @@ public class Map {
 		this.mapGenSeed = mapGenSeed;
 		this.tileSize = tileSize;
 
-		Configuration.tileSize = tileSize;
-		Configuration.mapSizeInTiles = mapSizeInTiles;
+		ConfigSingleton.INSTANCE.tileSize = tileSize;
+		ConfigSingleton.INSTANCE.mapSizeInTiles = mapSizeInTiles;
 
 		tileHeights = new Double[mapSize][mapSize];
 		tiles = new Tile[mapSize][mapSize];
