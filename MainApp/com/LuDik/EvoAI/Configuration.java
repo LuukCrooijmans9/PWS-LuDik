@@ -22,7 +22,6 @@ public class Configuration {
 	public static double fertilityMultiplier = 0.001;
 	public static double maxWater = 100;
 	public static double maxFood = 10;
-	public static double maxFoodPerConsume = 2;
 	public static boolean needDrinking = false;
 
 	// Waarde van creature
@@ -38,7 +37,6 @@ public class Configuration {
 	public static double weightPerWater = 0.001;
 	public static double baseFatConsumption = 0.1;
 	public static double baseWaterConsumption = 0.5;
-	public static double baseCreatureEfficiency = 10;
 	public static double maxSpeed = 5;
 	public static double maxDeltaDirection = 10;
 	public static double agePerStep = 0.0001;

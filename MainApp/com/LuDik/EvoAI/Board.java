@@ -82,7 +82,10 @@ public class Board {
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
 
-		if (mainSeed == 0) mainSeed = new Random().nextLong();
+		if (mainSeed == 0) {
+			mainSeed = new Random().nextLong();
+			
+		}
 		
 		Random mainSeedRNG = new Random(mainSeed);
 		evolutionSeed = mainSeedRNG.nextLong();

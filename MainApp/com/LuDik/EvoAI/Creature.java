@@ -19,7 +19,6 @@ public class Creature {
 	private static final double WEIGHT_PER_WATER = Configuration.weightPerWater;
 	private static final double BASE_FAT_CONSUMPTION = Configuration.baseFatConsumption;
 	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = Configuration.maxFoodInMouth;
-	private static final double BASE_CREATURE_EFFICIENCY = Configuration.baseCreatureEfficiency;
 	private static final int DEFAULT_BRAIN_WIDTH = Configuration.brainWidth;
 	private static final int DEFAULT_INPUT_HEIGHT = Configuration.inputLayerHeight;
 	private static final int DEFAULT_HIDDEN_HEIGHT = Configuration.hiddenLayerHeight;
