@@ -15,8 +15,8 @@ public class LandTile extends Tile {
 	private double foodColor; // the green component of the tileColor, which is determined by the foodvalue
 	private double tileMaxFoodValue; // the maximum value of foodvalue
 	
-	private static double GLOBAL_MAX_FOOD = Configuration.DEFAULT_MAX_FOOD;
-	private static double GLOBAL_FERTILITY = Configuration.DEFAULT_FERTILITY_MULTIPLIER;
+	private static double GLOBAL_MAX_FOOD = Configuration.maxFood;
+	private static double GLOBAL_FERTILITY = Configuration.fertilityMultiplier;
 
 	/**
 	 * This method initializes a LandTile with the given variables 

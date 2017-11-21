@@ -14,16 +14,16 @@ import java.awt.geom.Line2D;
 public class Creature {
 
 	// Copied from configuration
-	private static final double EAT_EFFICIENCY_STEEPNESS = Configuration.EAT_EFFICIENCY_STEEPNESS;
-	private static final double WEIGHT_PER_FAT = Configuration.WEIGHT_PER_FAT;
-	private static final double WEIGHT_PER_WATER = Configuration.WEIGHT_PER_WATER;
-	private static final double BASE_FAT_CONSUMPTION = Configuration.BASE_FAT_CONSUMPTION;
-	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = Configuration.DEFAULT_MAX_FOOD_IN_MOUTH;
-	private static final double BASE_CREATURE_EFFICIENCY = Configuration.BASE_CREATURE_EFFICIENCY;
-	private static final int DEFAULT_BRAIN_WIDTH = Configuration.DEFAULT_BRAIN_WIDTH;
-	private static final int DEFAULT_INPUT_HEIGHT = Configuration.DEFAULT_INPUT_HEIGHT;
-	private static final int DEFAULT_HIDDEN_HEIGHT = Configuration.DEFAULT_HIDDEN_HEIGHT;
-	private static final double BASE_WATER_CONSUMPTION = Configuration.BASE_WATER_CONSUMPTION;
+	private static final double EAT_EFFICIENCY_STEEPNESS = Configuration.eatEfficiencySteepness;
+	private static final double WEIGHT_PER_FAT = Configuration.weightPerFat;
+	private static final double WEIGHT_PER_WATER = Configuration.weightPerWater;
+	private static final double BASE_FAT_CONSUMPTION = Configuration.baseFatConsumption;
+	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = Configuration.maxFoodInMouth;
+	private static final double BASE_CREATURE_EFFICIENCY = Configuration.baseCreatureEfficiency;
+	private static final int DEFAULT_BRAIN_WIDTH = Configuration.brainWidth;
+	private static final int DEFAULT_INPUT_HEIGHT = Configuration.inputLayerHeight;
+	private static final int DEFAULT_HIDDEN_HEIGHT = Configuration.hiddenLayerHeight;
+	private static final double BASE_WATER_CONSUMPTION = Configuration.baseWaterConsumption;
 
 	private final long creatureID;
 	private Creature parent;
@@ -85,12 +85,12 @@ public class Creature {
 		direction = Math.random() * 360;
 
 		age = 0;
-		fat = Configuration.DEFAULT_STARTING_FAT;
-		water = Configuration.DEFAULT_STARTING_WATER;
+		fat = Configuration.startingFat;
+		water = Configuration.startingWater;
 
-		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
-		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
-		eyeDeviation = Configuration.DEFAULT_EYE_DEVIATION;
+		creatureSize = Configuration.crtrSize;
+		eyeLength = Configuration.eyeLength;
+		eyeDeviation = Configuration.eyeDeviation;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
@@ -105,7 +105,7 @@ public class Creature {
 		parent = parentCreature;
 		board = parent.getBoard();
 
-		creatureID = creatureNumber + Configuration.BEGIN_AMOUNT_CREATURES * generation;
+		creatureID = creatureNumber + Configuration.beginAmountCreatures * generation;
 
 		setXPos(x);
 		setYPos(y);
@@ -113,12 +113,12 @@ public class Creature {
 		direction = Math.random() * 360;
 
 		age = 0;
-		fat = Configuration.DEFAULT_STARTING_FAT;
-		water = Configuration.DEFAULT_STARTING_WATER;
+		fat = Configuration.startingFat;
+		water = Configuration.startingWater;
 
-		creatureSize = Configuration.DEFAULT_CREATURE_SIZE;
-		eyeLength = Configuration.DEFAULT_EYE_LENGTH;
-		eyeDeviation = Configuration.DEFAULT_EYE_DEVIATION;
+		creatureSize = Configuration.crtrSize;
+		eyeLength = Configuration.eyeLength;
+		eyeDeviation = Configuration.eyeDeviation;
 
 		setCreatureColor(new Color(0f, 1f, 0f));
 		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
@@ -165,7 +165,7 @@ public class Creature {
 		this.eat(brainOutputs[2]);
 		creatureColor = new Color((float) brainOutputs[3] / 2 + .5f, (float) brainOutputs[4] / 2 + .5f,
 				(float) brainOutputs[5] / 2 + .5f);
-		if (Configuration.NEED_DRINKING) {
+		if (Configuration.needDrinking) {
 			this.drink(brainOutputs[6]);
 		}
 	}
@@ -203,7 +203,7 @@ public class Creature {
 	// Moves the creature.
 	public void move(double deltaSpeed, double deltaDirection) {
 
-		maxSpeed = Configuration.DEFAULT_MAX_SPEED;
+		maxSpeed = Configuration.maxSpeed;
 
 		// Calculates new speed
 		if (speed + deltaSpeed >= maxSpeed) {
@@ -215,7 +215,7 @@ public class Creature {
 		}
 
 		// Calculates new direction
-		deltaDirection *= Configuration.MAX_DELTA_DIRECTION_PER_STEP;
+		deltaDirection *= Configuration.maxDeltaDirection;
 		direction -= deltaDirection;
 		direction %= 360;
 
@@ -225,12 +225,12 @@ public class Creature {
 		// Checks if the move is not invalid (Does it stay within the borders of the
 		// field)
 		if (getXPos() + deltaXPos - (creatureSize / 2) > 0 && getXPos() + deltaXPos
-				+ (creatureSize / 2) < Configuration.DEFAULT_MAP_SIZE_IN_TILES * Configuration.DEFAULT_TILE_SIZE) {
+				+ (creatureSize / 2) < Configuration.mapSizeInTiles * Configuration.tileSize) {
 			setXPos(getXPos() + deltaXPos);
 		}
 
 		if (getYPos() + deltaYPos - (creatureSize / 2) > 0 && getYPos() + deltaYPos
-				+ (creatureSize / 2) < Configuration.DEFAULT_MAP_SIZE_IN_TILES * Configuration.DEFAULT_TILE_SIZE) {
+				+ (creatureSize / 2) < Configuration.mapSizeInTiles * Configuration.tileSize) {
 			setYPos(getYPos() + deltaYPos);
 		}
 
@@ -247,7 +247,7 @@ public class Creature {
 
 		fat -= BASE_FAT_CONSUMPTION;
 
-		if (Configuration.NEED_DRINKING) {
+		if (Configuration.needDrinking) {
 			water -= BASE_WATER_CONSUMPTION;
 			weight = fat * WEIGHT_PER_FAT + water * WEIGHT_PER_WATER;
 		} else {
@@ -256,7 +256,7 @@ public class Creature {
 		if (fat <= 0 || water <= 0) {
 			isDead = true;
 		} else {
-			age += Configuration.AGE_PER_STEP;
+			age += Configuration.agePerStep;
 		}
 	}
 

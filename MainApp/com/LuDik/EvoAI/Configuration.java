@@ -2,51 +2,49 @@ package com.LuDik.EvoAI;
 
 public class Configuration {
 
-	public static double crtrSize;
-
 	// Map generation
-	public static int tileSize, mapSizeInTiles;
-	public static double DEFAULT_SMOOTHNESS = 0.1; // hoe hoger hoe ruwer de overgang van fertility/water, eigenlijk hoe
+	public static double mapSmoothness = 0.1; // hoe hoger hoe ruwer de overgang van fertility/water, eigenlijk hoe
 													// ver je ingezoomt zit op de perlin noise.
-	public static final long DEFAULT_MAIN_SEED = 0; // Seed is een double van 0 tot 255. negatief laten voor random seed
-	public static final long DEFAULT_MAPGEN_SEED = 0; // Seed is een double van 0 tot 255. negatief laten voor random seed
+	public static  long mainSeed = 0; // Seed is een double van 0 tot 255. negatief laten voor random seed
+	public static  long mapGenSeed = 0; // Seed is een double van 0 tot 255. negatief laten voor random seed
 
-	public static final int DEFAULT_TILE_SIZE = 40, DEFAULT_MAP_SIZE_IN_TILES = 100;
+	public static int tileSize = 40;
+	public static  int mapSizeInTiles = 100;
 
-	public static final double DEFAULT_EVOLUTION_FACTOR = 0.002; // 1 is maximale evolution 0 is geen evolutie
+	public static double evolutionFactor = 0.002; // 1 is maximale evolution 0 is geen evolutie
 	
-	public static int BEGIN_AMOUNT_CREATURES = 400;
-	public static int RATIO_CHILDS_PER_PARENT = 2; // 2 wil zeggen dat elke parent 2 childs krijgt
-	public static int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = 5; // hoeveel volledig nieuwe creatures er bij komen
+	public static int beginAmountCreatures = 400;
+	public static int ratioChildsPerParent = 2; // 2 wil zeggen dat elke parent 2 childs krijgt
+	public static int randomCreaturesPerGeneration = 5; // hoeveel volledig nieuwe creatures er bij komen
 																		// per generatie
 
 	// globalFertility bepaalt
-	public static double DEFAULT_FERTILITY_MULTIPLIER = 0.001;
-	public static double DEFAULT_MAX_WATER = 100;
-	public static double DEFAULT_MAX_FOOD = 10;
-	public static double MAX_FOOD_PER_CONSUME = 2;
-	public static boolean NEED_DRINKING = false;
+	public static double fertilityMultiplier = 0.001;
+	public static double maxWater = 100;
+	public static double maxFood = 10;
+	public static double maxFoodPerConsume = 2;
+	public static boolean needDrinking = false;
 
 	// Waarde van creature
-	public static double DEFAULT_CREATURE_SIZE = 10;
-	public static double DEFAULT_MAX_FOOD_IN_MOUTH = 10;
-	public static double DEFAULT_MAX_WATER_IN_MOUTH = 5;
-	public static double DEFAULT_EYE_LENGTH = 35;
-	public static double DEFAULT_EYE_DEVIATION = 35;
-	public static double EAT_EFFICIENCY_STEEPNESS = 200;
-	public static double DEFAULT_STARTING_FAT = 10;
-	public static double DEFAULT_STARTING_WATER = 10;
-	public static double WEIGHT_PER_FAT = 0.001;
-	public static double WEIGHT_PER_WATER = 0.001;
-	public static double BASE_FAT_CONSUMPTION = 0.1;
-	public static double BASE_WATER_CONSUMPTION = 0.5;
-	public static double BASE_CREATURE_EFFICIENCY = 10;
-	public static double DEFAULT_MAX_SPEED = 5;
-	public static double MAX_DELTA_DIRECTION_PER_STEP = 10;
-	public static double AGE_PER_STEP = 0.0001;
-	public static int DEFAULT_BRAIN_WIDTH = 3;
-	public static int DEFAULT_INPUT_HEIGHT = 13;
-	public static int DEFAULT_HIDDEN_HEIGHT = 13;
+	public static double crtrSize = 10;
+	public static double maxFoodInMouth = 10;
+	public static double maxWaterInMouth = 5;
+	public static double eyeLength = 35;
+	public static double eyeDeviation = 35;
+	public static double eatEfficiencySteepness = 200;
+	public static double startingFat = 10;
+	public static double startingWater = 10;
+	public static double weightPerFat = 0.001;
+	public static double weightPerWater = 0.001;
+	public static double baseFatConsumption = 0.1;
+	public static double baseWaterConsumption = 0.5;
+	public static double baseCreatureEfficiency = 10;
+	public static double maxSpeed = 5;
+	public static double maxDeltaDirection = 10;
+	public static double agePerStep = 0.0001;
+	public static int brainWidth = 3;
+	public static int inputLayerHeight = 13;
+	public static int hiddenLayerHeight = 13;
 
 	
 	

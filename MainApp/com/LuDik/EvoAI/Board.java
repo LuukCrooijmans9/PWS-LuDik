@@ -57,12 +57,12 @@ public class Board {
 	/**
 	 * Constants determined by the Configuration class:
 	 */
-	private int BEGIN_AMOUNT_CREATURES = Configuration.BEGIN_AMOUNT_CREATURES;
-	private double CREATURE_SIZE = Configuration.DEFAULT_CREATURE_SIZE;
-	private double EVOLUTION_FACTOR = Configuration.DEFAULT_EVOLUTION_FACTOR;
-	private int RATIO_CHILDS_PER_PARENT = Configuration.RATIO_CHILDS_PER_PARENT;
-	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
-	private final int TILE_SIZE = Configuration.DEFAULT_TILE_SIZE;
+	private int BEGIN_AMOUNT_CREATURES = Configuration.beginAmountCreatures;
+	private double CREATURE_SIZE = Configuration.crtrSize;
+	private double EVOLUTION_FACTOR = Configuration.evolutionFactor;
+	private int RATIO_CHILDS_PER_PARENT = Configuration.ratioChildsPerParent;
+	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = Configuration.randomCreaturesPerGeneration;
+	private final int TILE_SIZE = Configuration.tileSize;
 	
 	private long evolutionSeed;
 	private long mapGenSeed;
@@ -87,8 +87,8 @@ public class Board {
 		Random mainSeedRNG = new Random(mainSeed);
 		evolutionSeed = mainSeedRNG.nextLong();
 		
-		if (Configuration.DEFAULT_MAPGEN_SEED == 0) mapGenSeed = mainSeedRNG.nextLong();
-		else mapGenSeed = Configuration.DEFAULT_MAPGEN_SEED;
+		if (Configuration.mapGenSeed == 0) mapGenSeed = mainSeedRNG.nextLong();
+		else mapGenSeed = Configuration.mapGenSeed;
 		
 		
 		// this.TILE_SIZE = tileSize;
