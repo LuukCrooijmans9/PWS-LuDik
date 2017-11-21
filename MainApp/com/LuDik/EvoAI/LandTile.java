@@ -16,7 +16,7 @@ public class LandTile extends Tile {
 	private double tileMaxFoodValue; // the maximum value of foodvalue
 	
 	private static double GLOBAL_MAX_FOOD = ConfigSingleton.INSTANCE.maxFood;
-	private static double GLOBAL_FERTILITY = ConfigSingleton.INSTANCE.fertilityMultiplier;
+	private static double GLOBAL_FERTILITY = ConfigSingleton.INSTANCE.maxFertility;
 
 	/**
 	 * This method initializes a LandTile with the given variables 

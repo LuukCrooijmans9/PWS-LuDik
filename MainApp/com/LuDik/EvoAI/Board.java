@@ -60,7 +60,7 @@ public class Board {
 	private int BEGIN_AMOUNT_CREATURES = ConfigSingleton.INSTANCE.beginAmountCreatures;
 	private double CREATURE_SIZE = ConfigSingleton.INSTANCE.crtrSize;
 	private double EVOLUTION_FACTOR = ConfigSingleton.INSTANCE.evolutionFactor;
-	private int RATIO_CHILDS_PER_PARENT = ConfigSingleton.INSTANCE.ratioChildsPerParent;
+	private int RATIO_CHILDS_PER_PARENT = ConfigSingleton.INSTANCE.ratioChildrenPerParent;
 	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = ConfigSingleton.INSTANCE.randomCreaturesPerGeneration;
 	private final int TILE_SIZE = ConfigSingleton.INSTANCE.tileSize;
 	
