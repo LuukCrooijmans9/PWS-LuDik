@@ -26,12 +26,8 @@ public class Map {
 	private double fertilitySeed; // the seed determining the fertility of each tile.
 	private double waterLevel; // the minimum height that a tile must have in order not to be a waterTile (thus a landTile)
 	private int waterPercentage ; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles * 100% )
-	private double smoothness;
-	/**
-	 * Smoothness can be seen as how smooth the transition between adjacent
-	 * tiles is. A high smoothness value means that the difference in fertility
-	 * between adjacent tiles is likely low, and vice-versa.
-	 */
+	private double mapSmoothness; // how smooth the transition between the values of adjacent tiles is
+	
 	private Tile[][] tiles;
 	private Double[][] tileHeights;
 	private ArrayList<LandTile> landTiles;
@@ -49,9 +45,8 @@ public class Map {
 	 */
 
 	public Map() {
-
-		
-		this.smoothness = ConfigSingleton.INSTANCE.mapSmoothness;
+	
+		this.mapSmoothness = ConfigSingleton.INSTANCE.mapSmoothness;
 		this.mapSize = ConfigSingleton.INSTANCE.mapSizeInTiles;
 		this.tileSize = ConfigSingleton.INSTANCE.tileSize;
 		this.waterPercentage = ConfigSingleton.INSTANCE.waterPercentage;
@@ -72,7 +67,7 @@ public class Map {
 		 * is generated and that tile becomes a LandTile. In this way, a 2D grid of LandTiles and WaterTiles is achieved.
 		 */
 
-		generateTileHeights(tileHeights, smoothness, heightSeed);
+		generateTileHeights(tileHeights, mapSmoothness, heightSeed);
 		
 		DescriptiveStatistics tileHeightsStats = getArray2DStats(tileHeights);
 
@@ -89,7 +84,7 @@ public class Map {
 					waterTiles.add((WaterTile) tiles[i][k]);
 					
 				} else {
-					double fertility = ImprovedNoise.noise( i * smoothness, k * smoothness, fertilitySeed); // the same way of generating a value as the height, only with a different seed
+					double fertility = ImprovedNoise.noise( i * mapSmoothness, k * mapSmoothness, fertilitySeed); // the same way of generating a value as the height, only with a different seed
 					fertility = (fertility + 1) / 2; // ensures that the fertility ranges from 0 to 1
 					
 					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) fertility);
