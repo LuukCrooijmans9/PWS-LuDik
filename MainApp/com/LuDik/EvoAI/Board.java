@@ -57,27 +57,23 @@ public class Board {
 	/**
 	 * Constants determined by the ConfigSingleton.INSTANCE enumeration:
 	 */
-	private int BEGIN_AMOUNT_CREATURES;
-	private double CREATURE_SIZE;
-	private double EVOLUTION_FACTOR;
-	private int RATIO_CHILDS_PER_PARENT;
-	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
+	private final int BEGIN_AMOUNT_CREATURES;
+	private final double CREATURE_SIZE;
+	private final double EVOLUTION_FACTOR;
+	private final int RATIO_CHILDS_PER_PARENT;
+	private final int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
 	private final int TILE_SIZE;
 	
 	private long evolutionSeed;
-	private long mapGenSeed;
 	private long mainSeed;
 
 	/**
 	 * Constructor for Board. Creates the map and the spawnpoints and the timekeeper, and sets up variables for . 
 	 * It doesn't create the creature objects, this is done in a different method.
-	 * @param mapSize
-	 * @param mainSeed
-	 * @param smoothness
 	 * @param evoAI
 	 */
 	
-	public Board(int mapSize, long meainSeed, double smoothness, EvoAI evoAI) {
+	public Board(EvoAI evoAI) {
 
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
@@ -94,7 +90,7 @@ public class Board {
 		Random mainSeedRNG = new Random(mainSeed);
 		evolutionSeed = mainSeedRNG.nextLong();
 		
-		map = new Map(TILE_SIZE, mapSize, mapGenSeed, smoothness);
+		map = new Map(); // creates a new map according to the values in ConfigSingleton.INSTANCE
 
 		landTiles = map.getLandTiles();
 

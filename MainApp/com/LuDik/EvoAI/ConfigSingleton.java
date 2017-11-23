@@ -31,7 +31,7 @@ public enum ConfigSingleton {
 	public double maxFood = 10; // the highest foodValue a tile can have
 
 	/**
-	 * Variables that determine the appearance of the creatures
+	 * Variables that determine the appearance of the creatures:
 	 */
 	
 	public double crtrSize = 10; // the length of the diameter of all creatures
@@ -39,7 +39,8 @@ public enum ConfigSingleton {
 	public double eyeDeviation = 35; // how many degrees there are between the eyes of a creature
 
 	/**
-	 * Variables that 
+	 * Variables that determine the way in which creatures eat, interact with food,
+	 * and burn up food, or other variables that pertain to food and creatures:
 	 */
 	
 	public double startingFat = 10; // how much fat a newly born creature has
@@ -50,7 +51,7 @@ public enum ConfigSingleton {
 	public double agePerStep = 0.0001; // how much the age of a creature goes up per step
 	
 	/**
-	 * Variables that determine the manoeuvrability of the creatures
+	 * Variables that determine the manoeuvrability of the creatures:
 	 */
 	
 	public double maxSpeed = 5; // the heighest amount of units a creature can move per step
@@ -77,7 +78,7 @@ public enum ConfigSingleton {
 	public double maxWaterInMouth = 5; // the maximum amount of water a creature can drink in a step (not used)
 
 	/**
-	 * This methoud ensures that all values are ready to start the simulation. It must be called 
+	 * This method ensures that all values are ready to start the simulation. It must be called 
 	 * before the board class is created.
 	 */
 	

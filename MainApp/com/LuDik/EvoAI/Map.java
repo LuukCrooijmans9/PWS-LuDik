@@ -22,10 +22,10 @@ public class Map {
 	private long mapGenSeed; // the seed for the layout of this map. The same seed
 							// will result in the same map, if no other
 							// variables are changed.
-	private double heightSeed;
-	private double fertilitySeed; // the 
-	private double waterLevel;
-	private double waterPercentage = 20; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles * 100% )
+	private double heightSeed; // the seed determining the height of each tile. This is used to determine the waterlevel
+	private double fertilitySeed; // the seed determining the fertility of each tile.
+	private double waterLevel; // the minimum height that a tile must have in order not to be a waterTile (thus a landTile)
+	private int waterPercentage ; // the desired percentage of tiles that are waterTiles (waterTiles/Tiles * 100% )
 	private double smoothness;
 	/**
 	 * Smoothness can be seen as how smooth the transition between adjacent
@@ -48,7 +48,7 @@ public class Map {
 	 * @param smoothness
 	 */
 
-	public Map(int tileSize, int mapSizeInTiles, long mapGenSeed, double smoothness) {
+	public Map() {
 
 		
 		this.smoothness = ConfigSingleton.INSTANCE.mapSmoothness;
@@ -57,7 +57,7 @@ public class Map {
 		this.waterPercentage = ConfigSingleton.INSTANCE.waterPercentage;
 		this.mapGenSeed = ConfigSingleton.INSTANCE.mapGenSeed;
 		
-		Random seedGenerator = new Random(mapGenSeed); // is used to ensure that one seed leads to the same map everytime
+		Random seedGenerator = new Random(this.mapGenSeed); // is used to ensure that one seed leads to the same map everytime
 		heightSeed = seedGenerator.nextDouble() * 255d;
 		fertilitySeed = seedGenerator.nextDouble() * 255d;
 

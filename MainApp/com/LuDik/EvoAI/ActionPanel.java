@@ -113,8 +113,7 @@ public class ActionPanel extends JPanel {
 					timeKeeper = null;
 				}
 				
-				board = new Board(ConfigSingleton.INSTANCE.mapSizeInTiles,
-						ConfigSingleton.INSTANCE.mainSeed, ConfigSingleton.INSTANCE.mapSmoothness, mainFrame);
+				board = new Board(mainFrame);
 				
 				infoPanel.setBoard(board);
 				
