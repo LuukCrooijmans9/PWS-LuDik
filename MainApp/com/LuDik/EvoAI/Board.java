@@ -55,17 +55,18 @@ public class Board {
 	private ArrayList<Double> averageTotalFoodEatenArray;
 
 	/**
-	 * Constants determined by the ConfigSingleton.INSTANCE class:
+	 * Constants determined by the ConfigSingleton.INSTANCE enumeration:
 	 */
-	private int BEGIN_AMOUNT_CREATURES = ConfigSingleton.INSTANCE.beginAmountCreatures;
-	private double CREATURE_SIZE = ConfigSingleton.INSTANCE.crtrSize;
-	private double EVOLUTION_FACTOR = ConfigSingleton.INSTANCE.evolutionFactor;
-	private int RATIO_CHILDS_PER_PARENT = ConfigSingleton.INSTANCE.ratioChildrenPerParent;
-	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = ConfigSingleton.INSTANCE.randomCreaturesPerGeneration;
-	private final int TILE_SIZE = ConfigSingleton.INSTANCE.tileSize;
+	private int BEGIN_AMOUNT_CREATURES;
+	private double CREATURE_SIZE;
+	private double EVOLUTION_FACTOR;
+	private int RATIO_CHILDS_PER_PARENT;
+	private int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
+	private final int TILE_SIZE;
 	
 	private long evolutionSeed;
 	private long mapGenSeed;
+	private long mainSeed;
 
 	/**
 	 * Constructor for Board. Creates the map and the spawnpoints and the timekeeper, and sets up variables for . 
@@ -76,26 +77,23 @@ public class Board {
 	 * @param evoAI
 	 */
 	
-	public Board(int mapSize, long mainSeed, double smoothness, EvoAI evoAI) {
+	public Board(int mapSize, long meainSeed, double smoothness, EvoAI evoAI) {
 
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
-
-		if (mainSeed == 0) {
-			mainSeed = new Random().nextLong();
-			
-		}
+		
+		mainSeed = ConfigSingleton.INSTANCE.mainSeed;
+		BEGIN_AMOUNT_CREATURES = ConfigSingleton.INSTANCE.beginAmountCreatures;
+		CREATURE_SIZE = ConfigSingleton.INSTANCE.crtrSize;
+		EVOLUTION_FACTOR = ConfigSingleton.INSTANCE.evolutionFactor;
+		RATIO_CHILDS_PER_PARENT = ConfigSingleton.INSTANCE.ratioChildrenPerParent;
+		AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = ConfigSingleton.INSTANCE.randomCreaturesPerGeneration;
+		TILE_SIZE = ConfigSingleton.INSTANCE.tileSize;
 		
 		Random mainSeedRNG = new Random(mainSeed);
 		evolutionSeed = mainSeedRNG.nextLong();
 		
-		if (ConfigSingleton.INSTANCE.mapGenSeed == 0) mapGenSeed = mainSeedRNG.nextLong();
-		else mapGenSeed = ConfigSingleton.INSTANCE.mapGenSeed;
-		
-		
-		// this.TILE_SIZE = tileSize;
-
 		map = new Map(TILE_SIZE, mapSize, mapGenSeed, smoothness);
 
 		landTiles = map.getLandTiles();

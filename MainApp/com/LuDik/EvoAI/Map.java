@@ -19,7 +19,7 @@ public class Map {
 	 */
 	private int mapSize; // this is the value for the dimensions in tiles
 	private int tileSize; // the size of eacht tile in this Map
-	private double mapGenSeed; // the seed for the layout of this map. The same seed
+	private long mapGenSeed; // the seed for the layout of this map. The same seed
 							// will result in the same map, if no other
 							// variables are changed.
 	private double heightSeed;
@@ -50,18 +50,16 @@ public class Map {
 
 	public Map(int tileSize, int mapSizeInTiles, long mapGenSeed, double smoothness) {
 
+		
+		this.smoothness = ConfigSingleton.INSTANCE.mapSmoothness;
+		this.mapSize = ConfigSingleton.INSTANCE.mapSizeInTiles;
+		this.tileSize = ConfigSingleton.INSTANCE.tileSize;
+		this.waterPercentage = ConfigSingleton.INSTANCE.waterPercentage;
+		this.mapGenSeed = ConfigSingleton.INSTANCE.mapGenSeed;
+		
 		Random seedGenerator = new Random(mapGenSeed); // is used to ensure that one seed leads to the same map everytime
 		heightSeed = seedGenerator.nextDouble() * 255d;
 		fertilitySeed = seedGenerator.nextDouble() * 255d;
-		
-		
-		this.smoothness = smoothness;
-		mapSize = mapSizeInTiles;
-		this.mapGenSeed = mapGenSeed;
-		this.tileSize = tileSize;
-
-		ConfigSingleton.INSTANCE.tileSize = tileSize;
-		ConfigSingleton.INSTANCE.mapSizeInTiles = mapSizeInTiles;
 
 		tileHeights = new Double[mapSize][mapSize];
 		tiles = new Tile[mapSize][mapSize];
