@@ -17,7 +17,7 @@ public enum ConfigSingleton {
 	public int mapSizeInTiles = 100; // how many tiles long all sides of the map are
 
 
-	public double evolutionFactor = 0.002; // determines how big the mutations of the neural network are, 1 is the max value, 0 the minimum
+	public double evolutionFactor = 0.002; // determines how big the mutations of the neural network are after reproduction, 1 is the max value, 0 the minimum
 
 	/**
 	 * Variables that determine the spawning of the creatures

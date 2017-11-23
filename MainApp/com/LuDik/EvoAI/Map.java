@@ -17,11 +17,9 @@ public class Map {
 	/**
 	 * Certain properties of this map.
 	 */
-	private int mapSize; // this is the value for the dimensions in tiles
+	private int mapSizeInTiles; // this is the value for the dimensions in tiles
 	private int tileSize; // the size of eacht tile in this Map
-	private long mapGenSeed; // the seed for the layout of this map. The same seed
-							// will result in the same map, if no other
-							// variables are changed.
+	private long mapGenSeed; // the seed for the layout of this map. The same seed will result in the same map, if no other variables are changed.
 	private double heightSeed; // the seed determining the height of each tile. This is used to determine the waterlevel
 	private double fertilitySeed; // the seed determining the fertility of each tile.
 	private double waterLevel; // the minimum height that a tile must have in order not to be a waterTile (thus a landTile)
@@ -36,18 +34,15 @@ public class Map {
 	/**
 	 * This constructor constructs a new map with a height and width of
 	 * mapSizeInTiles amount of tiles, with a tileSize of tileSize, a seed for the
-	 * layout of the map, and with a smoothness of smthnss.
+	 * layout of the map, and with a smoothness of mapSmoothness. These values are all taken from 
+	 * ConfigSingleton.INSTANCE
 	 * 
-	 * @param tileSize
-	 * @param mapSizeInTiles
-	 * @param mapGenSeed
-	 * @param smoothness
 	 */
 
 	public Map() {
 	
 		this.mapSmoothness = ConfigSingleton.INSTANCE.mapSmoothness;
-		this.mapSize = ConfigSingleton.INSTANCE.mapSizeInTiles;
+		this.mapSizeInTiles = ConfigSingleton.INSTANCE.mapSizeInTiles;
 		this.tileSize = ConfigSingleton.INSTANCE.tileSize;
 		this.waterPercentage = ConfigSingleton.INSTANCE.waterPercentage;
 		this.mapGenSeed = ConfigSingleton.INSTANCE.mapGenSeed;
@@ -56,8 +51,8 @@ public class Map {
 		heightSeed = seedGenerator.nextDouble() * 255d;
 		fertilitySeed = seedGenerator.nextDouble() * 255d;
 
-		tileHeights = new Double[mapSize][mapSize];
-		tiles = new Tile[mapSize][mapSize];
+		tileHeights = new Double[mapSizeInTiles][mapSizeInTiles];
+		tiles = new Tile[mapSizeInTiles][mapSizeInTiles];
 		landTiles = new ArrayList<LandTile>();
 		waterTiles = new ArrayList<WaterTile>();
 
@@ -79,7 +74,7 @@ public class Map {
 		for (int i = 0; i < tileHeights.length; i++) {
 			for (int k = 0; k < tileHeights[0].length; k++) {
 				
-				if (tileHeights[i][k] <= waterLevel) {
+				if (tileHeights[i][k] < waterLevel) {
 					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
 					waterTiles.add((WaterTile) tiles[i][k]);
 					
