@@ -21,7 +21,7 @@ public class Brain {
 	 * 12: constant value 1. 13>: memorycels.
 	 * 
 	 * outputs indecis 0: deltaspeed. 1: deltadirection. 2: amount to eat. 3 to 6:
-	 * RGB values for the bodycolor. 6 to 10: Not used atm. 13>: memorycels
+	 * RGB values for the bodycolor. 6: giveBirth. 7 to 13: Not used atm. 13>: memorycels
 	 */
 
 	/**

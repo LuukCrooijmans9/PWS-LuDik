@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 /**
  * 
@@ -65,11 +66,20 @@ public class Creature {
 	Ellipse2D creatureShape;
 	private boolean selected;
 	private boolean controlled;
-	private int amountOfChilderen;
+	private int generation;
+	private int amountOfChildren;
+	private ArrayList<Creature> children= new ArrayList<Creature>();
 
 	// Translates the x and y values to the x and y values of the tile they are in.
 	static public int posToTile(double x) {
-		return (int) Math.round((x / ConfigSingleton.INSTANCE.tileSize) - 0.5d);
+		int tile = (int) Math.round((x / ConfigSingleton.INSTANCE.tileSize) - 0.5d);
+		if (tile < 0) {
+			tile = 0;
+		} else if (tile >= ConfigSingleton.INSTANCE.mapSizeInTiles) {
+			tile = ConfigSingleton.INSTANCE.mapSizeInTiles - 1;
+		}
+		return tile;
+
 	}
 
 	// Totally random creature
@@ -100,15 +110,16 @@ public class Creature {
 	}
 
 	// Creature based of 1 parent
-	Creature(Creature parentCreature, double x, double y, int generation, int creatureNumber, double deviation) {
+	Creature(Creature parentCreature, double x, double y, int creatureNumber, double deviation) {
 		parent = parentCreature;
 		board = parent.getBoard();
+		generation = parent.getGeneration();
 
+		// TODO CreatureID remake
 		creatureID = creatureNumber + ConfigSingleton.INSTANCE.beginAmountCreatures * generation;
 
 		setXPos(x);
 		setYPos(y);
-
 		direction = Math.random() * 360;
 
 		age = 0;
@@ -167,6 +178,7 @@ public class Creature {
 		if (ConfigSingleton.INSTANCE.needDrinking) {
 			this.drink(brainOutputs[6]);
 		}
+		this.giveBirth(brainOutputs[7]);
 	}
 
 	// Gathering food from the tile it is on.
@@ -215,6 +227,9 @@ public class Creature {
 
 		// Calculates new direction
 		deltaDirection *= ConfigSingleton.INSTANCE.maxDeltaDirection;
+		//if(deltaDirection > ConfigSingleton.INSTANCE.maxDeltaDirection) {
+		//	System.out.println(deltaDirection);
+		//}
 		direction -= deltaDirection;
 		direction %= 360;
 
@@ -226,11 +241,19 @@ public class Creature {
 		if (getXPos() + deltaXPos - (creatureSize / 2) > 0 && getXPos() + deltaXPos
 				+ (creatureSize / 2) < ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) {
 			setXPos(getXPos() + deltaXPos);
+		} else if (getXPos() + deltaXPos - (creatureSize / 2) <= 0) {
+			setXPos(0);
+		} else {
+			setXPos((ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) - 0.1);
 		}
 
 		if (getYPos() + deltaYPos - (creatureSize / 2) > 0 && getYPos() + deltaYPos
 				+ (creatureSize / 2) < ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) {
 			setYPos(getYPos() + deltaYPos);
+		} else if (getYPos() + deltaYPos - (creatureSize / 2) <= 0) {
+			setYPos(0);
+		} else {
+			setYPos((ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) - 0.1);
 		}
 
 		// Statistics
@@ -239,6 +262,15 @@ public class Creature {
 		// Calculates the fatBurned.
 		fatBurned += speed * weight;
 		fatBurned += Math.abs(deltaDirection) * weight;
+	}
+
+	public void giveBirth(double willingness) {
+		if (willingness > 0 & fat > ConfigSingleton.INSTANCE.startingFat * 1.1) {
+			fat -= ConfigSingleton.INSTANCE.startingFat;
+			Creature crtr = board.spawnSingleParentCreature(this, ConfigSingleton.INSTANCE.evolutionFactor);
+			children.add(crtr);
+			amountOfChildren++;
+		}
 	}
 
 	// Finishes this step and checks if the creature survived this day
@@ -252,7 +284,7 @@ public class Creature {
 		} else {
 			weight = fat * WEIGHT_PER_FAT;
 		}
-		if (fat <= 0 || water <= 0) {
+		if (fat <= 0) {
 			isDead = true;
 		} else {
 			age += ConfigSingleton.INSTANCE.agePerStep;
@@ -484,14 +516,6 @@ public class Creature {
 		this.foodInMouth = foodInMouth;
 	}
 
-	public double getxPos() {
-		return xPos;
-	}
-
-	public void setxPos(double xPos) {
-		this.xPos = xPos;
-	}
-
 	public double getDeltaXPos() {
 		return deltaXPos;
 	}
@@ -506,14 +530,6 @@ public class Creature {
 
 	public void setDeltaYPos(double deltaYPos) {
 		this.deltaYPos = deltaYPos;
-	}
-
-	public double getyPos() {
-		return yPos;
-	}
-
-	public void setyPos(double yPos) {
-		this.yPos = yPos;
 	}
 
 	public double getMaxSpeed() {
@@ -629,11 +645,11 @@ public class Creature {
 	}
 
 	public int getAmountOfChilderen() {
-		return amountOfChilderen;
+		return amountOfChildren;
 	}
 
 	public void setAmountOfChilderen(int amountOfChilderen) {
-		this.amountOfChilderen = amountOfChilderen;
+		this.amountOfChildren = amountOfChilderen;
 	}
 
 	public double getTotalDistanceTravelled() {
@@ -658,6 +674,14 @@ public class Creature {
 
 	public void setCenterEyeColor(Color centerEyeColor) {
 		this.centerEyeColor = centerEyeColor;
+	}
+
+	public int getGeneration() {
+		return generation;
+	}
+
+	public void setGeneration(int generation) {
+		this.generation = generation;
 	}
 
 }
