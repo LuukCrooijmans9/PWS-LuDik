@@ -55,7 +55,7 @@ public enum ConfigSingleton {
 	 */
 	
 	public double maxSpeed = 5; // the heighest amount of units a creature can move per step
-	public double maxDeltaDirection = 10; // the heighest amount of degrees a creature can turn per step
+	public double maxDeltaDirection = 1; // the heighest amount of degrees a creature can turn per step
 
 	/**
 	 * Variables that determine the brain, or the neural network of the creatures

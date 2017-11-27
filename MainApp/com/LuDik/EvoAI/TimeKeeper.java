@@ -38,6 +38,9 @@ public class TimeKeeper implements Runnable {
 	private void makeStep() {
 		board.doStep();
 		getInfoPanel().update();
+		if(step % 1000 == 0 & step != 0) {
+			board.doStatistics(step);
+		}
 	}
 
 	@Override

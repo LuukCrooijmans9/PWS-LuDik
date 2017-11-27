@@ -63,33 +63,35 @@ public class Board {
 	private final int RATIO_CHILDS_PER_PARENT;
 	private final int AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION;
 	private final int TILE_SIZE;
-	
+
 	private long evolutionSeed;
-	private long mainSeed;
+	private long currentSeed;
+	private Random mainRNG;
 
 	/**
-	 * Constructor for Board. Creates the map and the spawnpoints and the timekeeper, and sets up variables for . 
-	 * It doesn't create the creature objects, this is done in a different method.
+	 * Constructor for Board. Creates the map and the spawnpoints and the
+	 * timekeeper, and sets up variables for . It doesn't create the creature
+	 * objects, this is done in a different method.
+	 * 
 	 * @param evoAI
 	 */
-	
+
 	public Board(EvoAI evoAI) {
 
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
 		infoPanel = mainFrame.getInfoPanel();
-		
-		mainSeed = ConfigSingleton.INSTANCE.mainSeed;
+
+		currentSeed = ConfigSingleton.INSTANCE.mainSeed;
 		BEGIN_AMOUNT_CREATURES = ConfigSingleton.INSTANCE.beginAmountCreatures;
 		CREATURE_SIZE = ConfigSingleton.INSTANCE.crtrSize;
 		EVOLUTION_FACTOR = ConfigSingleton.INSTANCE.evolutionFactor;
 		RATIO_CHILDS_PER_PARENT = ConfigSingleton.INSTANCE.ratioChildrenPerParent;
 		AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = ConfigSingleton.INSTANCE.randomCreaturesPerGeneration;
 		TILE_SIZE = ConfigSingleton.INSTANCE.tileSize;
-		
-		Random mainSeedRNG = new Random(mainSeed);
-		evolutionSeed = mainSeedRNG.nextLong();
-		
+
+		evolutionSeed = this.randomLong();
+
 		map = new Map(); // creates a new map according to the values in ConfigSingleton.INSTANCE
 
 		landTiles = map.getLandTiles();
@@ -132,7 +134,7 @@ public class Board {
 	}
 
 	/**
-	 * This method 
+	 * This method
 	 */
 	public void spawnCreatures() {
 		int evolvingCreatures = 0;
@@ -145,51 +147,48 @@ public class Board {
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
 
 		/**
-		 * The code below selects the parentCreatures, the creatures with the highest fitness of the previous generation.
-		 * The number of parent creatures is dependent upon creaturesToSpawn and RATIO_CHILDS_PER_PARENT.
+		 * The code below selects the parentCreatures, the creatures with the highest
+		 * fitness of the previous generation. The number of parent creatures is
+		 * dependent upon creaturesToSpawn and RATIO_CHILDS_PER_PARENT.
 		 */
-		
+
 		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT; i++) {
 			Creature parentCreature = sortedCreaturesOfGeneration.get(i);
 			parentCreatures.add(parentCreature);
 		}
+		
+		allCreaturesOfGeneration.clear();
 
 		/**
 		 * The code below spawns a number of creatures for each parent. This number is
-		 * determined by RATIO_CHILDS_PER_PARENT. The spawned creatures are based upon their parent.
+		 * determined by RATIO_CHILDS_PER_PARENT. The spawned creatures are based upon
+		 * their parent.
 		 */
-		
+
 		for (int i = 0; i < (creaturesToSpawn - AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION)
 				/ RATIO_CHILDS_PER_PARENT; i++) {
-			parentCreatures.get(i);
+			Creature parentCreature = parentCreatures.get(i);
 			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
-				Point2D point = availableSpawnPoints
-						.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
-				Creature nextCreature = new Creature(
-						parentCreatures.get(i), 
-						point.getX(), point.getY(),
-						generation, RATIO_CHILDS_PER_PARENT * i + j,
-						EVOLUTION_FACTOR);
-				livingCreatures.add(nextCreature);
+				// Point2D point = availableSpawnPoints
+				// .get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+				Creature nextCreature = spawnSingleParentCreature(parentCreature, EVOLUTION_FACTOR);
+				//livingCreatures.add(nextCreature);
 				newAllCreaturesOfGeneration.add(nextCreature);
 				evolvingCreatures++;
 			}
 		}
 
 		/**
-		 * The code below adds newAllcreaturesOfGeneration to the cleared 
-		 * allCreaturesOfGeneration arraylist, and spawns a number of random creatures, 
+		 * The code below adds newAllcreaturesOfGeneration to the cleared
+		 * allCreaturesOfGeneration arraylist, and spawns a number of random creatures,
 		 * determined by the AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION constant.
 		 */
-		
-		allCreaturesOfGeneration.clear();
-		for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
-			allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
-		}
+
+	//	for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
+	//		allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
+	//	}
 		for (int i = newAllCreaturesOfGeneration.size(); i < creaturesToSpawn; i++) {
-			Creature nextCreature = spawnRandomCreature(i);
-			allCreaturesOfGeneration.add(nextCreature);
-			livingCreatures.add(nextCreature);
+			spawnRandomCreature(i);
 		}
 
 		generation++;
@@ -198,23 +197,47 @@ public class Board {
 	}
 
 	/**
-	 * This method creates a creature with the given id that is not based on another creature, as its features are fully random.
+	 * This method creates a creature with the given id that is not based on another
+	 * creature, as its features are fully random.
+	 * 
 	 * @param id
 	 * @return randomCreature
 	 */
-	
+
 	public Creature spawnRandomCreature(int id) {
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);
+		allCreaturesOfGeneration.add(randomCreature);
+		livingCreatures.add(randomCreature);
 		return randomCreature;
 	}
 
 	/**
-	 * This method returns an array of all the points in the map that a creature can spawn on
+	 * This method creates a creature based on a single other creature, as its
+	 * features resembles this parentCreature
+	 * 
+	 * @param parentCreature,
+	 *            Deviation
+	 * @return Creature which is based on the parentCreautue
+	 */
+	public Creature spawnSingleParentCreature(Creature parentCreature, double deviation) {
+		double x = parentCreature.getXPos() + randomDouble(-1, 1);
+		double y = parentCreature.getYPos() + randomDouble(-1, 1);
+		Creature crtr = new Creature(parentCreature, x, y, (int) parentCreature.getCreatureID(), deviation);
+		livingCreatures.add(crtr);
+		allCreaturesOfGeneration.add(crtr);
+		return crtr;
+	}
+
+
+	/**
+	 * This method returns an array of all the points in the map that a creature can
+	 * spawn on
+	 * 
 	 * @return Points2D array with spawnpoints
 	 */
-	
+
 	private ArrayList<Point2D> generateSpawnPoints() {
 
 		ArrayList<Point2D> spawnPoints = new ArrayList<Point2D>();
@@ -222,10 +245,10 @@ public class Board {
 				(int) (landTiles.size() * (TILE_SIZE / (CREATURE_SIZE + 2)) * (TILE_SIZE / (CREATURE_SIZE + 2))));
 
 		/**
-		 * The code below checks for each given tile how many creatures can spawn on it and where, and adds these
-		 * to the spawnPoints arraylist.
+		 * The code below checks for each given tile how many creatures can spawn on it
+		 * and where, and adds these to the spawnPoints arraylist.
 		 */
-		
+
 		for (LandTile landTile : landTiles) {
 			for (int i = 0; i < TILE_SIZE / (CREATURE_SIZE + 2) - 1; i++) {
 				for (int k = 0; k < TILE_SIZE / (CREATURE_SIZE + 2) - 1; k++) {
@@ -240,44 +263,51 @@ public class Board {
 	}
 
 	public void doStep() {
-		
+
 		CameraPanel cameraPanel = mainFrame.getCameraPanel();
-		
+
 		/**
-		 * The code below checks if the generation has ended, and handles the switch from old generation to new generation.
+		 * The code below checks if the generation has ended, and handles the switch
+		 * from old generation to new generation.
 		 */
-		
+
 		if (livingCreatures.size() == 0) {
-			this.updateStatistics(); 
-			
-			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets them.
+			//this.updateStatistics((long) generation);
+
+			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets
+									// them.
 
 			this.spawnCreatures(); // spawns a new generation of creatures based off of the old generation.
 		}
+		//TODO make global variable
+		if(livingCreatures.size() <= 100) {
+			spawnRandomCreature(2);
+		}
+
 
 		/**
-		 * The code below invokes doStep() on all currently alive creatures, 
-		 * and checks if they're still alive after their step.
+		 * The code below invokes doStep() on all currently alive creatures, and checks
+		 * if they're still alive after their step.
 		 */
-		
+
 		for (Creature crtr : new ArrayList<Creature>(livingCreatures)) {
 
-			if (crtr.isControlled()) {			
-				crtr.doStep(
-						cameraPanel.getRcDeltaSpeed(),
-						cameraPanel.getRcDeltaDirection(),
+			if (crtr.isControlled()) {
+				crtr.doStep(cameraPanel.getRcDeltaSpeed(), cameraPanel.getRcDeltaDirection(),
 						cameraPanel.getRcFoodAmount());
 			} else {
 				crtr.doStep();
-			} if (crtr.isDead()) {
+			}
+			if (crtr.isDead()) {
 				livingCreatures.remove(crtr);
 			}
 		}
 
 		/**
-		 * The code below makes all tiles of map grow (increases their food value based on their fertility value)
+		 * The code below makes all tiles of map grow (increases their food value based
+		 * on their fertility value)
 		 */
-		
+
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
 				tile.calculateNextFood();
@@ -287,58 +317,69 @@ public class Board {
 		cameraPanel.update();
 
 	}
-	
+
+	public void doStatistics(long step) {
+		updateStatistics(step);
+
+	}
+
 	/**
-	 * This method updates the various statistics variables in Board after a generation has ended.
+	 * This method updates the various statistics variables in Board after a
+	 * generation has ended.
 	 */
-	
-	private void updateStatistics() {
-		
+
+	private void updateStatistics(long step) {
+
 		/**
-		 * The code below calculates the average age, fitness and totalfoodeaten of all creatures of the generation
-		 * that has now ended, and puts it in arrays.
+		 * The code below calculates the average age, fitness and totalfoodeaten of all
+		 * creatures of the generation that has now ended, and puts it in arrays.
 		 */
-		
+
 		double averageFitness = 0;
 		double averageAge = 0;
 		double averageTotalFoodEaten = 0;
-		
-		for (int i = 0; i < allCreaturesOfGeneration.size(); i++) {
+		int amountOfDeadCreatures = allCreaturesOfGeneration.size();
+
+		for (int i = 0; i < amountOfDeadCreatures; i++) {
 			averageFitness += allCreaturesOfGeneration.get(i).getFitness();
 			averageAge += allCreaturesOfGeneration.get(i).getAge();
 			averageTotalFoodEaten += allCreaturesOfGeneration.get(i).getTotalFoodEaten();
 		}
-		averageFitness /= BEGIN_AMOUNT_CREATURES;
-		averageAge /= BEGIN_AMOUNT_CREATURES;
-		averageTotalFoodEaten /= BEGIN_AMOUNT_CREATURES;
+		averageFitness /= amountOfDeadCreatures;
+		averageAge /= amountOfDeadCreatures;
+		averageTotalFoodEaten /= amountOfDeadCreatures;
 
-		this.getAverageFitnessArray().add(generation, averageFitness);
-		this.getAverageAgeArray().add(generation, averageAge);
-		this.getAverageTotalFoodEatenArray().add(generation, averageTotalFoodEaten);
+		this.getAverageFitnessArray().add(averageFitness);
+		this.getAverageAgeArray().add(averageAge);
+		this.getAverageTotalFoodEatenArray().add(averageTotalFoodEaten);
 
-		infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness); //updates infoPanel
+		infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness); // updates infoPanel
 		System.out.println("averageFitness: " + (int) averageFitness);
 
 		/**
-		 * The code below calculates the improvement in fitness and indexes the fitness score of this generation.
+		 * The code below calculates the improvement in fitness and indexes the fitness
+		 * score of the last 1000 steps.
 		 */
-		
-		if (generation > 2) {
-			double improvement = (double) this.getAverageFitnessArray().get(generation)
-					- (double) this.getAverageFitnessArray().get(generation - 1);
+
+		// TODO Make global variable
+		int mStep = 0;// (int) step / 1000;
+		if (mStep > 2) {
+			double improvement = (double) this.getAverageFitnessArray().get(mStep)
+					- (double) this.getAverageFitnessArray().get(mStep - 1);
 			System.out.println("improvement: " + (int) improvement);
-			improvement = (double) this.getAverageFitnessArray().get(generation)
+			improvement = (double) this.getAverageFitnessArray().get(mStep)
 					- (double) this.getAverageFitnessArray().get(0);
 			System.out.println("Total improvement: " + (int) improvement);
 			System.out.println("Index: "
-					+ ((this.getAverageFitnessArray().get(generation) / this.getAverageFitnessArray().get(0))
-							* 100));
+					+ ((this.getAverageFitnessArray().get(mStep) / this.getAverageFitnessArray().get(0)) * 100));
 
 		}
 	}
 
 	/**
-	 * Draws the components of this method (all the tiles of the map and the creatures) with the given Graphics2D object.
+	 * Draws the components of this method (all the tiles of the map and the
+	 * creatures) with the given Graphics2D object.
+	 * 
 	 * @param g2d
 	 */
 	public void drawBoard(Graphics2D g2d) {
@@ -354,6 +395,36 @@ public class Board {
 				}
 			}
 		}
+	}
+	/** 
+	 *Generates a random double between 0(inclusive) and 1 (exclusive) 
+	 *and keeps track of the seed used for reproduction/saving.
+	 *
+	 *@return value between 0 and 1*/
+	
+	double randomDouble() {
+		mainRNG = new Random(currentSeed);
+		double randomDouble = mainRNG.nextDouble();
+		currentSeed = mainRNG.nextLong();
+		return randomDouble;
+	}
+	
+	/** 
+	 *Generates a random double between 0(inclusive) and 1 (exclusive) 
+	 *and keeps track of the seed used for reproduction/saving.
+	 *@return value between lowest and highest*/
+	double randomDouble(double rangeLow, double rangeHigh) {
+		mainRNG = new Random(currentSeed);
+		double randomDouble = (mainRNG.nextDouble() * (rangeHigh - rangeLow) + rangeLow);
+		currentSeed = mainRNG.nextLong();
+		return randomDouble;
+	}
+
+	long randomLong() {
+		mainRNG = new Random(currentSeed);
+		long randomLong = mainRNG.nextLong();
+		currentSeed = mainRNG.nextLong();
+		return randomLong;
 	}
 
 	public Map getMap() {
