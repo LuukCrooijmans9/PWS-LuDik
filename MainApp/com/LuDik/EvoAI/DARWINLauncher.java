@@ -734,7 +734,7 @@ public class DARWINLauncher extends JFrame {
 						dispose();
 						try {
 							ConfigSingleton.INSTANCE.finalizeVariables();
-							new EvoAI().setVisible(true);
+							new DARWIN().setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

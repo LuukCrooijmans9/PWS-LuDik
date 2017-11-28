@@ -24,7 +24,7 @@ public class CameraPanel extends JPanel {
 	private static final int CPWIDTH = 1000;
 	private static final int CPHEIGHT = 1000;
 
-	private EvoAI mainFrame;
+	private DARWIN mainFrame;
 
 	private double cameraX = (CPWIDTH/2);
 	private double cameraY = (CPWIDTH/2);
@@ -53,7 +53,7 @@ public class CameraPanel extends JPanel {
 
 
 	
-	public CameraPanel(EvoAI parent) {
+	public CameraPanel(DARWIN parent) {
 		mainFrame = parent;
 		setBackground(Color.white);
 		

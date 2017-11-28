@@ -33,7 +33,7 @@ public class InfoPanel extends JPanel {
 	private static final int TIMEDIFF_SAMPLESIZE = 100;
 
 	// UI containers:
-	private EvoAI mainFrame;
+	private DARWIN mainFrame;
 	private CameraPanel cameraPanel;
 
 	private Board board;
@@ -67,11 +67,11 @@ public class InfoPanel extends JPanel {
 
 	
 
-	public InfoPanel(EvoAI parent) {
+	public InfoPanel(DARWIN parent) {
 		initInfoPanel(parent);
 	}
 
-	private void initInfoPanel(EvoAI parent) {
+	private void initInfoPanel(DARWIN parent) {
 		IPHeight = parent.getCameraPanel().getCPHEIGHT();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBackground(Color.WHITE);

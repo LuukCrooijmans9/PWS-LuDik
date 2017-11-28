@@ -12,7 +12,7 @@ import javax.swing.SwingUtilities;
  * It also has a reference to the Board this program simulates.
  */
 
-public class EvoAI extends JFrame {
+public class DARWIN extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -25,7 +25,7 @@ public class EvoAI extends JFrame {
 	private Board board;
 	
 	
-	public EvoAI() {
+	public DARWIN() {
 		initUI();
 		
 	}

@@ -33,7 +33,7 @@ public class ActionPanel extends JPanel {
 
 
 	// The other main graphical containers:
-	private EvoAI mainFrame;
+	private DARWIN mainFrame;
 	private CameraPanel cameraPanel;
 	private InfoPanel infoPanel;
 
@@ -58,11 +58,11 @@ public class ActionPanel extends JPanel {
 
 	private boolean displayBoard;
 
-	public ActionPanel(EvoAI parent) {
+	public ActionPanel(DARWIN parent) {
 		initActionPanel(parent);
 	}
 
-	private void initActionPanel(EvoAI evoAI) {
+	private void initActionPanel(DARWIN evoAI) {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(APWidth, APHeight));

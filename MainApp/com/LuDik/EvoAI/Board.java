@@ -24,7 +24,7 @@ public class Board {
 	/**
 	 * UI elements:
 	 */
-	EvoAI mainFrame;
+	DARWIN mainFrame;
 	private InfoPanel infoPanel;
 
 	/**
@@ -76,7 +76,7 @@ public class Board {
 	 * @param evoAI
 	 */
 
-	public Board(EvoAI evoAI) {
+	public Board(DARWIN evoAI) {
 
 		evoAI.setBoard(this);
 		mainFrame = evoAI;
@@ -447,7 +447,7 @@ public class Board {
 		this.timeKeeper = timeKeeper;
 	}
 
-	public EvoAI getEvoAI() {
+	public DARWIN getEvoAI() {
 		return mainFrame;
 	}
 

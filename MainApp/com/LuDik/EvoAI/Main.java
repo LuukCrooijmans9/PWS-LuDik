@@ -14,7 +14,7 @@ public class Main {
 			@Override
 			public void run() {
 				ConfigSingleton.INSTANCE.finalizeVariables();
-				new EvoAI().setVisible(true); 
+				new DARWIN().setVisible(true); 
 			}
 		});
 	}
