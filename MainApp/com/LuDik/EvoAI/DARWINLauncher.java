@@ -59,6 +59,8 @@ public class DARWINLauncher extends JFrame {
 	 * Create the frame.
 	 */
 	public DARWINLauncher() {
+		setTitle("D.A.R.W.I.N. Launcher");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(new Dimension(842, 534));
 		setBackground(Color.WHITE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
