@@ -310,6 +310,10 @@ public class CameraPanel extends JPanel {
 		repaint();
 	}
 
+	public Creature getSelectedCreature() {
+		return selectedCreature;
+	}
+
 	public static int getCPWIDTH() {
 		return CPWIDTH;
 	}
