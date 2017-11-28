@@ -43,17 +43,23 @@ public class Board {
 	 * Variables for the creatures:
 	 */
 	private ArrayList<Creature> livingCreatures; // all creatures currently alive in this Board
-	private ArrayList<Creature> allCreaturesOfGeneration; // all creatures that are part of the current generation, dead
-															// or alive
+	private ArrayList<Creature> allCreaturesOfCurrentPeriod; // all creatures that are part of the current Period,
+																// dead
+																// or alive
+	private ArrayList<Creature> deadCreaturesOfCurrentPeriod;
 
 	/**
-	 * Statistics about previous generations:
+	 * Statistics about previous Period:
 	 */
-	private int generation;
+	private int period;
 	private ArrayList<Double> averageFitnessArray;
 	private ArrayList<Double> averageAgeArray;
 	private ArrayList<Double> averageTotalFoodEatenArray;
-
+	private ArrayList<double[]> accomplishmentsOfTheDead;
+	private int amountOfCreaturesBornInLastPeriod;
+	private int amountOfRandomCreaturesAddedInLastPeriod;
+	private int totalFoodEatenInLastPeriod;
+	private int amountOfCreaturesDiedInLastPeriod;
 	/**
 	 * Constants determined by the ConfigSingleton.INSTANCE enumeration:
 	 */
@@ -103,11 +109,18 @@ public class Board {
 		infoPanel.setTimeKeeper(timeKeeper);
 
 		livingCreatures = new ArrayList<Creature>();
-		allCreaturesOfGeneration = new ArrayList<Creature>();
+		allCreaturesOfCurrentPeriod = new ArrayList<Creature>();
+		deadCreaturesOfCurrentPeriod = new ArrayList<Creature>();
 
 		setAverageFitnessArray(new ArrayList<Double>());
 		setAverageAgeArray(new ArrayList<Double>());
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
+		accomplishmentsOfTheDead = new ArrayList<double[]>();
+
+		amountOfCreaturesBornInLastPeriod = 0;
+		amountOfRandomCreaturesAddedInLastPeriod = 0;
+		totalFoodEatenInLastPeriod = 0;
+		amountOfCreaturesDiedInLastPeriod = 0;
 
 	}
 
@@ -126,11 +139,11 @@ public class Board {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 			Creature nextCreature = new Creature(point.getX(), point.getY(), this, i);
 			livingCreatures.add(nextCreature);
-			allCreaturesOfGeneration.add(nextCreature);
+			allCreaturesOfCurrentPeriod.add(nextCreature);
 			availableSpawnPoints.remove(point); // makes sure that no creatures are spawned in the same location.
 		}
-		generation = 0;
-		System.out.println("Generation: " + generation + " spawned!");
+		period = 0;
+		System.out.println("Period: " + period + " spawned!");
 	}
 
 	/**
@@ -141,23 +154,23 @@ public class Board {
 		int randomCreatures = 0;
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
-		ArrayList<Creature> newAllCreaturesOfGeneration = new ArrayList<Creature>();
-		ArrayList<Creature> sortedCreaturesOfGeneration = new ArrayList<Creature>(infoPanel.getCreatures());
+		ArrayList<Creature> newAllCreaturesOfPeriod = new ArrayList<Creature>();
+		ArrayList<Creature> sortedCreaturesOfPeriod = new ArrayList<Creature>(infoPanel.getCreatures());
 
 		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
 
 		/**
 		 * The code below selects the parentCreatures, the creatures with the highest
-		 * fitness of the previous generation. The number of parent creatures is
-		 * dependent upon creaturesToSpawn and RATIO_CHILDS_PER_PARENT.
+		 * fitness of the previous Period. The number of parent creatures is dependent
+		 * upon creaturesToSpawn and RATIO_CHILDS_PER_PARENT.
 		 */
 
 		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT; i++) {
-			Creature parentCreature = sortedCreaturesOfGeneration.get(i);
+			Creature parentCreature = sortedCreaturesOfPeriod.get(i);
 			parentCreatures.add(parentCreature);
 		}
-		
-		allCreaturesOfGeneration.clear();
+
+		allCreaturesOfCurrentPeriod.clear();
 
 		/**
 		 * The code below spawns a number of creatures for each parent. This number is
@@ -172,28 +185,28 @@ public class Board {
 				// Point2D point = availableSpawnPoints
 				// .get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 				Creature nextCreature = spawnSingleParentCreature(parentCreature, EVOLUTION_FACTOR);
-				//livingCreatures.add(nextCreature);
-				newAllCreaturesOfGeneration.add(nextCreature);
+				// livingCreatures.add(nextCreature);
+				newAllCreaturesOfPeriod.add(nextCreature);
 				evolvingCreatures++;
 			}
 		}
 
 		/**
-		 * The code below adds newAllcreaturesOfGeneration to the cleared
-		 * allCreaturesOfGeneration arraylist, and spawns a number of random creatures,
+		 * The code below adds newAllcreaturesOfPeriod to the cleared
+		 * allCreaturesOfPeriod arraylist, and spawns a number of random creatures,
 		 * determined by the AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION constant.
 		 */
 
-	//	for (int i = 0; i < newAllCreaturesOfGeneration.size(); i++) {
-	//		allCreaturesOfGeneration.add(newAllCreaturesOfGeneration.get(i));
-	//	}
-		for (int i = newAllCreaturesOfGeneration.size(); i < creaturesToSpawn; i++) {
+		// for (int i = 0; i < newAllCreaturesOfPeriod.size(); i++) {
+		// allCreaturesOfPeriod.add(newAllCreaturesOfPeriod.get(i));
+		// }
+		for (int i = newAllCreaturesOfPeriod.size(); i < creaturesToSpawn; i++) {
 			spawnRandomCreature(i);
 		}
 
-		generation++;
+		period++;
 		System.out.println(" ");
-		System.out.println("Generation: " + generation + " spawned!");
+		System.out.println("Period: " + period + " spawned!");
 	}
 
 	/**
@@ -208,8 +221,9 @@ public class Board {
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
 		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
 		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);
-		allCreaturesOfGeneration.add(randomCreature);
+		allCreaturesOfCurrentPeriod.add(randomCreature);
 		livingCreatures.add(randomCreature);
+		amountOfRandomCreaturesAddedInLastPeriod++;
 		return randomCreature;
 	}
 
@@ -226,10 +240,10 @@ public class Board {
 		double y = parentCreature.getYPos() + randomDouble(-1, 1);
 		Creature crtr = new Creature(parentCreature, x, y, (int) parentCreature.getCreatureID(), deviation);
 		livingCreatures.add(crtr);
-		allCreaturesOfGeneration.add(crtr);
+		allCreaturesOfCurrentPeriod.add(crtr);
+		amountOfCreaturesBornInLastPeriod++;
 		return crtr;
 	}
-
 
 	/**
 	 * This method returns an array of all the points in the map that a creature can
@@ -267,23 +281,22 @@ public class Board {
 		CameraPanel cameraPanel = mainFrame.getCameraPanel();
 
 		/**
-		 * The code below checks if the generation has ended, and handles the switch
-		 * from old generation to new generation.
+		 * The code below checks if the period has ended, and handles the switch from
+		 * old period to new period.
 		 */
 
 		if (livingCreatures.size() == 0) {
-			//this.updateStatistics((long) generation);
+			// this.updateStatistics((long) generation);
 
 			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets
 									// them.
 
 			this.spawnCreatures(); // spawns a new generation of creatures based off of the old generation.
 		}
-		//TODO make global variable
-		if(livingCreatures.size() <= 100) {
-			spawnRandomCreature(2);
-		}
 
+		if (livingCreatures.size() < ConfigSingleton.INSTANCE.minAmountCreatures) {
+			spawnRandomCreature((int) randomLong());
+		}
 
 		/**
 		 * The code below invokes doStep() on all currently alive creatures, and checks
@@ -299,7 +312,10 @@ public class Board {
 				crtr.doStep();
 			}
 			if (crtr.isDead()) {
+				accomplishmentsOfTheDead.add(crtr.funeral());
 				livingCreatures.remove(crtr);
+				deadCreaturesOfCurrentPeriod.add(crtr);
+				amountOfCreaturesDiedInLastPeriod++;
 			}
 		}
 
@@ -319,61 +335,85 @@ public class Board {
 	}
 
 	public void doStatistics(long step) {
+
 		updateStatistics(step);
 
 	}
 
 	/**
-	 * This method updates the various statistics variables in Board after a
-	 * generation has ended.
+	 * This method updates the various statistics variables in Board after a period
+	 * has ended.
 	 */
 
 	private void updateStatistics(long step) {
 
+		int pStep = ((int) (step / ConfigSingleton.INSTANCE.periodLength) - 1);
+		if (pStep < 0) {
+			return;
+		}
 		/**
 		 * The code below calculates the average age, fitness and totalfoodeaten of all
-		 * creatures of the generation that has now ended, and puts it in arrays.
+		 * creatures of the period that has now ended, and puts it in arrays.
 		 */
 
-		double averageFitness = 0;
-		double averageAge = 0;
-		double averageTotalFoodEaten = 0;
-		int amountOfDeadCreatures = allCreaturesOfGeneration.size();
+		double averageFitness = 0.00001;
+		double averageAge = 0.00001;
+		double averageTotalFoodEaten = 0.00001;
+		int amountOfCreaturesBorn = amountOfCreaturesBornInLastPeriod;
+		int amountOfRandomCreaturesAdded = amountOfRandomCreaturesAddedInLastPeriod;
+		int amountOfDeadCreatures = amountOfCreaturesDiedInLastPeriod;
+		amountOfCreaturesBornInLastPeriod = 0;
+		amountOfRandomCreaturesAddedInLastPeriod = 0;
+		amountOfCreaturesDiedInLastPeriod = 0;
 
-		for (int i = 0; i < amountOfDeadCreatures; i++) {
-			averageFitness += allCreaturesOfGeneration.get(i).getFitness();
-			averageAge += allCreaturesOfGeneration.get(i).getAge();
-			averageTotalFoodEaten += allCreaturesOfGeneration.get(i).getTotalFoodEaten();
+		System.out.println("Born Creatures: " + amountOfCreaturesBorn);
+		System.out.println("Random Creatures: " + amountOfRandomCreaturesAdded);
+		System.out.println("Died Creatures: " + amountOfDeadCreatures);
+
+		if (amountOfDeadCreatures != 0) {
+
+			for (int i = 0; i < amountOfDeadCreatures; i++) {
+				averageFitness += deadCreaturesOfCurrentPeriod.get(i).getFitness();
+				averageAge += deadCreaturesOfCurrentPeriod.get(i).getAge();
+				averageTotalFoodEaten += deadCreaturesOfCurrentPeriod.get(i).getTotalFoodEaten();
+			}
+
+			averageFitness /= amountOfDeadCreatures;
+			averageAge /= amountOfDeadCreatures;
+			averageTotalFoodEaten /= amountOfDeadCreatures;
 		}
-		averageFitness /= amountOfDeadCreatures;
-		averageAge /= amountOfDeadCreatures;
-		averageTotalFoodEaten /= amountOfDeadCreatures;
 
 		this.getAverageFitnessArray().add(averageFitness);
 		this.getAverageAgeArray().add(averageAge);
 		this.getAverageTotalFoodEatenArray().add(averageTotalFoodEaten);
 
-		infoPanel.setAverageFitnessOfPreviousGeneration(averageFitness); // updates infoPanel
+		infoPanel.setAverageFitnessOfPreviousPeriod(averageFitness); // updates infoPanel
 		System.out.println("averageFitness: " + (int) averageFitness);
 
 		/**
 		 * The code below calculates the improvement in fitness and indexes the fitness
-		 * score of the last 1000 steps.
+		 * score of the last period.
 		 */
 
-		// TODO Make global variable
-		int mStep = 0;// (int) step / 1000;
-		if (mStep > 2) {
-			double improvement = (double) this.getAverageFitnessArray().get(mStep)
-					- (double) this.getAverageFitnessArray().get(mStep - 1);
+		if (pStep > 2) {
+			double improvement = (double) this.getAverageFitnessArray().get(pStep)
+					- (double) this.getAverageFitnessArray().get(pStep - 1);
 			System.out.println("improvement: " + (int) improvement);
-			improvement = (double) this.getAverageFitnessArray().get(mStep)
+			improvement = (double) this.getAverageFitnessArray().get(pStep)
 					- (double) this.getAverageFitnessArray().get(0);
 			System.out.println("Total improvement: " + (int) improvement);
 			System.out.println("Index: "
-					+ ((this.getAverageFitnessArray().get(mStep) / this.getAverageFitnessArray().get(0)) * 100));
+					+ ((this.getAverageFitnessArray().get(pStep) / this.getAverageFitnessArray().get(0)) * 100));
 
 		}
+
+		for (Creature crtr : deadCreaturesOfCurrentPeriod) {
+			allCreaturesOfCurrentPeriod.remove(crtr);
+		}
+		deadCreaturesOfCurrentPeriod.clear();
+		
+		period++;
+
 	}
 
 	/**
@@ -396,23 +436,27 @@ public class Board {
 			}
 		}
 	}
-	/** 
-	 *Generates a random double between 0(inclusive) and 1 (exclusive) 
-	 *and keeps track of the seed used for reproduction/saving.
+
+	/**
+	 * Generates a random double between 0(inclusive) and 1 (exclusive) and keeps
+	 * track of the seed used for reproduction/saving.
 	 *
-	 *@return value between 0 and 1*/
-	
+	 * @return value between 0 and 1
+	 */
+
 	double randomDouble() {
 		mainRNG = new Random(currentSeed);
 		double randomDouble = mainRNG.nextDouble();
 		currentSeed = mainRNG.nextLong();
 		return randomDouble;
 	}
-	
-	/** 
-	 *Generates a random double between 0(inclusive) and 1 (exclusive) 
-	 *and keeps track of the seed used for reproduction/saving.
-	 *@return value between lowest and highest*/
+
+	/**
+	 * Generates a random double between 0(inclusive) and 1 (exclusive) and keeps
+	 * track of the seed used for reproduction/saving.
+	 * 
+	 * @return value between lowest and highest
+	 */
 	double randomDouble(double rangeLow, double rangeHigh) {
 		mainRNG = new Random(currentSeed);
 		double randomDouble = (mainRNG.nextDouble() * (rangeHigh - rangeLow) + rangeLow);
@@ -451,20 +495,20 @@ public class Board {
 		return mainFrame;
 	}
 
-	public ArrayList<Creature> getAllCreaturesOfGeneration() {
-		return allCreaturesOfGeneration;
+	public ArrayList<Creature> getAllCreaturesOfPeriod() {
+		return allCreaturesOfCurrentPeriod;
 	}
 
-	public void setAllCreaturesOfGeneration(ArrayList<Creature> allCreaturesOfGeneration) {
-		this.allCreaturesOfGeneration = allCreaturesOfGeneration;
+	public void setAllCreaturesOfPeriod(ArrayList<Creature> allCreaturesOfPeriod) {
+		this.allCreaturesOfCurrentPeriod = allCreaturesOfPeriod;
 	}
 
-	public int getGeneration() {
-		return generation;
+	public int getPeriod() {
+		return period;
 	}
 
-	public void setGeneration(int generation) {
-		this.generation = generation;
+	public void setPeriod(int Period) {
+		this.period = Period;
 	}
 
 	public ArrayList<Double> getAverageFitnessArray() {

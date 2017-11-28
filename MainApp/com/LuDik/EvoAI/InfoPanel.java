@@ -41,10 +41,10 @@ public class InfoPanel extends JPanel {
 
 	private List<Creature> creatures;
 	private Creature selectedCreature;
-	private int currentGeneration;
+	private int currentPeriod;
 
 	private static int IPHeight;
-	private double averageFitnessOfPreviousGeneration;
+	private double averageFitnessOfPreviousPeriod;
 	
 	private JPanel singleLineInfoPanel;
 	private JPanel listPanel;
@@ -122,9 +122,9 @@ public class InfoPanel extends JPanel {
 			}
 		});
 		
-		fitnessLineChartPanel = new LineChartPanel(this, "Fitness in relation to generation", "Generation", "Fitness");
-		ageLineChartPanel = new LineChartPanel(this, "Age in relation to generation", "Generation", "Age");
-		totalFoodEatenLineChartPanel = new LineChartPanel(this, "TotalFoodEaten in relation to generation", "Generation", "TotalFoodEaten");
+		fitnessLineChartPanel = new LineChartPanel(this, "Fitness in relation to Period", "Period", "Fitness");
+		ageLineChartPanel = new LineChartPanel(this, "Age in relation to Period", "Period", "Age");
+		totalFoodEatenLineChartPanel = new LineChartPanel(this, "TotalFoodEaten in relation to Period", "Period", "TotalFoodEaten");
 
 		singleLineInfoPanel.add(stepLbl);
 		singleLineInfoPanel.add(timePerStepLbl);
@@ -155,7 +155,7 @@ public class InfoPanel extends JPanel {
 		
 		updateCreaturesList();
 		
-		if (currentGeneration != board.getGeneration()) {
+		if (currentPeriod != board.getPeriod()) {
 			
 			XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitnessArray(), "averageFitness");
 			XYSeries averageAgeSeries = convertArrayListToXYSeries(board.getAverageAgeArray(), "averageAge");
@@ -164,12 +164,12 @@ public class InfoPanel extends JPanel {
 			ageLineChartPanel.updateDataset(averageAgeSeries);
 			totalFoodEatenLineChartPanel.updateDataset(averageTotalFoodEatenSeries);
 			
-			currentGeneration = board.getGeneration();
+			currentPeriod = board.getPeriod();
 		}
 	}
 
 	private void updateCreaturesList() {
-		creatures = board.getAllCreaturesOfGeneration();
+		creatures = board.getAllCreaturesOfPeriod();
 
 		if (creatures != null) {
 			creatures.sort(new Comparator<Creature>() {
@@ -260,7 +260,7 @@ public class InfoPanel extends JPanel {
 	
 	public void setBoard(Board brd) {
 		board = brd;
-		currentGeneration = board.getGeneration();
+		currentPeriod = board.getPeriod();
 		
 	}
 
@@ -280,12 +280,12 @@ public class InfoPanel extends JPanel {
 		this.cameraPanel = cameraPanel;
 	}
 
-	public double getAverageFitnessOfPreviousGeneration() {
-		return averageFitnessOfPreviousGeneration;
+	public double getAverageFitnessOfPreviousPeriod() {
+		return averageFitnessOfPreviousPeriod;
 	}
 
-	public void setAverageFitnessOfPreviousGeneration(double averageFitnessOfPreviousGeneration) {
-		this.averageFitnessOfPreviousGeneration = averageFitnessOfPreviousGeneration;
+	public void setAverageFitnessOfPreviousPeriod(double averageFitnessOfPreviousPeriod) {
+		this.averageFitnessOfPreviousPeriod = averageFitnessOfPreviousPeriod;
 	}
 
 	public JList getCreaturesList() {

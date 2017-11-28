@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +51,7 @@ public class Creature {
 
 	private double creatureSize;
 	private int xTile, yTile;
+	private boolean isMature = false;
 	private boolean isDead = false;
 
 	// It's eyes
@@ -68,7 +70,7 @@ public class Creature {
 	private boolean controlled;
 	private int generation;
 	private int amountOfChildren;
-	private ArrayList<Creature> children= new ArrayList<Creature>();
+	private ArrayList<Creature> children = new ArrayList<Creature>();
 
 	// Translates the x and y values to the x and y values of the tile they are in.
 	static public int posToTile(double x) {
@@ -160,6 +162,11 @@ public class Creature {
 		eye.look();
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
+		if(!isMature) {
+			if(age / ConfigSingleton.INSTANCE.agePerStep >= ConfigSingleton.INSTANCE.maturityAge) {
+				isMature = true;
+			}
+		}
 	}
 
 	// The brain does it's magic here
@@ -227,9 +234,9 @@ public class Creature {
 
 		// Calculates new direction
 		deltaDirection *= ConfigSingleton.INSTANCE.maxDeltaDirection;
-		//if(deltaDirection > ConfigSingleton.INSTANCE.maxDeltaDirection) {
-		//	System.out.println(deltaDirection);
-		//}
+		// if(deltaDirection > ConfigSingleton.INSTANCE.maxDeltaDirection) {
+		// System.out.println(deltaDirection);
+		// }
 		direction -= deltaDirection;
 		direction %= 360;
 
@@ -265,7 +272,7 @@ public class Creature {
 	}
 
 	public void giveBirth(double willingness) {
-		if (willingness > 0 & fat > ConfigSingleton.INSTANCE.startingFat * 1.1) {
+		if (isMature & willingness > 0 & fat > 2 * ConfigSingleton.INSTANCE.startingFat) {
 			fat -= ConfigSingleton.INSTANCE.startingFat;
 			Creature crtr = board.spawnSingleParentCreature(this, ConfigSingleton.INSTANCE.evolutionFactor);
 			children.add(crtr);
@@ -285,10 +292,20 @@ public class Creature {
 			weight = fat * WEIGHT_PER_FAT;
 		}
 		if (fat <= 0) {
-			isDead = true;
+			isDead = true; //He was a loving Father to us all
 		} else {
 			age += ConfigSingleton.INSTANCE.agePerStep;
 		}
+	}
+	
+	public double[] funeral() {
+		parent = null;
+		double[] accomplishments = new double[4];
+		accomplishments[0] = amountOfChildren;
+		accomplishments[1] = age;
+		accomplishments[2] = fitness;
+		accomplishments[3] = totalFoodEaten;
+		return accomplishments;
 	}
 
 	// Draws the creature
@@ -317,6 +334,8 @@ public class Creature {
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
+
+
 
 	// Calculates the fitness
 	public double getFitness() {
