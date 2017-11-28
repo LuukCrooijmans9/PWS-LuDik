@@ -15,6 +15,23 @@ public class Brain {
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
 
+	private static String[] inputLabels = {
+			"RLeftEye","GLeftEye","BLeftEye",
+			"RCenterEye","GCenterEye","BCenterEye",
+			"RRightEye","GRightEye","BRightEye",
+			"currentSpeed",
+			"fat",
+			"constant value 1"
+	};
+	
+	private static String[] outputLabels = {
+			"deltaSpeed",
+			"deltaDirection",
+			"amount to eat",
+			"RBody","GBody","BBody",
+			"giveBirth"
+	};
+	
 	/**
 	 * inputs indecis 0 to 3: RGB values of the lefteye. 3 to 6: RGB values of the
 	 * centereye. 6 to 9: RGB values of the righteye. 10: current speed. 11: fat.

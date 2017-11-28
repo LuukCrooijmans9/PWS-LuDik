@@ -12,7 +12,10 @@ public class Neuron {
 	double[] weights;
 	double bias;
 	boolean isActive;
-
+	private double sigmoidOutput;
+	
+	
+	
 	/**
 	 * Creates a random Neuron
 	 */
@@ -59,7 +62,9 @@ public class Neuron {
 		for (int i = 0; i < inputs.length; i++) {
 			weightedSum += inputs[i] * weights[i];
 		}
-		return Neuron.sigmoid(weightedSum);
+		
+		sigmoidOutput = Neuron.sigmoid(weightedSum);
+		return sigmoidOutput;
 	}
 
 	/**
