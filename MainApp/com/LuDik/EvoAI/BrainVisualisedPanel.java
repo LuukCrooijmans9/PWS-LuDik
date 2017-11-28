@@ -17,7 +17,7 @@ public class BrainVisualisedPanel extends JPanel {
 	private double gridSize;
 	private static int inputLayerHeight = ConfigSingleton.INSTANCE.inputLayerHeight;
 	private static int hiddenLayerHeight = ConfigSingleton.INSTANCE.hiddenLayerHeight;
-	private static int brainWidth = ConfigSingleton.INSTANCE.brainWidth;
+	private static int brainWidth = ConfigSingleton.INSTANCE.brainWidth + 1;
 	private static int heighestLayer;
 
 	private CameraPanel cameraPanel;
@@ -69,11 +69,14 @@ public class BrainVisualisedPanel extends JPanel {
 						startHeight + 2 * gridSize * k, gridSize, gridSize);
 
 				if (creature != null) {
+					double output;
 					if (i != 0) {
 						BasicStroke defStroke = (BasicStroke) g2d.getStroke();
 						for (int j = 0; j < neurons[i - 1].length; j++) {
 							Ellipse2D neuron = neurons[i - 1][j];
-							double weight = brain.getNeurons()[i][k].getWeights()[j];
+							double weight = brain.getNeurons()[i - 1]
+									[k].getWeights()
+									[j];
 							g2d.setPaint(new Color((float) Math.max(0, weight / Math.abs(weight)), 0f, 0f,
 									(float) Math.abs(weight / (1 + Math.abs(weight)))));
 							g2d.setStroke(new BasicStroke((float) Math.abs(weight)));
@@ -84,8 +87,10 @@ public class BrainVisualisedPanel extends JPanel {
 						
 						g2d.setStroke(defStroke);
 						g2d.setPaint(Color.black);
+						output = brain.getNeurons()[i - 1][k].getSigmoidOutput();
+					} else {
+						output = brain.getInputs()[k];
 					}
-					double output = brain.getNeurons()[i][k].getSigmoidOutput();
 
 					String outputString = String.valueOf(output);
 					if (outputString.length() > 5) {

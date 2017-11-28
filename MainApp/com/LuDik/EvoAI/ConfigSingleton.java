@@ -69,8 +69,8 @@ public enum ConfigSingleton {
 	 * Variables that determine the brain, or the neural network of the creatures
 	 */
 
-	public int brainWidth = 3; // how many layers a creature's neural network has (input and ouputlayer
-								// included)
+	public int brainWidth = 2; // how many layers a creature's neural network has (outputlayer
+								// included, inputlayer excluded)
 	public int inputLayerHeight = 13; // how many neurons there are in the inputlayer
 	public int hiddenLayerHeight = 13; // how many neurons there are in the hidden layer(s)
 

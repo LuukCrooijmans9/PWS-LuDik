@@ -59,7 +59,7 @@ public class Brain {
 		rgbColor = new float[2];
 		for (int i = 0; i < this.brainWidth; i++) {
 			for (int j = 0; j < height; j++) {
-				if (((i == 0 || i == this.height -1 )&& j > this.inputHeight - 1) || ((i == 0 || i == this.height -1 ) && j > this.hiddenHeight - 1)) {
+				if ((i == this.height -1 && j > this.inputHeight - 1) || ((i == 0 || i == this.height -1 ) && j > this.hiddenHeight - 1)) {
 					neurons[i][j] = new Neuron(height, false);
 				} else {
 					neurons[i][j] = new Neuron(height, true);
@@ -132,7 +132,7 @@ public class Brain {
 
 		// loop voor eerste layer van neuralnet
 		for (int i = 0; i < height; i++) {
-			hiddenOutputs[i] = neurons[0][i].processNeuron(new double[] {inputs[i]});
+			hiddenOutputs[i] = neurons[0][i].processNeuron(inputs);
 		}
 
 		// loop voor hiddenlayers van neuralnet
