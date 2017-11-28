@@ -106,4 +106,8 @@ public class Neuron {
 		this.isActive = isActive;
 	}
 
+	public double getSigmoidOutput() {
+		return sigmoidOutput;
+	}
+
 }

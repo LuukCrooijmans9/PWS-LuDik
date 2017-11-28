@@ -39,6 +39,7 @@ public class BrainVisualisedWindow extends JDialog {
 	 * Create the dialog.
 	 */
 	public BrainVisualisedWindow(CameraPanel cameraPanel) {
+		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 470, 547);
 		getContentPane().setLayout(new BorderLayout());

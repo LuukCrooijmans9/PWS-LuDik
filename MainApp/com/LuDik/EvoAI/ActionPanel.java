@@ -114,6 +114,7 @@ public class ActionPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				infoPanel = mainFrame.getInfoPanel();
 				cameraPanel = mainFrame.getCameraPanel();
+				showBrainBtn.setEnabled(true);
 
 				if (timeKeeper != null) {
 					timeKeeper = null;
@@ -233,13 +234,16 @@ public class ActionPanel extends JPanel {
 		 * the brain, the neural network of the selected creature.
 		 */
 
-		showBrainBtn = new Button("show brain" + isControlCrtr());
+		showBrainBtn = new Button("show brain" );
+		showBrainBtn.setEnabled(false);
 
 		showBrainBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				if (brainDialog == null) {
+				
+				if (brainDialog == null || !brainDialog.isVisible()) {
+					System.out.println("test: " + brainDialog);
 					try {
 						brainDialog = new BrainVisualisedWindow(cameraPanel);
 						brainDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -247,6 +251,8 @@ public class ActionPanel extends JPanel {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				} else {
+					
 				}
 			};
 		});
@@ -265,6 +271,10 @@ public class ActionPanel extends JPanel {
 		add(followCrtrBtn);
 		add(controlCrtrBtn);
 		add(showBrainBtn);
+	}
+
+	public BrainVisualisedWindow getBrainDialog() {
+		return brainDialog;
 	}
 
 	public TimeKeeper getTimeKeeper() {

@@ -132,7 +132,7 @@ public class Brain {
 
 		// loop voor eerste layer van neuralnet
 		for (int i = 0; i < height; i++) {
-			hiddenOutputs[i] = neurons[0][i].processNeuron(inputs);
+			hiddenOutputs[i] = neurons[0][i].processNeuron(new double[] {inputs[i]});
 		}
 
 		// loop voor hiddenlayers van neuralnet

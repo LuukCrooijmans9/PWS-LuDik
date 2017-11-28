@@ -290,6 +290,10 @@ public class CameraPanel extends JPanel {
 
 	public void update() {
 		repaint();
+		
+		if (selectedCreature != null && mainFrame.getActionPanel().getBrainDialog() != null) {
+			mainFrame.getActionPanel().getBrainDialog().update();
+		}
 	}
 	
 	public void setSelectedCreature(Creature crtr) {
@@ -304,7 +308,10 @@ public class CameraPanel extends JPanel {
 		selectedCreature = crtr;
 		
 		mainFrame.getInfoPanel().setSelectedCreature(selectedCreature);
-//		selectedCreature.setCreatureColor(Color.blue);
+		if (mainFrame.getActionPanel().getBrainDialog() != null) {
+			mainFrame.getActionPanel().getBrainDialog().update();
+		}
+		//		selectedCreature.setCreatureColor(Color.blue);
 		selectedCreature.setSelected(true);
 		
 		repaint();

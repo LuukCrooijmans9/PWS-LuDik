@@ -33,8 +33,8 @@ public enum ConfigSingleton {
 	public int maturityAge = 5; // How many steps the creature should live before being granted the ability to
 								// give birth
 
-	public double maxFertility = 0.01; // the highest value for fertility a tile can have
-	public double maxFood = 40; // the highest foodValue a tile can have
+	public double maxFertility = 0.1; // the highest value for fertility a tile can have
+	public double maxFood = 400; // the highest foodValue a tile can have
 
 	/**
 	 * Variables that determine the appearance of the creatures:
