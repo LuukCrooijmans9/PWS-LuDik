@@ -19,6 +19,7 @@ public class BrainVisualisedWindow extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private BrainVisualisedPanel brainVisualisedPanel;
+	private CameraPanel cameraPanel;
 
 	/**
 	 * Launch the application.
@@ -39,6 +40,7 @@ public class BrainVisualisedWindow extends JDialog {
 	 * Create the dialog.
 	 */
 	public BrainVisualisedWindow(CameraPanel cameraPanel) {
+		this.cameraPanel = cameraPanel;
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 470, 547);
@@ -78,6 +80,11 @@ public class BrainVisualisedWindow extends JDialog {
 	
 	public void update() {
 		brainVisualisedPanel.update();
+		if (cameraPanel.getSelectedCreature() != null ) {
+			setTitle("Brain of: Creature" + cameraPanel.getSelectedCreature().getCreatureID());
+		} else {
+			setTitle("Brain of: no creature selected");
+		}
 	}
 
 }

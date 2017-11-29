@@ -52,7 +52,8 @@ public class BrainVisualisedPanel extends JPanel {
 
 		double neuronDist = (getWidth() - (brainWidth * gridSize)) / (brainWidth + 1); // the distance between the
 																						// neurons on the X-axis
-
+		float textSize = (float)  (gridSize / 2);
+		
 		for (int i = 0; i < brainWidth; i++) {
 
 			int layerHeight;
@@ -97,9 +98,23 @@ public class BrainVisualisedPanel extends JPanel {
 						outputString = outputString.substring(0, 4);
 					}
 					drawCenteredText(g2d, (int) (neurons[i][k].getCenterX() + 0.5),
-							(int) (neurons[i][k].getCenterY() + 0.5), 10f, outputString);
+							(int) (neurons[i][k].getCenterY() + 0.5), textSize, outputString);
 				}
 				g2d.draw(neurons[i][k]);
+				
+				if(i == 0 && k <= Brain.getInputLabels().length - 1) {
+					drawCenteredText(g2d,
+							 (int) (neurons[i][k].getMinX() - 2 * gridSize),
+							 (int) (neurons[i][k].getCenterY()), 
+							 textSize, Brain.getInputLabels()[k]);
+				}
+				
+				if(i == brainWidth - 1 && k <= Brain.getOutputLabels().length - 1) {
+					drawCenteredText(g2d,
+							 (int) (neurons[i][k].getMaxX() + 2 * gridSize),
+							 (int) (neurons[i][k].getCenterY()), 
+							 textSize, Brain.getOutputLabels()[k]);
+				}
 			}
 		}
 
@@ -107,15 +122,13 @@ public class BrainVisualisedPanel extends JPanel {
 
 	public void update() {
 		gridSize = Math.min(getHeight() / ((2 * heighestLayer) + 1), getWidth() / ((2 * brainWidth) + 1));
-		System.out.println("camerapanel: " + cameraPanel);
 		creature = cameraPanel.getSelectedCreature();
 
 		if (creature != null) {
 			brain = creature.getBrain();
 		}
 
-		System.out.println("test: " + gridSize);
-
+		
 		repaint();
 	}
 

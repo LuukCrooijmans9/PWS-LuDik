@@ -1,7 +1,9 @@
 package com.LuDik.EvoAI;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.lang.reflect.Array;
@@ -310,13 +312,31 @@ public class Creature {
 
 	// Draws the creature
 	void draw(Graphics2D g2d) {
-		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
+		
+		/**
+		 * Draws the red circle around the selected creature:
+		 */
+		
+		if (selected) {
+			g2d.setPaint(Color.red);
+			BasicStroke stroke = (BasicStroke) g2d.getStroke();
+			g2d.setStroke(new BasicStroke(2));
+			g2d.draw(new Ellipse2D.Double(getXPos() - (creatureSize), getYPos() - (creatureSize), 
+					2 * creatureSize, 2 * creatureSize));
+			g2d.setStroke(stroke);
+		}
+		
+		/**
+		 * Draws the creature itself (body, orientation line, eyes):
+		 */
+		
+		g2d.setPaint(Color.black);
+		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),creatureSize,
 				creatureSize);
 
-		if (!selected)
-			g2d.setColor(getCreatureColor());
-		else
-			g2d.setColor(Color.blue);
+		g2d.setColor(getCreatureColor());
+		
+		
 
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);

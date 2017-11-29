@@ -226,4 +226,20 @@ public class Brain {
 		this.height = height;
 	}
 
+	public static String[] getInputLabels() {
+		return inputLabels;
+	}
+
+	public static void setInputLabels(String[] inputLabels) {
+		Brain.inputLabels = inputLabels;
+	}
+
+	public static String[] getOutputLabels() {
+		return outputLabels;
+	}
+
+	public static void setOutputLabels(String[] outputLabels) {
+		Brain.outputLabels = outputLabels;
+	}
+
 }
