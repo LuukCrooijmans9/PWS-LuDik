@@ -94,7 +94,7 @@ public class Brain {
 		if (rightEyeColor != null) {
 			rgbColor = rightEyeColor.getRGBColorComponents(null);
 			for (int i = 0; i < rgbColor.length; i++) {
-				inputs[i] = rgbColor[i];
+				inputs[i] = rgbColor[i] * 2 - 1;
 			}
 		}
 
@@ -102,7 +102,7 @@ public class Brain {
 		if (centerEyeColor != null) {
 			rgbColor = centerEyeColor.getRGBColorComponents(null);
 			for (int i = 0; i < rgbColor.length; i++) {
-				inputs[i + 3] = rgbColor[i];
+				inputs[i + 3] = rgbColor[i] * 2 - 1;
 			}
 		}
 
@@ -110,13 +110,14 @@ public class Brain {
 		if (leftEyeColor != null) {
 			rgbColor = leftEyeColor.getRGBColorComponents(null);
 			for (int i = 0; i < rgbColor.length; i++) {
-				inputs[i + 6] = rgbColor[i];
+				inputs[i + 6] = rgbColor[i] * 2 - 1;
 			}
 		}
 
-		inputs[9] = creature.getSpeed();
-		inputs[10] = creature.getFat();
-		inputs[11] = creature.getWater();
+		inputs[9] = Neuron.sigmoid(creature.getSpeed()) * 2 - 1;
+		inputs[10] = Neuron.sigmoid(creature.getFat() / ConfigSingleton.INSTANCE.startingFat) * 2 - 1 ;
+//		inputs[11] = creature.getWater();
+		inputs[11] = -1d;
 		inputs[12] = 1d;
 
 		for (int i = 13; i < height; i++) {

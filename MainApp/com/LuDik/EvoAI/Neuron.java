@@ -72,7 +72,7 @@ public class Neuron {
 	 * 
 	 * @parameter output values between -1 and 1.
 	 */
-	static double sigmoid(double input) {
+	public static double sigmoid(double input) {
 		if (input < -10) {
 			return -1;
 		} else if (input > 10) {
