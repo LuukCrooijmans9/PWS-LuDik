@@ -15,30 +15,20 @@ public class Brain {
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
 
-	private static String[] inputLabels = {
-			"RLeftEye","GLeftEye","BLeftEye",
-			"RCenterEye","GCenterEye","BCenterEye",
-			"RRightEye","GRightEye","BRightEye",
-			"currentSpeed",
-			"fat",
-			"constant value 1"
-	};
-	
-	private static String[] outputLabels = {
-			"deltaSpeed",
-			"deltaDirection",
-			"amount to eat",
-			"RBody","GBody","BBody",
-			"giveBirth"
-	};
-	
+	private static String[] inputLabels = { "RLeftEye", "GLeftEye", "BLeftEye", "RCenterEye", "GCenterEye",
+			"BCenterEye", "RRightEye", "GRightEye", "BRightEye", "currentSpeed", "fat", "constant value 1" };
+
+	private static String[] outputLabels = { "deltaSpeed", "deltaDirection", "amount to eat", "RBody", "GBody", "BBody",
+			"giveBirth" };
+
 	/**
 	 * inputs indecis 0 to 3: RGB values of the lefteye. 3 to 6: RGB values of the
 	 * centereye. 6 to 9: RGB values of the righteye. 10: current speed. 11: fat.
 	 * 12: constant value 1. 13>: memorycels.
 	 * 
 	 * outputs indecis 0: deltaspeed. 1: deltadirection. 2: amount to eat. 3 to 6:
-	 * RGB values for the bodycolor. 6: giveBirth. 7 to 13: Not used atm. 13>: memorycels
+	 * RGB values for the bodycolor. 6: giveBirth. 7 to 13: Not used atm. 13>:
+	 * memorycels
 	 */
 
 	/**
@@ -59,10 +49,11 @@ public class Brain {
 		rgbColor = new float[2];
 		for (int i = 0; i < this.brainWidth; i++) {
 			for (int j = 0; j < height; j++) {
-				if ((i == this.height -1 && j > this.inputHeight - 1) || ((i == 0 || i == this.height -1 ) && j > this.hiddenHeight - 1)) {
-					neurons[i][j] = new Neuron(height, false);
+				if ((i == this.height - 1 && j > this.inputHeight - 1)
+						|| ((i == 0 || i == this.height - 1) && j > this.hiddenHeight - 1)) {
+					neurons[i][j] = new Neuron(height, false, creature.getBoard());
 				} else {
-					neurons[i][j] = new Neuron(height, true);
+					neurons[i][j] = new Neuron(height, true, creature.getBoard());
 				}
 			}
 		}
@@ -82,7 +73,7 @@ public class Brain {
 		rgbColor = new float[2];
 		for (int i = 0; i < this.brainWidth; i++) {
 			for (int j = 0; j < height; j++) {
-				neurons[i][j] = new Neuron(neurons[i][j], deviation);
+				neurons[i][j] = new Neuron(neurons[i][j], deviation, creature.getBoard());
 			}
 		}
 	}
@@ -115,8 +106,8 @@ public class Brain {
 		}
 
 		inputs[9] = Neuron.sigmoid(creature.getSpeed()) * 2 - 1;
-		inputs[10] = Neuron.sigmoid(creature.getFat() / ConfigSingleton.INSTANCE.startingFat) * 2 - 1 ;
-//		inputs[11] = creature.getWater();
+		inputs[10] = Neuron.sigmoid(creature.getFat() / ConfigSingleton.INSTANCE.startingFat) * 2 - 1;
+		// inputs[11] = creature.getWater();
 		inputs[11] = -1d;
 		inputs[12] = 1d;
 

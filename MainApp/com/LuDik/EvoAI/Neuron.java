@@ -19,13 +19,13 @@ public class Neuron {
 	/**
 	 * Creates a random Neuron
 	 */
-	Neuron(int heightPreviousLayer, boolean isActive) {
+	Neuron(int heightPreviousLayer, boolean isActive, Board board) {
 
 		weights = new double[heightPreviousLayer];
 		for (int i = 0; i < heightPreviousLayer; i++) {
-			weights[i] = Math.random() * 2 - 1;
+			weights[i] = board.randomDouble() * 2 - 1;
 		}
-		bias = Math.random() * 2 - 1;
+		bias = board.randomDouble() * 2 - 1;
 		this.isActive = isActive;
 	}
 
@@ -36,18 +36,18 @@ public class Neuron {
 	 * @parameter Parent Neuron, Deviation
 	 */
 
-	Neuron(Neuron neuron, double deviation) {
+	Neuron(Neuron neuron, double deviation, Board board) {
 
 		this.weights = neuron.getWeights();
 		for (int i = 0; i < this.weights.length; i++) {
-			double random = Math.random();
+			double random = board.randomDouble();
 			if (random < deviation) {
-				weights[i] += (Math.random() * 2 - 1) * deviation;
+				weights[i] += (board.randomDouble() * 2 - 1) * deviation;
 			}
 		}
-		double random = Math.random();
+		double random = board.randomDouble();
 		if (random < deviation) {
-			deviation = (Math.random() * 2 - 1) * deviation;
+			deviation = (board.randomDouble() * 2 - 1) * deviation;
 			this.bias += deviation;
 		}
 		this.isActive = neuron.isActive;

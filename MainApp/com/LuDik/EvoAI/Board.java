@@ -136,7 +136,7 @@ public class Board {
 																						// there are spawnpoints
 
 		for (int i = 0; i < creaturesToSpawn; i++) {
-			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * randomDouble() + 0.5));
 			Creature nextCreature = new Creature(point.getX(), point.getY(), this, i);
 			livingCreatures.add(nextCreature);
 			allCreaturesOfCurrentPeriod.add(nextCreature);
@@ -183,7 +183,7 @@ public class Board {
 			Creature parentCreature = parentCreatures.get(i);
 			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
 				// Point2D point = availableSpawnPoints
-				// .get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+				// .get((int) ((availableSpawnPoints.size() - 1) * randomDouble() + 0.5));
 				Creature nextCreature = spawnSingleParentCreature(parentCreature, EVOLUTION_FACTOR);
 				// livingCreatures.add(nextCreature);
 				newAllCreaturesOfPeriod.add(nextCreature);
@@ -219,7 +219,7 @@ public class Board {
 
 	public Creature spawnRandomCreature(int id) {
 		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
-		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * Math.random() + 0.5));
+		Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * randomDouble() + 0.5));
 		Creature randomCreature = new Creature(point.getX(), point.getY(), this, id);
 		allCreaturesOfCurrentPeriod.add(randomCreature);
 		livingCreatures.add(randomCreature);

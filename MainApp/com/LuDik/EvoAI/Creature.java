@@ -93,7 +93,7 @@ public class Creature {
 
 		setXPos(x);
 		setYPos(y);
-		direction = Math.random() * 360;
+		direction = board.randomDouble() * 360;
 
 		age = 0;
 		fat = ConfigSingleton.INSTANCE.startingFat;
@@ -122,7 +122,7 @@ public class Creature {
 
 		setXPos(x);
 		setYPos(y);
-		direction = Math.random() * 360;
+		direction = board.randomDouble() * 360;
 
 		age = 0;
 		fat = ConfigSingleton.INSTANCE.startingFat;
