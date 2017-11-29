@@ -160,7 +160,7 @@ public class CameraPanel extends JPanel {
 				return;
 			}
 			
-			for (Creature crtr : creatures) {
+			for (Creature crtr : new ArrayList<Creature>(creatures)) {
 				if (scaleT.createTransformedShape(crtr.getCreatureShape()).contains((double) x, (double) y)) {
 					
 					setSelectedCreature(crtr);
