@@ -36,8 +36,6 @@ import java.awt.event.ActionEvent;
  * This class is a frame that acts a launcher for the main program, DARWIN. In this frame you can
  * adjust the variables that are used in the simulation of DARWIN, stored in the ConfigSingleton enumeration, and
  * start DARWIN with the "start" button when the values for the variables are to your liking
- * 
- *
  */
 
 public class DARWINLauncher extends JFrame {
@@ -517,7 +515,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_brainWidth.setPreferredSize(new Dimension(100, 20));
-		spinner_brainWidth.setModel(new SpinnerNumberModel(3, 0, 2147483647, 1));
+		spinner_brainWidth.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.brainWidth, 0, 2147483647, 1));
 
 		JPanel panel_brainWidth = new JPanel();
 		panel_brainWidth.add(lbl_brainWidth);
