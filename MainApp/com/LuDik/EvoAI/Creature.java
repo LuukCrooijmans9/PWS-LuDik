@@ -55,8 +55,6 @@ public class Creature {
 	private int xTile, yTile;
 	private boolean isMature = false;
 	private boolean isDead = false;
-	private boolean fertile = false;
-	private int fertileCooldown;
 
 	// It's eyes
 
@@ -189,7 +187,7 @@ public class Creature {
 		if (ConfigSingleton.INSTANCE.needDrinking) {
 			this.drink(brainOutputs[6]);
 		}
-		this.giveBirth(brainOutputs[7]);
+		this.giveBirth(brainOutputs[6]);
 	}
 
 	// Gathering food from the tile it is on.
@@ -276,12 +274,11 @@ public class Creature {
 	}
 
 	public void giveBirth(double willingness) {
-		if (isMature & willingness > 0 & fat > 2 * ConfigSingleton.INSTANCE.startingFat & fertile) {
+		if (isMature & willingness > 0 & fat > 2 * ConfigSingleton.INSTANCE.startingFat) {
 			fat -= ConfigSingleton.INSTANCE.startingFat;
 			Creature crtr = board.spawnSingleParentCreature(this, ConfigSingleton.INSTANCE.evolutionFactor);
 			children.add(crtr);
 			amountOfChildren++;
-			fertileCooldown = 2;
 		}
 	}
 
@@ -301,12 +298,7 @@ public class Creature {
 		} else {
 			age += ConfigSingleton.INSTANCE.agePerStep;
 		}
-		if (!fertile) {
-			fertileCooldown--;
-			if (fertileCooldown == 0) {
-				fertile = true;
-			}
-		}
+
 	}
 
 	public double[] funeral() {
