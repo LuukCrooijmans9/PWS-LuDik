@@ -55,6 +55,8 @@ public class Creature {
 	private int xTile, yTile;
 	private boolean isMature = false;
 	private boolean isDead = false;
+	private boolean fertile = false;
+	private int fertileCooldown;
 
 	// It's eyes
 
@@ -164,8 +166,8 @@ public class Creature {
 		eye.look();
 		xTile = Creature.posToTile(getXPos());
 		yTile = Creature.posToTile(getYPos());
-		if(!isMature) {
-			if(age / ConfigSingleton.INSTANCE.agePerStep >= ConfigSingleton.INSTANCE.maturityAge) {
+		if (!isMature) {
+			if (age / ConfigSingleton.INSTANCE.agePerStep >= ConfigSingleton.INSTANCE.maturityAge) {
 				isMature = true;
 			}
 		}
@@ -274,18 +276,19 @@ public class Creature {
 	}
 
 	public void giveBirth(double willingness) {
-		if (isMature & willingness > 0 & fat > 2 * ConfigSingleton.INSTANCE.startingFat) {
+		if (isMature & willingness > 0 & fat > 2 * ConfigSingleton.INSTANCE.startingFat & fertile) {
 			fat -= ConfigSingleton.INSTANCE.startingFat;
 			Creature crtr = board.spawnSingleParentCreature(this, ConfigSingleton.INSTANCE.evolutionFactor);
 			children.add(crtr);
 			amountOfChildren++;
+			fertileCooldown = 2;
 		}
 	}
 
 	// Finishes this step and checks if the creature survived this day
 	public void endStep() {
 
-		fat -= BASE_FAT_CONSUMPTION;
+		fat -= BASE_FAT_CONSUMPTION + ((age * age) / 1000);
 
 		if (ConfigSingleton.INSTANCE.needDrinking) {
 			water -= BASE_WATER_CONSUMPTION;
@@ -294,12 +297,18 @@ public class Creature {
 			weight = fat * WEIGHT_PER_FAT;
 		}
 		if (fat <= 0) {
-			isDead = true; //He was a loving Father to us all
+			isDead = true; // He was a loving Father to us all
 		} else {
 			age += ConfigSingleton.INSTANCE.agePerStep;
 		}
+		if (!fertile) {
+			fertileCooldown--;
+			if (fertileCooldown == 0) {
+				fertile = true;
+			}
+		}
 	}
-	
+
 	public double[] funeral() {
 		parent = null;
 		double[] accomplishments = new double[4];
@@ -312,31 +321,29 @@ public class Creature {
 
 	// Draws the creature
 	void draw(Graphics2D g2d) {
-		
+
 		/**
 		 * Draws the red circle around the selected creature:
 		 */
-		
+
 		if (selected) {
 			g2d.setPaint(Color.red);
 			BasicStroke stroke = (BasicStroke) g2d.getStroke();
 			g2d.setStroke(new BasicStroke(2));
-			g2d.draw(new Ellipse2D.Double(getXPos() - (creatureSize), getYPos() - (creatureSize), 
-					2 * creatureSize, 2 * creatureSize));
+			g2d.draw(new Ellipse2D.Double(getXPos() - (creatureSize), getYPos() - (creatureSize), 2 * creatureSize,
+					2 * creatureSize));
 			g2d.setStroke(stroke);
 		}
-		
+
 		/**
 		 * Draws the creature itself (body, orientation line, eyes):
 		 */
-		
+
 		g2d.setPaint(Color.black);
-		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),creatureSize,
+		creatureShape.setFrame(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2), creatureSize,
 				creatureSize);
 
 		g2d.setColor(getCreatureColor());
-		
-		
 
 		g2d.fill(creatureShape);
 		g2d.setColor(Color.BLACK);
@@ -354,8 +361,6 @@ public class Creature {
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
 	}
-
-
 
 	// Calculates the fitness
 	public double getFitness() {

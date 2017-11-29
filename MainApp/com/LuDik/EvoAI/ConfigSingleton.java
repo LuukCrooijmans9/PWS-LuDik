@@ -85,7 +85,7 @@ public enum ConfigSingleton {
 	public double baseWaterConsumption = 0.5; // how much water the creature uses up per step regardless of conditions
 	public double maxWaterInMouth = 5; // the maximum amount of water a creature can drink in a step (not used)
 
-/**
+	/**
 	 * Variables that determine statistics
 	 */
 	public int periodLength = 1000; // At which interval statistics happen

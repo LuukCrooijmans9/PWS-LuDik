@@ -41,7 +41,7 @@ public class Brain {
 		this.inputHeight = inputHeight;
 		this.hiddenHeight = hiddenHeight;
 		this.brainWidth = brainWidth;
-		this.height = Math.max(inputHeight, Math.max(hiddenHeight, 13));
+		this.height = Math.max(inputHeight, Math.max(hiddenHeight, 0));
 		neurons = new Neuron[brainWidth][height];
 		this.creature = creature;
 		outputs = new double[height];
@@ -112,7 +112,9 @@ public class Brain {
 		inputs[12] = 1d;
 
 		for (int i = 13; i < height; i++) {
+
 			inputs[i] = outputs[i];
+
 		}
 
 	}
@@ -121,19 +123,16 @@ public class Brain {
 	public double[] feedForward() {
 		hiddenOutputs = new double[height];
 		hiddenInputs = new double[height];
-
-		// loop voor eerste layer van neuralnet
-		for (int i = 0; i < height; i++) {
-			hiddenOutputs[i] = neurons[0][i].processNeuron(inputs);
-		}
-
-		// loop voor hiddenlayers van neuralnet
-		for (int i = 1; i < brainWidth; i++) {
+		
+		// loop voor layers van neuralnet
+		hiddenOutputs = inputs;
+		for (int i = 0; i < brainWidth; i++) {
 			hiddenInputs = hiddenOutputs;
 			for (int j = 0; j < height; j++) {
-				hiddenOutputs[i] = neurons[i][j].processNeuron(hiddenInputs);
+				hiddenOutputs[j] = neurons[i][j].processNeuron(hiddenInputs);
 			}
 		}
+
 		outputs = hiddenOutputs;
 		return outputs;
 	}

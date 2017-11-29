@@ -60,6 +60,8 @@ public class InfoPanel extends JPanel {
 	private JLabel selectedCrtrFatLbl;
 	private JLabel selectedCrtrFoodFitnessLbl;
 	private JLabel selectedCrtrAgeFatBurnedLbl;
+	private JLabel mainSeed;
+	private JLabel mapSeed;
 
 	private JList<String> creaturesList;
 	private ArrayList<Long> timeDiffArray;
@@ -110,6 +112,8 @@ public class InfoPanel extends JPanel {
 		selectedCrtrFatLbl = new JLabel("selectedCreature: " + 0);
 		selectedCrtrFoodFitnessLbl = new JLabel("TotalFoodEaten: " + 0 + " Fitness: " + 0);
 		selectedCrtrAgeFatBurnedLbl = new JLabel("Age: " + 0 + " FatBurnedThisStep: " + 0);
+		mainSeed = new JLabel("MainSeed: " + ConfigSingleton.INSTANCE.mainSeed);
+		mapSeed = new JLabel("MapSeed: "+ ConfigSingleton.INSTANCE.mapGenSeed);
 
 		creaturesList = new JList();
 		creaturesList.addListSelectionListener(new ListSelectionListener() {
@@ -132,6 +136,9 @@ public class InfoPanel extends JPanel {
 		singleLineInfoPanel.add(selectedCrtrFatLbl);
 		singleLineInfoPanel.add(selectedCrtrFoodFitnessLbl);
 		singleLineInfoPanel.add(selectedCrtrAgeFatBurnedLbl);
+		singleLineInfoPanel.add(mainSeed);
+		singleLineInfoPanel.add(mapSeed);
+		
 		listPanel.add(creaturesList);
 		graphPanel.add(fitnessLineChartPanel);
 		graphPanel.add(ageLineChartPanel);
@@ -229,7 +236,7 @@ public class InfoPanel extends JPanel {
 			df.setRoundingMode(RoundingMode.CEILING);
 			stepLbl.setText("Step: " + timeKeeper.getStep());
 			if (timeKeeper.getStep() % TIMEDIFF_SAMPLESIZE == 0){
-				timePerStepLbl.setText("NanoTimePerStep: " + df.format(avgTimeDiff / Math.pow(10, 6)));
+				timePerStepLbl.setText("MillisecondsPerStep: " + df.format(avgTimeDiff / Math.pow(10, 6)));
 			}
 		}
 	}
