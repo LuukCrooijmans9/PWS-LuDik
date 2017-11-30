@@ -3,8 +3,8 @@ package com.LuDik.EvoAI;
 import java.awt.Color;
 
 public class Eye {
-	Creature creature;
-	Board board;
+	transient Creature creature;
+	transient Board board;
 	double eyeLength, eyeDeviation, rightX, rightY, leftX, leftY;
 	int xTile, yTile;
 	Color rightEyeColor, centerEyeColor, leftEyeColor;

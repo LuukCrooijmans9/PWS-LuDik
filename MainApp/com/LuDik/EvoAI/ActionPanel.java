@@ -47,6 +47,7 @@ public class ActionPanel extends JPanel {
 	private static final int APWidth = 400;
 
 	private Button startBoardBtn;
+	private Button saveBtn;
 	private Button pauseBtn;
 	private Button followCrtrBtn;
 	private Button controlCrtrBtn;
@@ -131,6 +132,22 @@ public class ActionPanel extends JPanel {
 				timeKeeper.start();
 
 				pauseBtn.setEnabled(true);
+				saveBtn.setEnabled(true);
+
+			};
+		});
+		
+		saveBtn = new Button("Save");
+
+		saveBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+
+
+				synchronized (timeKeeper) {
+					timeKeeper.setSaving(true);
+				}
 
 			};
 		});
@@ -267,6 +284,7 @@ public class ActionPanel extends JPanel {
 
 		add(startBoardBtn);
 		add(pauseBtn);
+		add(saveBtn);
 		add(displayBoardBtn);
 		add(followCrtrBtn);
 		add(controlCrtrBtn);

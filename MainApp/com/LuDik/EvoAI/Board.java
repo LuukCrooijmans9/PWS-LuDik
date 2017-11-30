@@ -24,8 +24,8 @@ public class Board {
 	/**
 	 * UI elements:
 	 */
-	DARWIN mainFrame;
-	private InfoPanel infoPanel;
+	transient DARWIN mainFrame;
+	transient private InfoPanel infoPanel;
 
 	/**
 	 * Map specific variables
@@ -37,16 +37,17 @@ public class Board {
 	/**
 	 * This board's TimeKeeper object
 	 */
-	private TimeKeeper timeKeeper;
+	transient private TimeKeeper timeKeeper;
 
 	/**
 	 * Variables for the creatures:
 	 */
-	private ArrayList<Creature> livingCreatures; // all creatures currently alive in this Board
-	private ArrayList<Creature> allCreaturesOfCurrentPeriod; // all creatures that are part of the current Period,
-																// dead
-																// or alive
-	private ArrayList<Creature> deadCreaturesOfCurrentPeriod;
+	transient private ArrayList<Creature> livingCreatures; // all creatures currently alive in this Board
+	transient private ArrayList<Creature> allCreaturesOfCurrentPeriod; // all creatures that are part of the current
+																		// Period,
+	// dead
+	// or alive
+	transient private ArrayList<Creature> deadCreaturesOfCurrentPeriod;
 
 	/**
 	 * Statistics about previous Period:
@@ -411,7 +412,7 @@ public class Board {
 			allCreaturesOfCurrentPeriod.remove(crtr);
 		}
 		deadCreaturesOfCurrentPeriod.clear();
-		
+
 		period++;
 
 	}
@@ -469,6 +470,14 @@ public class Board {
 		long randomLong = mainRNG.nextLong();
 		currentSeed = mainRNG.nextLong();
 		return randomLong;
+	}
+
+	public void saveSimulation() {
+		Saver.saveObject(ConfigSingleton.INSTANCE, "Configuration", "ConfigSingleton");
+		Saver.saveObject(this, "Board", "Board");
+		for (int i = 0; i < this.getLivingCreatures().size(); i++) {
+			Saver.saveObject(this.getLivingCreatures().get(i), "Creatures", i + "_Creature");
+		}
 	}
 
 	public Map getMap() {

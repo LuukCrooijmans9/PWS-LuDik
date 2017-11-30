@@ -1,8 +1,9 @@
 package com.LuDik.EvoAI;
 
 /**
- * An instance of this class keeps track of time. It notifies its board object each time a certain period of time has passed.
- * This period of time is determined by the delay variable and can be modified during code execution. 
+ * An instance of this class keeps track of time. It notifies its board object
+ * each time a certain period of time has passed. This period of time is
+ * determined by the delay variable and can be modified during code execution.
  *
  */
 
@@ -12,19 +13,20 @@ public class TimeKeeper implements Runnable {
 	private Thread timeKeeper;
 	private long step = 0; // a counter for how many times the delay has passed and the c
 	private long delay = 25; // the amount of time in ms (miliseconds) between two steps
-	private long timeDiff; // the time that has passed during code execution in ms, the amount of time the thread has to wait
+	private long timeDiff; // the time that has passed during code execution in ms, the amount of time the
+							// thread has to wait
 	private InfoPanel infoPanel; // the infoPanel GUI object this timeKeeper notifies.
-	
+
 	private boolean paused; // if this timekeeper is paused or not
+	private boolean saving;
 	private long timeDiffNano;
 
-	public TimeKeeper(Board board) {	
+
+	public TimeKeeper(Board board) {
 
 		this.board = board;
 		timeKeeper = new Thread(this);
-		
-		
-		
+
 	}
 
 	public void start() {
@@ -32,13 +34,14 @@ public class TimeKeeper implements Runnable {
 	}
 
 	/**
-	 * This method notifies the board and the infoPanel object so that they execute their code.
+	 * This method notifies the board and the infoPanel object so that they execute
+	 * their code.
 	 */
-	
+
 	private void makeStep() {
 		board.doStep();
 		getInfoPanel().update();
-		if(step % ConfigSingleton.INSTANCE.periodLength == 0 ) {
+		if (step % ConfigSingleton.INSTANCE.periodLength == 0) {
 			board.doStatistics(step);
 		}
 	}
@@ -51,18 +54,16 @@ public class TimeKeeper implements Runnable {
 		/**
 		 * The entire simulation is executed from within this while loop:
 		 */
-		
+
 		while (true) {
-			
+
 			beforeTime = System.nanoTime();
-			
+
 			makeStep();
 
 			timeDiffNano = System.nanoTime() - beforeTime;
-			timeDiff = (long) timeDiffNano / (long) Math.pow(10, 6) ; //calculates timeDiff and converts it to ms
+			timeDiff = (long) timeDiffNano / (long) Math.pow(10, 6); // calculates timeDiff and converts it to ms
 			sleep = delay - timeDiff;
-			
-
 
 			if (sleep < 0) {
 				sleep = 0;
@@ -75,17 +76,25 @@ public class TimeKeeper implements Runnable {
 			}
 			step++;
 			
+			if(saving) {
+				board.saveSimulation();
+				saving = false;
+			}
+
 			if (paused) {
 				try {
-					synchronized(this) {
+					synchronized (this) {
 						wait();
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				Saver.saveObject(board, "Board", "Board");
+				Saver.saveObject(board.getLivingCreatures().get(0), "Creatures", 0+"_Creature");
+				Saver.saveObject(board.getLivingCreatures().get(0).getBrain(), "Creatures", 0 + "_Brain");
+
 			}
 
-			
 		}
 
 	}
@@ -110,6 +119,14 @@ public class TimeKeeper implements Runnable {
 		this.paused = paused;
 	}
 
+	public boolean isSaving() {
+		return saving;
+	}
+
+	public void setSaving(boolean saving) {
+		this.saving = saving;
+	}
+
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
@@ -121,7 +138,5 @@ public class TimeKeeper implements Runnable {
 	public long getTimeDiffNano() {
 		return timeDiffNano;
 	}
-
-	
 
 }

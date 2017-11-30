@@ -22,14 +22,14 @@ public class Creature {
 	private static final double WEIGHT_PER_FAT = ConfigSingleton.INSTANCE.weightPerFat;
 	private static final double WEIGHT_PER_WATER = ConfigSingleton.INSTANCE.weightPerWater;
 	private static final double BASE_FAT_CONSUMPTION = ConfigSingleton.INSTANCE.baseFatConsumption;
-	public static final double DEFAULT_MAX_FOOD_IN_MOUTH = ConfigSingleton.INSTANCE.maxFoodInMouth;
+	private static final double DEFAULT_MAX_FOOD_IN_MOUTH = ConfigSingleton.INSTANCE.maxFoodInMouth;
 	private static final int DEFAULT_BRAIN_WIDTH = ConfigSingleton.INSTANCE.brainWidth;
 	private static final int DEFAULT_INPUT_HEIGHT = ConfigSingleton.INSTANCE.inputLayerHeight;
 	private static final int DEFAULT_HIDDEN_HEIGHT = ConfigSingleton.INSTANCE.hiddenLayerHeight;
 	private static final double BASE_WATER_CONSUMPTION = ConfigSingleton.INSTANCE.baseWaterConsumption;
 
 	private final long creatureID;
-	private Creature parent;
+	transient private Creature parent;
 
 	// The brain and it's outputs are stored in these variables.
 	private Brain brain;
@@ -60,10 +60,10 @@ public class Creature {
 
 	private Color rightEyeColor, centerEyeColor, leftEyeColor;
 	private double eyeDeviation, eyeLength, rightEyeX, rightEyeY, leftEyeX, leftEyeY;
-	private Eye eye;
+	transient private Eye eye;
 
 	// Where it is ALIVE
-	private Board board;
+	transient private Board board;
 
 	// Visuals
 	private Color creatureColor;
@@ -72,7 +72,7 @@ public class Creature {
 	private boolean controlled;
 	private int generation;
 	private int amountOfChildren;
-	private ArrayList<Creature> children = new ArrayList<Creature>();
+	transient private ArrayList<Creature> children = new ArrayList<Creature>();
 
 	// Translates the x and y values to the x and y values of the tile they are in.
 	static public int posToTile(double x) {

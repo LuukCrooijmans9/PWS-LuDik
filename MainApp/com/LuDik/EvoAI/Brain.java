@@ -11,7 +11,7 @@ public class Brain {
 	private int inputHeight, hiddenHeight, brainWidth;
 	private int height; // heighest layer
 	private Neuron[][] neurons;
-	private Creature creature;
+	transient private Creature creature;
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
 
