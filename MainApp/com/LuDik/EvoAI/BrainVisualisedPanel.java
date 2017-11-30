@@ -24,11 +24,13 @@ public class BrainVisualisedPanel extends JPanel {
 	private static int heighestLayer;
 
 	private static float maxWidthLine = 4;
+	private static float dimmedAlpha = 0.1f;
 
 	private CameraPanel cameraPanel;
 
 	private Ellipse2D selectedNeuron;
 	private Ellipse2D[][] neurons;
+	private boolean[][] isNeuronDimmed;
 	private Creature creature;
 	private Brain brain;
 	private double maxWeight;
@@ -39,32 +41,32 @@ public class BrainVisualisedPanel extends JPanel {
 	 */
 	public BrainVisualisedPanel(CameraPanel cameraPanel) {
 		BrainVisualisedPanel panel = this;
-//		addMouseListener(new MouseAdapter() {
-//
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				if (neurons == null) return;
-//				
-//
-//				Point clickPoint = e.getPoint();
-//				
-//				
-//				for (Ellipse2D[] neuronLayer : neurons) {
-//					for (Ellipse2D neuron : neuronLayer) {
-//						if (neuron.getBounds2D().contains(clickPoint)) {
-//							
-//							panel.setSelectedNeuron(neuron);
-//							System.out.println("test: " + neuron);
-//							return;
-//						}
-//					}
-//				}
-//				
-//				panel.setSelectedNeuron(null);
-//				
-//				
-//			}
-//		});
+		addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (neurons == null)
+					return;
+
+				Point clickPoint = e.getPoint();
+
+				for (Ellipse2D[] neuronLayer : neurons) {
+					for (Ellipse2D neuron : neuronLayer) {
+						if (neuron.getBounds2D().contains(clickPoint)) {
+
+							panel.setSelectedNeuron(neuron);
+							update();
+							System.out.println("test: " + neuron);
+							return;
+						}
+					}
+				}
+
+				panel.setSelectedNeuron(null); // if no neuron was clicked, this deselects the currently sellected
+				update();								// neuron
+
+			}
+		});
 		this.cameraPanel = cameraPanel;
 
 		heighestLayer = Math.max(inputLayerHeight, hiddenLayerHeight);
@@ -72,6 +74,10 @@ public class BrainVisualisedPanel extends JPanel {
 		neurons = new Ellipse2D[brainWidth][hiddenLayerHeight];
 		neurons[0] = new Ellipse2D[inputLayerHeight];
 		neurons[brainWidth - 1] = new Ellipse2D[inputLayerHeight];
+
+		isNeuronDimmed = new boolean[brainWidth][hiddenLayerHeight];
+		isNeuronDimmed[0] = new boolean[inputLayerHeight];
+		isNeuronDimmed[brainWidth - 1] = new boolean[inputLayerHeight];
 	}
 
 	@Override
@@ -88,12 +94,6 @@ public class BrainVisualisedPanel extends JPanel {
 		double neuronDist = (getWidth() - (brainWidth * gridSize)) / (brainWidth + 1); // the distance between the
 																						// neurons on the X-axis
 		float textSize = (float) (gridSize / 2);
-		
-		
-
-//		float widthMultiplier = Math.abs(maxWidthLine / (float) maxWeight);
-
-		// brain.getNeurons()[layer - 1][heightPos].getWeights()
 
 		for (int i = 0; i < brainWidth; i++) {
 
@@ -104,7 +104,9 @@ public class BrainVisualisedPanel extends JPanel {
 				layerHeight = hiddenLayerHeight;
 			}
 
-			double startHeight = (0.5 * getHeight()) - (0.5 * gridSize * ((2 * layerHeight) - 1)); // the height on which this layer starts
+			double startHeight = (0.5 * getHeight()) - (0.5 * gridSize * ((2 * layerHeight) - 1)); // the height on
+																									// which this layer
+																									// starts
 
 			for (int k = 0; k < layerHeight; k++) {
 				neurons[i][k] = new Ellipse2D.Double(i * (neuronDist + gridSize) + neuronDist,
@@ -126,7 +128,7 @@ public class BrainVisualisedPanel extends JPanel {
 					if (outputString.length() > 5) {
 						outputString = outputString.substring(0, 4);
 					}
-					
+
 					drawNeuronBody(g2d, textSize, neurons[i][k], outputString, bias, (float) maxBias);
 				}
 
@@ -143,15 +145,11 @@ public class BrainVisualisedPanel extends JPanel {
 		}
 
 	}
-	
+
 	/**
-	 * This method draws the circle and the output value in the circle representing the neuron.
-	 * @param g2d
-	 * @param textSize
-	 * @param neuronBody
-	 * @param outputString
+	 * Updates the panel. This method should be called everytime the state of the brain or of the window containing this 
+	 * panel is changed;
 	 */
-	
 
 	public void update() {
 		gridSize = Math.min(getHeight() / ((2 * heighestLayer) + 1), getWidth() / ((2 * brainWidth) + 1));
@@ -161,13 +159,18 @@ public class BrainVisualisedPanel extends JPanel {
 			brain = creature.getBrain();
 			maxWeight = determineMaxWeight(brain);
 			maxBias = determineMaxBias(brain);
-			
-			
+
 		}
 
 		repaint();
 	}
 
+	/**
+	 * Returns the highest absolute value of a weight of the brain parameter
+	 * @param brain
+	 * @return highest absolute value of a weight
+	 */
+	
 	private double determineMaxWeight(Brain brain) {
 		double maxWeight = 0;
 		double averageWeight = 0;
@@ -210,27 +213,51 @@ public class BrainVisualisedPanel extends JPanel {
 
 		averageBias /= amountOfBiases;
 
-		System.out.println("maxBias: " + maxBias);
-//		System.out.println("averageBias: " + averageBias);
+		// System.out.println("maxBias: " + maxBias);
+		// System.out.println("averageBias: " + averageBias);
 
 		return maxBias;
 	}
 
-	private void drawNeuronBody(Graphics2D g2d, float textSize, Ellipse2D neuronBody, String outputString, float bias, float maxBias) {
+	/**
+	 * This method draws the circle and the output value in the circle representing
+	 * the neuron.
+	 * 
+	 * @param g2d
+	 * @param textSize
+	 * @param neuronBody
+	 * @param outputString
+	 */
+	private void drawNeuronBody(Graphics2D g2d, float textSize, Ellipse2D neuronBody, String outputString, float bias,
+			float maxBias) {
+
+		int[] posArr = getPosOfNeuron(neuronBody);
+		int neuronLayer = posArr[0], neuronHeight = posArr[1];
 		
-		if (bias < 0) {
-			g2d.setPaint(new Color(1, 0, 0, Math.abs(bias / maxBias)));
+		float startAlpha;
+		if (isNeuronDimmed[neuronLayer][neuronHeight]) {
+			startAlpha = dimmedAlpha;
 		} else {
-			g2d.setPaint(new Color(0, 1, 0, Math.abs(bias / maxBias)));
+			startAlpha = 1;
 		}
 		
-		g2d.fill(neuronBody);
 		
-		g2d.setPaint(Color.BLACK);
-		drawCenteredText(g2d, (int) (neuronBody.getCenterX() + 0.5),
-				(int) (neuronBody.getCenterY() + 0.5), textSize, outputString);
+		
+		if (bias < 0) {
+			g2d.setPaint(new Color(1, 0, 0, startAlpha * Math.abs(bias / maxBias)));
+		} else {
+			g2d.setPaint(new Color(0, 1, 0, startAlpha * Math.abs(bias / maxBias)));
+		}
+
+		g2d.fill(neuronBody);
+
+		g2d.setPaint(new Color(0, 0, 0, startAlpha));
+		drawCenteredText(g2d, (int) (neuronBody.getCenterX() + 0.5), (int) (neuronBody.getCenterY() + 0.5), textSize,
+				outputString);
 		g2d.draw(neuronBody);
+		g2d.setPaint(Color.BLACK);
 	}
+
 	/**
 	 * This method draws the lines between the specified neuron and all the neurons
 	 * from the previous layer, and colours those lines with a width and color
@@ -246,17 +273,25 @@ public class BrainVisualisedPanel extends JPanel {
 
 	private void drawNeuronLines(Graphics2D g2d, int layer, int heightPos, float maxWeight) {
 		BasicStroke defStroke = (BasicStroke) g2d.getStroke();
-		
+
 		float widthMultiplier = Math.abs(maxWidthLine / maxWeight);
-		
+
 		for (int j = 0; j < neurons[layer - 1].length; j++) {
 
+			
 			Ellipse2D neuron = neurons[layer - 1][j];
-
+			
+			float startAlpha;
+			if (isNeuronDimmed[layer][heightPos] || isNeuronDimmed[layer - 1][j]) {
+				startAlpha = dimmedAlpha;
+			} else {
+				startAlpha = 1;
+			}
+			
 			float weight = (float) brain.getNeurons()[layer - 1][heightPos].getWeights()[j];
 
-			g2d.setPaint(new Color((float) Math.max(0, weight / Math.abs(weight)), 0f, 0f,
-					Math.abs(weight / maxWeight)));
+			g2d.setPaint(
+					new Color((float) Math.max(0, weight / Math.abs(weight)), 0f, 0f, startAlpha * Math.abs(weight / maxWeight)));
 
 			g2d.setStroke(new BasicStroke((float) Math.abs(weight) * widthMultiplier));
 
@@ -286,7 +321,49 @@ public class BrainVisualisedPanel extends JPanel {
 
 		g2d.drawString(text, cornerX, cornerY); // Draw the string.
 	}
+
+	/**
+	 * Sets the input as the selected neuron and dims all neurons in the same layer as the selectedNeuron.
+	 * @param selectedNeuron
+	 */
 	
-	
-	
+	public void setSelectedNeuron(Ellipse2D selectedNeuron) {
+		this.selectedNeuron = selectedNeuron;
+
+		for (int i = 0; i < isNeuronDimmed.length; i ++) {
+			for (int k = 0; k < isNeuronDimmed[i].length; k++) {
+				isNeuronDimmed[i][k] = false;
+			}
+		}
+		if (selectedNeuron != null) {
+			int[] posArr = getPosOfNeuron(selectedNeuron);
+			int neuronLayer = posArr[0], neuronHeight = posArr[1];
+
+			System.out.println("test: " + neuronLayer + "  " + neuronHeight);
+			
+			for (int j = 0; j < isNeuronDimmed[neuronLayer].length; j++) {
+				if (j != neuronHeight) {
+					isNeuronDimmed[neuronLayer][j] = true;
+				}
+			}
+
+		}
+	}
+
+	private int[] getPosOfNeuron(Ellipse2D selectedNeuron) {
+
+		int[] posArr;
+
+		for (int i = 0; i < neurons.length; i++) {
+			for (int k = 0; k < neurons[i].length; k++) {
+				if (selectedNeuron == neurons[i][k]) {
+					posArr = new int[] { i, k };
+					return posArr;
+				}
+			}
+		}
+
+		return null;
+	}
+
 }
