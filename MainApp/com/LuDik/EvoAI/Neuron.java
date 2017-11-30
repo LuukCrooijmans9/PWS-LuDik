@@ -48,7 +48,7 @@ public class Neuron {
 		double random = board.randomDouble();
 		if (random < deviation) {
 			deviation = (board.randomDouble() * 2 - 1) * deviation;
-			this.bias += deviation;
+			neuron.bias += deviation;
 		}
 		this.isActive = neuron.isActive;
 	}
