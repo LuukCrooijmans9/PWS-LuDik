@@ -13,9 +13,7 @@ public class Neuron {
 	double bias;
 	boolean isActive;
 	private double sigmoidOutput;
-	
-	
-	
+
 	/**
 	 * Creates a random Neuron
 	 */
@@ -37,18 +35,24 @@ public class Neuron {
 	 */
 
 	Neuron(Neuron neuron, double deviation, Board board) {
+		
+		this.weights = new double[neuron.getWeights().length];
 
-		this.weights = neuron.getWeights();
+		for (int i = 0; i < neuron.getWeights().length; i++) {
+			//System.out.println(neuron.getWeights()[i]);
+			this.weights[i] = neuron.getWeights()[i];
+		}
 		for (int i = 0; i < this.weights.length; i++) {
 			double random = board.randomDouble();
 			if (random < deviation) {
 				weights[i] += (board.randomDouble() * 2 - 1) * deviation;
 			}
 		}
+		this.bias = neuron.getBias();
 		double random = board.randomDouble();
 		if (random < deviation) {
 			deviation = (board.randomDouble() * 2 - 1) * deviation;
-			neuron.bias += deviation;
+			this.bias += deviation;
 		}
 		this.isActive = neuron.isActive;
 	}
@@ -62,7 +66,7 @@ public class Neuron {
 		for (int i = 0; i < inputs.length; i++) {
 			weightedSum += inputs[i] * weights[i];
 		}
-		
+
 		sigmoidOutput = Neuron.sigmoid(weightedSum);
 		return sigmoidOutput;
 	}
