@@ -123,17 +123,28 @@ public class Brain {
 	public double[] feedForward() {
 		hiddenOutputs = new double[height];
 		hiddenInputs = new double[height];
-		
+
 		// loop voor layers van neuralnet
-		hiddenOutputs = inputs;
+		for (int i = 0; i < inputs.length; i++) {
+			hiddenOutputs[i] = inputs[i];
+		}
 		for (int i = 0; i < brainWidth; i++) {
-			hiddenInputs = hiddenOutputs;
+			for (int j = 0; j < hiddenInputs.length; j++) {
+				hiddenInputs = hiddenOutputs;
+			}
 			for (int j = 0; j < height; j++) {
 				hiddenOutputs[j] = neurons[i][j].processNeuron(hiddenInputs);
 			}
 		}
-
-		outputs = hiddenOutputs;
+		for (int i = 0; i < inputs.length; i++) {
+			outputs[i] = hiddenOutputs[i];
+		}
+		
+		if (creature.isSelected()) {
+			for (int i = 0; i < inputs.length; i++) {
+				System.out.println(i + ": " + inputs[i]);
+			}
+		}
 		return outputs;
 	}
 
