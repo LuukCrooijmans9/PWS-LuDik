@@ -1,10 +1,7 @@
 package com.LuDik.EvoAI;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -32,7 +29,7 @@ public class Board {
 	 */
 	private Map map;
 	private ArrayList<LandTile> landTiles;
-	private ArrayList<Point2D> spawnPoints; // this variable is also dependant on the CREATURE_SIZE variable
+	transient private ArrayList<Point2D> spawnPoints; // this variable is also dependant on the CREATURE_SIZE variable
 
 	/**
 	 * This board's TimeKeeper object
@@ -42,12 +39,10 @@ public class Board {
 	/**
 	 * Variables for the creatures:
 	 */
-	transient private ArrayList<Creature> livingCreatures; // all creatures currently alive in this Board
-	transient private ArrayList<Creature> allCreaturesOfCurrentPeriod; // all creatures that are part of the current
-																		// Period,
-	// dead
-	// or alive
-	transient private ArrayList<Creature> deadCreaturesOfCurrentPeriod;
+	ArrayList<Creature> livingCreatures; // all creatures currently alive in this Board
+	ArrayList<Creature> allCreaturesOfCurrentPeriod; // all creatures that are part of the current
+														// Period, dead or alive
+	transient ArrayList<Creature> deadCreaturesOfCurrentPeriod;
 
 	/**
 	 * Statistics about previous Period:
@@ -74,6 +69,7 @@ public class Board {
 	private long evolutionSeed;
 	private long currentSeed;
 	private Random mainRNG;
+	private ArrayList<Double> foodValues;
 
 	/**
 	 * Constructor for Board. Creates the map and the spawnpoints and the
@@ -117,6 +113,7 @@ public class Board {
 		setAverageAgeArray(new ArrayList<Double>());
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
 		accomplishmentsOfTheDead = new ArrayList<double[]>();
+		foodValues = new ArrayList<Double>();
 
 		amountOfCreaturesBornInLastPeriod = 0;
 		amountOfRandomCreaturesAddedInLastPeriod = 0;
@@ -254,6 +251,7 @@ public class Board {
 	 */
 
 	private ArrayList<Point2D> generateSpawnPoints() {
+		landTiles = map.getLandTiles();
 
 		ArrayList<Point2D> spawnPoints = new ArrayList<Point2D>();
 		spawnPoints.ensureCapacity(
@@ -263,13 +261,16 @@ public class Board {
 		 * The code below checks for each given tile how many creatures can spawn on it
 		 * and where, and adds these to the spawnPoints arraylist.
 		 */
-
+		//System.out.println(landTiles.get(0));
 		for (LandTile landTile : landTiles) {
 			for (int i = 0; i < TILE_SIZE / (CREATURE_SIZE + 2) - 1; i++) {
 				for (int k = 0; k < TILE_SIZE / (CREATURE_SIZE + 2) - 1; k++) {
-					spawnPoints
-							.add(new Point2D.Double(landTile.getTileRect().getX() + (i + 0.5d) * ((CREATURE_SIZE + 2d)),
-									landTile.getTileRect().getY() + (k + 0.5d) * ((CREATURE_SIZE + 2d))));
+					//System.out.println(landTile.getTileRect());
+					Point2D.Double point = new Point2D.Double(
+							landTile.getTileRect().getX() + (i + 0.5d) * ((CREATURE_SIZE + 2d)),
+							landTile.getTileRect().getY() + (k + 0.5d) * ((CREATURE_SIZE + 2d)));
+					//System.out.println(point);
+					spawnPoints.add(point);
 				}
 			}
 		}
@@ -285,25 +286,27 @@ public class Board {
 		 * The code below checks if the period has ended, and handles the switch from
 		 * old period to new period.
 		 */
-
+		System.out.println("step 1");
 		if (livingCreatures.size() == 0) {
 			// this.updateStatistics((long) generation);
+			System.out.println("step 2");
 
 			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets
 									// them.
 
 			this.spawnCreatures(); // spawns a new generation of creatures based off of the old generation.
 		}
-
+		System.out.println("step 3");
 		if (livingCreatures.size() < ConfigSingleton.INSTANCE.minAmountCreatures) {
 			spawnRandomCreature((int) randomLong());
+			System.out.println("step 4");
 		}
 
 		/**
 		 * The code below invokes doStep() on all currently alive creatures, and checks
 		 * if they're still alive after their step.
 		 */
-
+		System.out.println("step 5");
 		for (Creature crtr : new ArrayList<Creature>(livingCreatures)) {
 
 			if (crtr.isControlled()) {
@@ -319,19 +322,21 @@ public class Board {
 				amountOfCreaturesDiedInLastPeriod++;
 			}
 		}
+		System.out.println("step 6");
 
 		/**
 		 * The code below makes all tiles of map grow (increases their food value based
 		 * on their fertility value)
 		 */
-
+		System.out.println("step 7");
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
 				tile.calculateNextFood();
 			}
 		}
-
+		System.out.println("step 8");
 		cameraPanel.update();
+		System.out.println("step 9");
 
 	}
 
@@ -473,10 +478,72 @@ public class Board {
 	}
 
 	public void saveSimulation() {
+		if(foodValues == null) {
+			foodValues = new ArrayList<Double>();
+		}
+		for (int i = 0; i < landTiles.size(); i++) {
+			foodValues.add(landTiles.get(i).getFoodValue());
+		}
+		System.out.println("Saving foodValues: " + foodValues);
+		
 		Saver.saveObject(ConfigSingleton.INSTANCE, "Configuration", "ConfigSingleton");
+		for (int i = 0; i < allCreaturesOfCurrentPeriod.size(); i++) {
+			allCreaturesOfCurrentPeriod.get(i).prepareSave();
+		}
+		for (int i = 0; i < livingCreatures.size(); i++) {
+			livingCreatures.get(i).prepareSave();
+		}
+		map.prepareSave();
 		Saver.saveObject(this, "Board", "Board");
-		for (int i = 0; i < this.getLivingCreatures().size(); i++) {
-			Saver.saveObject(this.getLivingCreatures().get(i), "Creatures", i + "_Creature");
+		reloadSimulation();
+		// for (int i = 0; i < this.getLivingCreatures().size(); i++) {
+		//
+		// Saver.saveObject(this.getLivingCreatures().get(i), "Creatures",
+		// "Fitness_"+String.format("%05d", (int)
+		// ((this.getLivingCreatures().get(i).getFitness()) * 100d)) + "_Creature_" +
+		// i);
+		// }
+	}
+
+	public void reloadSimulation() {
+
+		// if(livingCreatures.size() == 0) {
+		//
+		// }
+		map.reloadSave();
+		for (int i = 0; i < allCreaturesOfCurrentPeriod.size(); i++) {
+			allCreaturesOfCurrentPeriod.get(i).reloadSave(this);
+		}
+		for (int i = 0; i < livingCreatures.size(); i++) {
+			livingCreatures.get(i).reloadSave(this);
+		}
+	}
+
+	public void loadBoard(DARWIN mainFrame) {
+		if (this.mainFrame == null) {
+			this.mainFrame = mainFrame;
+		}
+		if (deadCreaturesOfCurrentPeriod == null) {
+			deadCreaturesOfCurrentPeriod = new ArrayList<Creature>();
+		}
+		if (timeKeeper == null) {
+			timeKeeper = new TimeKeeper(this);
+			infoPanel = mainFrame.getInfoPanel();
+			timeKeeper.setInfoPanel(infoPanel);
+		}
+		System.out.println("foodValues: " + foodValues);
+		
+		map = new Map();
+		map.loadMap(foodValues);
+		for (int i = 0; i < livingCreatures.size(); i++) {
+			livingCreatures.get(i).loadCreature();
+		}
+		if (spawnPoints == null) {
+			spawnPoints = generateSpawnPoints();
+		}
+
+		if (landTiles == null) {
+			landTiles = map.getLandTiles();
 		}
 	}
 

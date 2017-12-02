@@ -11,7 +11,7 @@ public class Brain {
 	private int inputHeight, hiddenHeight, brainWidth;
 	private int height; // heighest layer
 	private Neuron[][] neurons;
-	transient private Creature creature;
+	private Creature creature;
 	private double[] inputs, hiddenOutputs, hiddenInputs, outputs;
 	private float[] rgbColor;
 
@@ -140,12 +140,15 @@ public class Brain {
 			outputs[i] = hiddenOutputs[i];
 		}
 		
-		if (creature.isSelected()) {
-			for (int i = 0; i < inputs.length; i++) {
-				System.out.println(i + ": " + inputs[i]);
-			}
-		}
 		return outputs;
+	}
+	
+	public void prepareSave() {
+		creature = null;
+	}
+	
+	public void reloadSave(Creature crtr) {
+		creature = crtr;
 	}
 
 	public int getBrainWidth() {

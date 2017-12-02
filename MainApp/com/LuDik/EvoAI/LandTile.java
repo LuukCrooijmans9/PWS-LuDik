@@ -1,7 +1,6 @@
 package com.LuDik.EvoAI;
 
 import java.awt.Color;
-import java.awt.geom.Rectangle2D;
 
 /**
  * An instance of this class is a tile with a fertility and a foodValue. The foodValue can be influenced from without.
@@ -11,6 +10,7 @@ import java.awt.geom.Rectangle2D;
 
 public class LandTile extends Tile {
 	private double fertility; // how quickly the foodvalue increases
+
 	private double foodValue; // how much food there is on this LandTile
 	private double foodColor; // the green component of the tileColor, which is determined by the foodvalue
 	private double tileMaxFoodValue; // the maximum value of foodvalue
@@ -77,6 +77,14 @@ public class LandTile extends Tile {
 	public void refill() {
 		foodValue = tileMaxFoodValue;
 		tileColor = new Color((float) fertility, (float) foodColor, 0f);
+	}
+
+	public double getFoodValue() {
+		return foodValue;
+	}
+
+	public void setFoodValue(double foodValue) {
+		this.foodValue = foodValue;
 	}
 	
 	

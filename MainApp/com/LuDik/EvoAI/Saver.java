@@ -9,27 +9,28 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Saver {
 
-	public static void saveObject(Object object,String specificMap, String fileName) {
+	public static void saveObject(Object object, String specificMap, String fileName) {
+		LocalDate localDate = LocalDate.now();
+		String date = (DateTimeFormatter.ofPattern("dd.MM").format(localDate));
 		// 1. Convert object to JSON string
 		Gson gson = new Gson();
 		// String json = gson.toJson(object);
 		System.out.println(object.getClass());
-		File file = new File("C:\\" + "DARWINSAVE" + "\\" + specificMap + "\\" + fileName + ".json");
+		File file = new File("C:\\" + "DARWINSAVE" + "\\" + date + "\\" + specificMap + "\\" + fileName + ".json");
 		file.getParentFile().mkdirs();
 
 		// 2. Convert object to JSON string and save into a file directly
-		System.out.println("Starting on: " + object);
+		System.out.println(file.getAbsolutePath());
 		try (FileWriter writer = new FileWriter(file.getPath())) {
-			System.out.println("step 1");
 			gson.toJson(object, writer);
-			System.out.println("Fin");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Finished: " + object);
 		System.out.println("Saved to: " + file.getPath());
 	}
 

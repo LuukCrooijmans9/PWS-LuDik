@@ -44,7 +44,7 @@ public class DARWIN extends JFrame {
 		setResizable(false);
 		pack();
 					
-		setTitle("EvoAI");
+		setTitle("DARWIN");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 	}

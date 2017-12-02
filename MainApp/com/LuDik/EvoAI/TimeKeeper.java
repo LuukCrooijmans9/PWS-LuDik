@@ -89,9 +89,9 @@ public class TimeKeeper implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				Saver.saveObject(board, "Board", "Board");
-				Saver.saveObject(board.getLivingCreatures().get(0), "Creatures", 0+"_Creature");
-				Saver.saveObject(board.getLivingCreatures().get(0).getBrain(), "Creatures", 0 + "_Brain");
+//				Saver.saveObject(board, "Board", "Board");
+//				Saver.saveObject(board.getLivingCreatures().get(0), "Creatures", 0+"_Creature");
+//				Saver.saveObject(board.getLivingCreatures().get(0).getBrain(), "Creatures", 0 + "_Brain");
 
 			}
 

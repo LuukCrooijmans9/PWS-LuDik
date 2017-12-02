@@ -9,13 +9,13 @@ import java.awt.geom.Rectangle2D;
  * which must be present in every Tile. A tile is a square with a certain color, size and position.
  */
 
-public abstract class Tile {
+public class Tile {
 
 	int upperLeftX, upperLeftY;
 	static int tileSize = ConfigSingleton.INSTANCE.tileSize;
 	boolean isWaterTile;
 
-	Rectangle2D tileRect = new Rectangle2D.Double();
+	transient Rectangle2D tileRect = new Rectangle2D.Double();
 
 	Color tileColor;
 
@@ -26,13 +26,19 @@ public abstract class Tile {
 	}
 
 	void draw(Graphics2D g2d) {
-
 		g2d.setColor(tileColor);
 		g2d.fill(tileRect);
 		g2d.setColor(Color.BLACK);
 		g2d.draw(tileRect);
 	}
-
+	
+	void prepareSave() {
+		tileRect = null;
+	}
+	void reloadSave() {
+		tileRect = new Rectangle2D.Float((float) upperLeftX, (float) upperLeftY, (float) tileSize, (float) tileSize);
+	}
+	
 
 	public Rectangle2D getTileRect() {
 		return tileRect;

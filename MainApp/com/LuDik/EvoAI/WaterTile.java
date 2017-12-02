@@ -1,7 +1,6 @@
 package com.LuDik.EvoAI;
 
 import java.awt.Color;
-import java.awt.geom.Rectangle2D;
 
 /**
  * An instance of this class is a tile with a blue color, and if NEED_DRINKING is true, the method drinkWaterTile can return

@@ -60,14 +60,14 @@ public class Creature {
 
 	private Color rightEyeColor, centerEyeColor, leftEyeColor;
 	private double eyeDeviation, eyeLength, rightEyeX, rightEyeY, leftEyeX, leftEyeY;
-	transient private Eye eye;
+	private Eye eye;
 
 	// Where it is ALIVE
-	transient private Board board;
+	private Board board;
 
 	// Visuals
 	private Color creatureColor;
-	Ellipse2D creatureShape;
+	transient Ellipse2D creatureShape;
 	private boolean selected;
 	private boolean controlled;
 	private int generation;
@@ -278,6 +278,7 @@ public class Creature {
 			fat -= ConfigSingleton.INSTANCE.startingFat;
 			Creature crtr = board.spawnSingleParentCreature(this, ConfigSingleton.INSTANCE.evolutionFactor);
 			children.add(crtr);
+			//System.out.println(crtr);
 			amountOfChildren++;
 		}
 	}
@@ -352,6 +353,25 @@ public class Creature {
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getRightX(), eye.getRightY()));
 		g2d.setColor(Color.BLUE);
 		g2d.draw(new Line2D.Double(getXPos(), getYPos(), eye.getLeftX(), eye.getLeftY()));
+	}
+
+	public void prepareSave() {
+		board = null;
+		eye.prepareSave();
+		brain.prepareSave();
+		parent = null;
+	}
+
+	public void reloadSave(Board board) {
+		this.board = board;
+		brain.reloadSave(this);
+		creatureShape = new Ellipse2D.Double(getXPos() - (creatureSize / 2), getYPos() - (creatureSize / 2),
+				creatureSize, creatureSize);
+		eye = new Eye(this, this.board, eyeLength, eyeDeviation);
+	}
+
+	public void loadCreature() {
+		children = new ArrayList<Creature>();
 	}
 
 	// Calculates the fitness

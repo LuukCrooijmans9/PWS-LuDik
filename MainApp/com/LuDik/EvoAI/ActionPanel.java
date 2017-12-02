@@ -2,10 +2,13 @@ package com.LuDik.EvoAI;
 
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
@@ -14,6 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * This class is the panel that contains all the interactive graphical
@@ -48,6 +55,7 @@ public class ActionPanel extends JPanel {
 
 	private Button startBoardBtn;
 	private Button saveBtn;
+	private Button loadBtn;
 	private Button pauseBtn;
 	private Button followCrtrBtn;
 	private Button controlCrtrBtn;
@@ -113,6 +121,8 @@ public class ActionPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
+				board = new Board(mainFrame);
+				
 				infoPanel = mainFrame.getInfoPanel();
 				cameraPanel = mainFrame.getCameraPanel();
 				showBrainBtn.setEnabled(true);
@@ -121,7 +131,7 @@ public class ActionPanel extends JPanel {
 					timeKeeper = null;
 				}
 
-				board = new Board(mainFrame);
+				
 
 				infoPanel.setBoard(board);
 
@@ -133,10 +143,11 @@ public class ActionPanel extends JPanel {
 
 				pauseBtn.setEnabled(true);
 				saveBtn.setEnabled(true);
+				loadBtn.setEnabled(false);
 
 			};
 		});
-		
+
 		saveBtn = new Button("Save");
 
 		saveBtn.addActionListener(new ActionListener() {
@@ -144,10 +155,75 @@ public class ActionPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 
+				synchronized (timeKeeper) {
+					timeKeeper.setSaving(true);
+				}
+
+			};
+		});
+
+		saveBtn = new Button("Save");
+		saveBtn.setEnabled(false);
+		saveBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
 
 				synchronized (timeKeeper) {
 					timeKeeper.setSaving(true);
 				}
+
+			};
+		});
+
+		loadBtn = new Button("Load");
+
+		loadBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+
+				Gson gson = new Gson();
+				Board brd = null;
+				try {
+					brd = gson.fromJson(new FileReader("C:\\DARWINSAVE\\01.12\\Board\\Board.json"), Board.class);
+				} catch (JsonSyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonIOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (brd != null) {
+					board = brd;
+				}else {
+					System.out.println("Couldn't Find File");
+					return;
+				}
+				System.out.println(board);
+				
+				infoPanel = mainFrame.getInfoPanel();
+				cameraPanel = mainFrame.getCameraPanel();
+				showBrainBtn.setEnabled(true);
+
+				if (timeKeeper != null) {
+					timeKeeper = null;
+				}
+
+
+				infoPanel.setBoard(board);
+
+				board.reloadSimulation();
+				board.loadBoard(mainFrame);
+				cameraPanel.update();
+				timeKeeper = board.getTimeKeeper();
+				timeKeeper.start();
+
+				pauseBtn.setEnabled(true);
+				saveBtn.setEnabled(true);
 
 			};
 		});
@@ -251,14 +327,14 @@ public class ActionPanel extends JPanel {
 		 * the brain, the neural network of the selected creature.
 		 */
 
-		showBrainBtn = new Button("show brain" );
+		showBrainBtn = new Button("show brain");
 		showBrainBtn.setEnabled(false);
 
 		showBrainBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				
+
 				if (brainDialog == null || !brainDialog.isVisible()) {
 					System.out.println("test: " + brainDialog);
 					try {
@@ -269,7 +345,7 @@ public class ActionPanel extends JPanel {
 						e.printStackTrace();
 					}
 				} else {
-					
+
 				}
 			};
 		});
@@ -285,6 +361,7 @@ public class ActionPanel extends JPanel {
 		add(startBoardBtn);
 		add(pauseBtn);
 		add(saveBtn);
+		add(loadBtn);
 		add(displayBoardBtn);
 		add(followCrtrBtn);
 		add(controlCrtrBtn);

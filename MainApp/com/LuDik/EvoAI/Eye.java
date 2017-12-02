@@ -19,6 +19,8 @@ public class Eye {
 
 	void look() {
 		double rightRadianDirection, leftRadianDirection;
+
+
 		rightRadianDirection = Math.toRadians(creature.getDirection() - eyeDeviation);
 		rightX = (Math.sin(rightRadianDirection) * eyeLength) + creature.getXPos();
 		rightY = (Math.cos(rightRadianDirection) * eyeLength) + creature.getYPos();
@@ -26,6 +28,8 @@ public class Eye {
 		xTile = Creature.posToTile(rightX);
 		yTile = Creature.posToTile(rightY);
 
+		
+		
 		if (xTile < 0 || yTile < 0 || xTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1
 				|| yTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1) {
 			rightEyeColor = Color.WHITE;
@@ -39,7 +43,8 @@ public class Eye {
 
 		xTile = Creature.posToTile(leftX);
 		yTile = Creature.posToTile(leftY);
-
+		
+		
 		if (xTile < 0 || yTile < 0 || xTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1
 				|| yTile > ConfigSingleton.INSTANCE.mapSizeInTiles - 1) {
 			creature.setLeftEyeColor(Color.WHITE);
@@ -51,6 +56,16 @@ public class Eye {
 		yTile = creature.getyTile();
 		creature.setCenterEyeColor(board.getMap().getTiles()[xTile][yTile].getTileColor());
 		
+	}
+	
+	public void prepareSave() {
+		creature = null;
+		board = null;
+	}
+	
+	public void reloadSave(Creature crtr, Board brd) {
+		this.creature = crtr;
+		this.board = brd;
 	}
 
 	public double getRightX() {
