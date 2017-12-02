@@ -42,6 +42,80 @@ public class Map {
 	 * all taken from ConfigSingleton.INSTANCE
 	 * 
 	 */
+	
+	public Map(long Seed) {
+		this.mapSmoothness = ConfigSingleton.INSTANCE.mapSmoothness;
+		this.mapSizeInTiles = ConfigSingleton.INSTANCE.mapSizeInTiles;
+		this.tileSize = ConfigSingleton.INSTANCE.tileSize;
+		this.waterPercentage = ConfigSingleton.INSTANCE.waterPercentage;
+		this.mapGenSeed = Seed;
+
+		Random seedGenerator = new Random(this.mapGenSeed); // is used to ensure that one seed leads to the same map
+															// everytime
+		heightSeed = seedGenerator.nextDouble() * 255d;
+		fertilitySeed = seedGenerator.nextDouble() * 255d;
+
+		tileHeights = new Double[mapSizeInTiles][mapSizeInTiles];
+		tiles = new Tile[mapSizeInTiles][mapSizeInTiles];
+		landTiles = new ArrayList<LandTile>();
+		waterTiles = new ArrayList<WaterTile>();
+
+		/**
+		 * The code below generates the height (altitude) of all the tiles, and
+		 * determines the height of the waterlevel. Every tile with a height lower than
+		 * or equal to the waterlevel is a WaterTile. If the height is higher than the
+		 * waterlevel, a fertility for that tile is generated and that tile becomes a
+		 * LandTile. In this way, a 2D grid of LandTiles and WaterTiles is achieved.
+		 */
+
+		generateTileHeights(tileHeights, mapSmoothness, heightSeed);
+
+		DescriptiveStatistics tileHeightsStats = getArray2DStats(tileHeights);
+
+		System.out.println("standard deviation with apache: " + tileHeightsStats.getStandardDeviation());
+		System.out.println("median with apache: " + tileHeightsStats.getPercentile(waterPercentage));
+
+		waterLevel = tileHeightsStats.getPercentile(waterPercentage); // determines how high the waterlevel should be in
+																		// order to get the desired water percentage
+
+		for (int i = 0; i < tileHeights.length; i++) {
+			for (int k = 0; k < tileHeights[0].length; k++) {
+
+				if (tileHeights[i][k] < waterLevel) {
+					tiles[i][k] = new WaterTile(i * tileSize, k * tileSize);
+					waterTiles.add((WaterTile) tiles[i][k]);
+					
+
+				} else {
+					double fertility = ImprovedNoise.noise(i * mapSmoothness, k * mapSmoothness, fertilitySeed); // the
+																													// same
+																													// way
+																													// of
+																													// generating
+																													// a
+																													// value
+																													// as
+																													// the
+																													// height,
+																													// only
+																													// with
+																													// a
+																													// different
+																													// seed
+					fertility = (fertility + 1) / 2; // ensures that the fertility ranges from 0 to 1
+
+					tiles[i][k] = new LandTile(i * tileSize, k * tileSize, (float) fertility);
+					landTiles.add((LandTile) tiles[i][k]);
+				}
+
+			}
+
+		}
+		System.out.println("landTiles: " + landTiles.size());
+		System.out.println("waterTiles: " + waterTiles.size());
+	}
+		
+	
 
 	public Map() {
 
@@ -228,11 +302,11 @@ public class Map {
 	}
 
 	public void loadMap(ArrayList<Double> foodValues) {
-//		for (int i = 0; i < landTiles.size(); i++) {
-//			//System.out.println(landTiles.get(i));
-//			landTiles.get(i).setFoodValue(foodValues.get(i));
-//		}
-		
+		for (int i = 0; i < landTiles.size(); i++) {
+			System.out.println(landTiles.get(i));
+			landTiles.get(i).setFoodValue(foodValues.get(i));
+		}
+
 
 	}
 

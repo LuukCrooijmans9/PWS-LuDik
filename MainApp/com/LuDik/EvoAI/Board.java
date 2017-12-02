@@ -67,6 +67,7 @@ public class Board {
 	private final int TILE_SIZE;
 
 	private long evolutionSeed;
+	private long mapGenSeed;
 	private long currentSeed;
 	private Random mainRNG;
 	private ArrayList<Double> foodValues;
@@ -86,6 +87,7 @@ public class Board {
 		infoPanel = mainFrame.getInfoPanel();
 
 		currentSeed = ConfigSingleton.INSTANCE.mainSeed;
+		setMapGenSeed(ConfigSingleton.INSTANCE.mapGenSeed);
 		BEGIN_AMOUNT_CREATURES = ConfigSingleton.INSTANCE.beginAmountCreatures;
 		CREATURE_SIZE = ConfigSingleton.INSTANCE.crtrSize;
 		EVOLUTION_FACTOR = ConfigSingleton.INSTANCE.evolutionFactor;
@@ -93,7 +95,7 @@ public class Board {
 		AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION = ConfigSingleton.INSTANCE.randomCreaturesPerGeneration;
 		TILE_SIZE = ConfigSingleton.INSTANCE.tileSize;
 
-		evolutionSeed = this.randomLong();
+		
 
 		map = new Map(); // creates a new map according to the values in ConfigSingleton.INSTANCE
 
@@ -481,8 +483,8 @@ public class Board {
 		if(foodValues == null) {
 			foodValues = new ArrayList<Double>();
 		}
-		for (int i = 0; i < landTiles.size(); i++) {
-			foodValues.add(landTiles.get(i).getFoodValue());
+		for (int i = 0; i < map.getLandTiles().size(); i++) {
+			foodValues.add(map.getLandTiles().get(i).getFoodValue());
 		}
 		System.out.println("Saving foodValues: " + foodValues);
 		
@@ -533,7 +535,7 @@ public class Board {
 		}
 		System.out.println("foodValues: " + foodValues);
 		
-		map = new Map();
+		map = new Map(mapGenSeed);
 		map.loadMap(foodValues);
 		for (int i = 0; i < livingCreatures.size(); i++) {
 			livingCreatures.get(i).loadCreature();
@@ -545,6 +547,10 @@ public class Board {
 		if (landTiles == null) {
 			landTiles = map.getLandTiles();
 		}
+		
+		amountOfCreaturesBornInLastPeriod = 0;
+		amountOfRandomCreaturesAddedInLastPeriod = 0;
+		amountOfCreaturesDiedInLastPeriod = 0;
 	}
 
 	public Map getMap() {
@@ -609,6 +615,14 @@ public class Board {
 
 	public void setAverageTotalFoodEatenArray(ArrayList<Double> averageTotalFoodEatenArray) {
 		this.averageTotalFoodEatenArray = averageTotalFoodEatenArray;
+	}
+
+	public long getMapGenSeed() {
+		return mapGenSeed;
+	}
+
+	public void setMapGenSeed(long mapGenSeed) {
+		this.mapGenSeed = mapGenSeed;
 	}
 
 }
