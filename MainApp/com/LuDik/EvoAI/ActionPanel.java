@@ -186,7 +186,7 @@ public class ActionPanel extends JPanel {
 				Gson gson = new Gson();
 				Board brd = null;
 				try {
-					brd = gson.fromJson(new FileReader("C:\\DARWINSAVE\\01.12\\Board\\Board.json"), Board.class);
+					brd = gson.fromJson(new FileReader("C:\\DARWINSAVE\\02.12\\Board\\Board.json"), Board.class);
 				} catch (JsonSyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -204,6 +204,7 @@ public class ActionPanel extends JPanel {
 					return;
 				}
 				System.out.println(board);
+				mainFrame.setBoard(board);
 				
 				infoPanel = mainFrame.getInfoPanel();
 				cameraPanel = mainFrame.getCameraPanel();
