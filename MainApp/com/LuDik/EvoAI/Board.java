@@ -288,27 +288,27 @@ public class Board {
 		 * The code below checks if the period has ended, and handles the switch from
 		 * old period to new period.
 		 */
-		System.out.println("step 1");
+		
 		if (livingCreatures.size() == 0) {
 			// this.updateStatistics((long) generation);
-			System.out.println("step 2");
+		
 
 			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets
 									// them.
 
 			this.spawnCreatures(); // spawns a new generation of creatures based off of the old generation.
 		}
-		System.out.println("step 3");
+	
 		if (livingCreatures.size() < ConfigSingleton.INSTANCE.minAmountCreatures) {
 			spawnRandomCreature((int) randomLong());
-			System.out.println("step 4");
+			
 		}
 
 		/**
 		 * The code below invokes doStep() on all currently alive creatures, and checks
 		 * if they're still alive after their step.
 		 */
-		System.out.println("step 5");
+	
 		for (Creature crtr : new ArrayList<Creature>(livingCreatures)) {
 
 			if (crtr.isControlled()) {
@@ -324,21 +324,21 @@ public class Board {
 				amountOfCreaturesDiedInLastPeriod++;
 			}
 		}
-		System.out.println("step 6");
+	
 
 		/**
 		 * The code below makes all tiles of map grow (increases their food value based
 		 * on their fertility value)
 		 */
-		System.out.println("step 7");
+
 		for (Tile[] tileArray : map.getTiles()) {
 			for (Tile tile : tileArray) {
 				tile.calculateNextFood();
 			}
 		}
-		System.out.println("step 8");
+
 		cameraPanel.update();
-		System.out.println("step 9");
+
 
 	}
 
@@ -498,20 +498,10 @@ public class Board {
 		map.prepareSave();
 		Saver.saveObject(this, "Board", "Board");
 		reloadSimulation();
-		// for (int i = 0; i < this.getLivingCreatures().size(); i++) {
-		//
-		// Saver.saveObject(this.getLivingCreatures().get(i), "Creatures",
-		// "Fitness_"+String.format("%05d", (int)
-		// ((this.getLivingCreatures().get(i).getFitness()) * 100d)) + "_Creature_" +
-		// i);
-		// }
 	}
 
 	public void reloadSimulation() {
 
-		// if(livingCreatures.size() == 0) {
-		//
-		// }
 		map.reloadSave();
 		for (int i = 0; i < allCreaturesOfCurrentPeriod.size(); i++) {
 			allCreaturesOfCurrentPeriod.get(i).reloadSave(this);

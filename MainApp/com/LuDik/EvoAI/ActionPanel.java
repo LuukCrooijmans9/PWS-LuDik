@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
@@ -122,7 +124,7 @@ public class ActionPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				board = new Board(mainFrame);
-				
+
 				infoPanel = mainFrame.getInfoPanel();
 				cameraPanel = mainFrame.getCameraPanel();
 				showBrainBtn.setEnabled(true);
@@ -130,8 +132,6 @@ public class ActionPanel extends JPanel {
 				if (timeKeeper != null) {
 					timeKeeper = null;
 				}
-
-				
 
 				infoPanel.setBoard(board);
 
@@ -185,8 +185,11 @@ public class ActionPanel extends JPanel {
 
 				Gson gson = new Gson();
 				Board brd = null;
+				LocalDate localDate = LocalDate.now();
+				String date = (DateTimeFormatter.ofPattern("dd.MM").format(localDate));
 				try {
-					brd = gson.fromJson(new FileReader("C:\\DARWINSAVE\\02.12\\Board\\Board.json"), Board.class);
+					brd = gson.fromJson(new FileReader("C:\\DARWINSAVE\\" + date + "\\Board\\Board.json"),
+							Board.class);
 				} catch (JsonSyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -199,13 +202,13 @@ public class ActionPanel extends JPanel {
 				}
 				if (brd != null) {
 					board = brd;
-				}else {
+				} else {
 					System.out.println("Couldn't Find File");
 					return;
 				}
 				System.out.println(board);
 				mainFrame.setBoard(board);
-				
+
 				infoPanel = mainFrame.getInfoPanel();
 				cameraPanel = mainFrame.getCameraPanel();
 				showBrainBtn.setEnabled(true);
@@ -213,7 +216,6 @@ public class ActionPanel extends JPanel {
 				if (timeKeeper != null) {
 					timeKeeper = null;
 				}
-
 
 				infoPanel.setBoard(board);
 
