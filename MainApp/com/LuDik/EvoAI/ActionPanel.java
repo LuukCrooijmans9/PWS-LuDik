@@ -188,7 +188,7 @@ public class ActionPanel extends JPanel {
 				LocalDate localDate = LocalDate.now();
 				String date = (DateTimeFormatter.ofPattern("dd.MM").format(localDate));
 				try {
-					brd = gson.fromJson(new FileReader("C:\\DARWINSAVE\\" + date + "\\Board\\Board.json"),
+					brd = gson.fromJson(new FileReader("DARWINSAVE\\Board\\Board.json"),
 							Board.class);
 				} catch (JsonSyntaxException e) {
 					// TODO Auto-generated catch block

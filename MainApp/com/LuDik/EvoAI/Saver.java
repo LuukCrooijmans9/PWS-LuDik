@@ -15,13 +15,11 @@ import java.time.format.DateTimeFormatter;
 public class Saver {
 
 	public static void saveObject(Object object, String specificMap, String fileName) {
-		LocalDate localDate = LocalDate.now();
-		String date = (DateTimeFormatter.ofPattern("dd.MM").format(localDate));
 		// 1. Convert object to JSON string
 		Gson gson = new Gson();
 		// String json = gson.toJson(object);
 		System.out.println(object.getClass());
-		File file = new File("C:\\" + "DARWINSAVE" + "\\" + date + "\\" + specificMap + "\\" + fileName + ".json");
+		File file = new File("DARWINSAVE" + "\\" + specificMap + "\\" + fileName + ".json");
 		file.getParentFile().mkdirs();
 
 		// 2. Convert object to JSON string and save into a file directly
