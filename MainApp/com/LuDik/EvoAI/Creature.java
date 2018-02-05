@@ -251,7 +251,7 @@ public class Creature {
 				+ (creatureSize / 2) < ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) {
 			setXPos(getXPos() + deltaXPos);
 		} else if (getXPos() + deltaXPos - (creatureSize / 2) <= 0) {
-			setXPos(0);
+			setXPos(0.1);
 		} else {
 			setXPos((ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) - 0.1);
 		}
@@ -260,7 +260,7 @@ public class Creature {
 				+ (creatureSize / 2) < ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) {
 			setYPos(getYPos() + deltaYPos);
 		} else if (getYPos() + deltaYPos - (creatureSize / 2) <= 0) {
-			setYPos(0);
+			setYPos(0.1);
 		} else {
 			setYPos((ConfigSingleton.INSTANCE.mapSizeInTiles * ConfigSingleton.INSTANCE.tileSize) - 0.1);
 		}

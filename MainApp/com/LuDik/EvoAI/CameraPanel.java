@@ -114,9 +114,9 @@ public class CameraPanel extends JPanel {
 		g2d.setTransform(saveXform);
 		
 //		debug lijnen, uncomment als je twee lijnen die door het midden van het scherm gaan wil hebben.
-		g2d.setColor(Color.green);
-		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
-		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
+//		g2d.setColor(Color.green);
+//		g2d.drawLine(0, CPWIDTH/2, CPWIDTH, CPWIDTH/2);
+//		g2d.drawLine(CPWIDTH/2, 0, CPWIDTH/2, CPWIDTH);
 		 
 		
 		
