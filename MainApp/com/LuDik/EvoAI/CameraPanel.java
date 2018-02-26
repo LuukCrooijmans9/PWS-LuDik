@@ -22,7 +22,7 @@ public class CameraPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final int CPWIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 100;
+	private static final int CPWIDTH = 650;
 	private static final int CPHEIGHT = CPWIDTH;
 
 	private DARWIN mainFrame;
