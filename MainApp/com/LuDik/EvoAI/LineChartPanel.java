@@ -27,7 +27,7 @@ public class LineChartPanel extends JPanel {
        
         chart = createChart(dataset, chartTitle, xLabel, yLabel);
         chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension((int) container.getPreferredSize().getWidth(), 200));
+        chartPanel.setPreferredSize(new Dimension((int) container.getPreferredSize().getWidth(), (int) (container.getPreferredSize().getHeight() / 6)));
         add(chartPanel);
         
 	}

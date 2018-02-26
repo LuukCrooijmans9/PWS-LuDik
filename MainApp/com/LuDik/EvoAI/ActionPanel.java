@@ -53,7 +53,7 @@ public class ActionPanel extends JPanel {
 	private TimeKeeper timeKeeper;
 
 	private static int APHeight = CameraPanel.getCPHEIGHT();
-	private static final int APWidth = 400;
+	private static final int APWidth = 250;
 
 	private Button startBoardBtn;
 	private Button saveBtn;

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -21,8 +22,8 @@ public class CameraPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final int CPWIDTH = 1000;
-	private static final int CPHEIGHT = 1000;
+	private static final int CPWIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 100;
+	private static final int CPHEIGHT = CPWIDTH;
 
 	private DARWIN mainFrame;
 
