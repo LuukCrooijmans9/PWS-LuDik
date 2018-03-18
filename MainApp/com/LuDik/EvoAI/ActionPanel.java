@@ -20,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -381,14 +382,15 @@ public class ActionPanel extends JPanel {
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 
 					BufferedImage buffImg = cameraPanel.getBufferedImageOfBoard();
+					String imageName = "darwinimage" + imagesTaken;
 					
-					File f = new File(chooser.getSelectedFile().getPath() + File.separator + "darwinimage" + imagesTaken + ".png");
-					f.getParentFile().mkdirs();
-					try {
-						ImageIO.write(buffImg, "PNG", f);
-					} catch (IOException e) {
-						e.printStackTrace();
+					if (Saver.savePNG(buffImg, chooser.getSelectedFile().getPath(), imageName)) {
+						JOptionPane.showMessageDialog(null, "Image successfully saved.", "Action successful",JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Could not save image.", "Action unsuccessful",JOptionPane.INFORMATION_MESSAGE);
 					}
+					
+
 				} else {
 					System.out.println("No Selection ");
 				}
