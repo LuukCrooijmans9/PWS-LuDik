@@ -5,15 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -35,13 +33,11 @@ public class CameraPanel extends JPanel {
 	private boolean controlCrtr;
 	private boolean displayBoard;
 	
-	private AffineTransform saveXform;
 	private AffineTransform scaleT;
 	private AffineTransform translateT;
 
 	private Creature selectedCreature;
 		
-	private static final double SCROLL_SPEED = 20;
 	private static final double ZOOM_SPEED_IN = 1.1;
 	private static final double ZOOM_SPEED_OUT = 1d/1.1;
 	
@@ -50,9 +46,6 @@ public class CameraPanel extends JPanel {
 	private double rcFoodAmount = 0;
 	
 	private int x,y;
-
-
-
 	
 	public CameraPanel(DARWIN parent) {
 		mainFrame = parent;
@@ -287,6 +280,20 @@ public class CameraPanel extends JPanel {
 				break;
 			}
 		}
+	}
+	
+	public BufferedImage getBufferedImageOfBoard() {
+		
+		int imgSize = ConfigSingleton.INSTANCE.tileSize * ConfigSingleton.INSTANCE.mapSizeInTiles;
+		BufferedImage boardImg = 
+				new BufferedImage(imgSize, imgSize,
+				BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g2 = boardImg.createGraphics();
+		mainFrame.getBoard().drawBoard(g2);
+		
+
+		return boardImg;
 	}
 
 	public void update() {

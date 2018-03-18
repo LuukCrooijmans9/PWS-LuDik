@@ -7,13 +7,18 @@ import java.awt.Dimension;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -36,7 +41,7 @@ public class ActionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	// These contants determine the behaviour and the appearance of the delaySlider
+	// These constants determine the behaviour and the appearance of the delaySlider
 	private static final int DELAY_SLIDER_STARTVALUE = 25;
 	private static final int DELAY_SLIDER_MINVALUE = 0;
 	private static final int DELAY_SLIDER_MAXVALUE = 200;
@@ -62,6 +67,8 @@ public class ActionPanel extends JPanel {
 	private Button followCrtrBtn;
 	private Button controlCrtrBtn;
 	private Button displayBoardBtn;
+	private Button showBrainBtn;
+	private Button takeImageBtn;
 
 	private JSlider delaySlider;
 	private JLabel delaySliderLbl;
@@ -71,8 +78,6 @@ public class ActionPanel extends JPanel {
 	private boolean controlCrtr;
 
 	private boolean displayBoard;
-
-	private Button showBrainBtn;
 
 	public ActionPanel(DARWIN parent) {
 		initActionPanel(parent);
@@ -188,8 +193,7 @@ public class ActionPanel extends JPanel {
 				LocalDate localDate = LocalDate.now();
 				String date = (DateTimeFormatter.ofPattern("dd.MM").format(localDate));
 				try {
-					brd = gson.fromJson(new FileReader("DARWINSAVE\\Board\\Board.json"),
-							Board.class);
+					brd = gson.fromJson(new FileReader("DARWINSAVE\\Board\\Board.json"), Board.class);
 				} catch (JsonSyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -326,7 +330,7 @@ public class ActionPanel extends JPanel {
 		});
 
 		/**
-		 * The code below creates a butten that opens a window that visually represents
+		 * The code below creates a button that opens a window that visually represents
 		 * the brain, the neural network of the selected creature.
 		 */
 
@@ -354,6 +358,45 @@ public class ActionPanel extends JPanel {
 		});
 
 		/**
+		 * The code below creates a button that takes an image of the current state of
+		 * board.
+		 */
+
+		takeImageBtn = new Button("take image of board");
+
+		takeImageBtn.addActionListener(new ActionListener() {
+
+			private int imagesTaken = 0;
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				imagesTaken++;
+
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle("Please select a folder in which the image can be saved.");
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+					BufferedImage buffImg = cameraPanel.getBufferedImageOfBoard();
+					
+					File f = new File(chooser.getSelectedFile().getPath() + File.separator + "darwinimage" + imagesTaken + ".png");
+					f.getParentFile().mkdirs();
+					try {
+						ImageIO.write(buffImg, "PNG", f);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					System.out.println("No Selection ");
+				}
+
+			};
+		});
+
+		/**
 		 * The code below adds the buttons and sliders to the actionPanel in a specific
 		 * order.
 		 */
@@ -369,6 +412,7 @@ public class ActionPanel extends JPanel {
 		add(followCrtrBtn);
 		add(controlCrtrBtn);
 		add(showBrainBtn);
+		add(takeImageBtn);
 	}
 
 	public BrainVisualisedWindow getBrainDialog() {
