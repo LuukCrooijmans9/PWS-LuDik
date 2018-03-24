@@ -69,7 +69,7 @@ public class DARWINLauncher extends JFrame {
 		getContentPane().setLayout(gridBagLayout);
 
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane_1.setToolTipText("This is a tooltip");
+//		tabbedPane_1.setToolTipText("This is a tooltip");
 		GridBagConstraints gbc_tabbedPane_1 = new GridBagConstraints();
 		gbc_tabbedPane_1.gridwidth = 3;
 		gbc_tabbedPane_1.insets = new Insets(0, 0, 0, 5);
@@ -123,7 +123,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_mainSeed.setPreferredSize(new Dimension(100, 20));
-		spinner_mainSeed.setModel(new SpinnerNumberModel(new Long(0), new Long(-2147483648), new Long(2147483647), new Long(1)));
+		spinner_mainSeed.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.mainSeed, Long.MIN_VALUE, Long.MAX_VALUE, (long) 1));
 
 		JPanel panel_mainSeed = new JPanel();
 		panel_mainSeed.add(lbl_mainSeed);
@@ -144,7 +144,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_mapGenSeed.setPreferredSize(new Dimension(100, 20));
-		spinner_mapGenSeed.setModel(new SpinnerNumberModel(new Long(0), new Long(-2147483648), new Long(2147483647), new Long(1)));
+		spinner_mapGenSeed.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.mapGenSeed, Long.MIN_VALUE, Long.MAX_VALUE, (long) 1));
 
 		JPanel panel_mapGenSeed = new JPanel();
 		panel_mapGenSeed.add(lbl_mapGenSeed);
@@ -165,7 +165,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_waterPercentage.setPreferredSize(new Dimension(100, 20));
-		spinner_waterPercentage.setModel(new SpinnerNumberModel(20, 0, 100, 2));
+		spinner_waterPercentage.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.waterPercentage, 0, 100, 2));
 
 		JPanel panel_waterPercentage = new JPanel();
 		panel_waterPercentage.add(lbl_waterPercentage);
@@ -186,7 +186,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_tileSize.setPreferredSize(new Dimension(100, 20));
-		spinner_tileSize.setModel(new SpinnerNumberModel(40, 0, 2147483647, 4));
+		spinner_tileSize.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.tileSize, 0, 2147483647, 4));
 
 		JPanel panel_tileSize = new JPanel();
 		panel_tileSize.add(lbl_tileSize);
@@ -207,7 +207,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_mapSizeInTiles.setPreferredSize(new Dimension(100, 20));
-		spinner_mapSizeInTiles.setModel(new SpinnerNumberModel(100, 0, 2147483647, 10));
+		spinner_mapSizeInTiles.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.mapSizeInTiles, 0, 2147483647, 10));
 
 		JPanel panel_mapSizeInTiles = new JPanel();
 		panel_mapSizeInTiles.add(lbl_mapSizeInTiles);
@@ -312,7 +312,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_beginAmountCreatures.setPreferredSize(new Dimension(100, 20));
-		spinner_beginAmountCreatures.setModel(new SpinnerNumberModel(400, 0, 2147483647, 40));
+		spinner_beginAmountCreatures.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.beginAmountCreatures, 0, 2147483647, 40));
 
 		JPanel panel_beginAmountCreatures = new JPanel();
 		panel_beginAmountCreatures.add(lbl_beginAmountCreatures);
@@ -333,7 +333,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_ratioChildrenPerParent.setPreferredSize(new Dimension(100, 20));
-		spinner_ratioChildrenPerParent.setModel(new SpinnerNumberModel(2, 0, 2147483647, 1));
+		spinner_ratioChildrenPerParent.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.ratioChildrenPerParent, 0, 2147483647, 1));
 
 		JPanel panel_ratioChildrenPerParent = new JPanel();
 		panel_ratioChildrenPerParent.add(lbl_ratioChildrenPerParent);
@@ -354,7 +354,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_randomCreaturesPerGeneration.setPreferredSize(new Dimension(100, 20));
-		spinner_randomCreaturesPerGeneration.setModel(new SpinnerNumberModel(5, 0, 2147483647, 1));
+		spinner_randomCreaturesPerGeneration.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.randomCreaturesPerGeneration, 0, 2147483647, 1));
 
 		JPanel panel_randomCreaturesPerGeneration = new JPanel();
 		panel_randomCreaturesPerGeneration.add(lbl_randomCreaturesPerGeneration);
@@ -536,7 +536,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_inputLayerHeight.setPreferredSize(new Dimension(100, 20));
-		spinner_inputLayerHeight.setModel(new SpinnerNumberModel(13, 0, 2147483647, 1));
+		spinner_inputLayerHeight.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.inputLayerHeight, 0, 2147483647, 1));
 
 		JPanel panel_inputLayerHeight = new JPanel();
 		panel_inputLayerHeight.add(lbl_inputLayerHeight);
@@ -557,7 +557,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_hiddenLayerHeight.setPreferredSize(new Dimension(100, 20));
-		spinner_hiddenLayerHeight.setModel(new SpinnerNumberModel(13, 0, 2147483647, 1));
+		spinner_hiddenLayerHeight.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.hiddenLayerHeight, 0, 2147483647, 1));
 
 		JPanel panel_hiddenLayerHeight = new JPanel();
 		panel_hiddenLayerHeight.add(lbl_hiddenLayerHeight);

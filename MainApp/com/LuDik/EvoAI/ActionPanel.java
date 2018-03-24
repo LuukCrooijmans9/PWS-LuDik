@@ -4,6 +4,7 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -127,29 +128,54 @@ public class ActionPanel extends JPanel {
 
 		startBoardBtn.addActionListener(new ActionListener() {
 
+			boolean alreadyPressed = false;
+
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				board = new Board(mainFrame);
+				if (!alreadyPressed) {
+					board = new Board(mainFrame);
 
-				infoPanel = mainFrame.getInfoPanel();
-				cameraPanel = mainFrame.getCameraPanel();
-				showBrainBtn.setEnabled(true);
+					infoPanel = mainFrame.getInfoPanel();
+					cameraPanel = mainFrame.getCameraPanel();
+					showBrainBtn.setEnabled(true);
 
-				if (timeKeeper != null) {
-					timeKeeper = null;
+					if (timeKeeper != null) {
+						timeKeeper = null;
+					}
+
+					infoPanel.setBoard(board);
+
+					board.spawnFirstCreatures();
+					cameraPanel.update();
+
+					timeKeeper = board.getTimeKeeper();
+					timeKeeper.start();
+
+					pauseBtn.setEnabled(true);
+					saveBtn.setEnabled(true);
+					loadBtn.setEnabled(false);
+
+					alreadyPressed = true;
+					startBoardBtn.setLabel("Quit simulation and go to launcher");
+					return;
 				}
-
-				infoPanel.setBoard(board);
-
-				board.spawnFirstCreatures();
-				cameraPanel.update();
-
-				timeKeeper = board.getTimeKeeper();
-				timeKeeper.start();
-
-				pauseBtn.setEnabled(true);
-				saveBtn.setEnabled(true);
-				loadBtn.setEnabled(false);
+				
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							DARWINLauncher frame = new DARWINLauncher();
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				synchronized (timeKeeper) {
+					timeKeeper.terminate();
+				}
+				mainFrame.setVisible(false);
+				mainFrame.dispose();
 
 			};
 		});
@@ -383,13 +409,14 @@ public class ActionPanel extends JPanel {
 
 					BufferedImage buffImg = cameraPanel.getBufferedImageOfBoard();
 					String imageName = "darwinimage" + imagesTaken;
-					
+
 					if (Saver.savePNG(buffImg, chooser.getSelectedFile().getPath(), imageName)) {
-						JOptionPane.showMessageDialog(null, "Image successfully saved.", "Action successful",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Image successfully saved.", "Action successful",
+								JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						JOptionPane.showMessageDialog(null, "Could not save image.", "Action unsuccessful",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Could not save image.", "Action unsuccessful",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
-					
 
 				} else {
 					System.out.println("No Selection ");

@@ -19,6 +19,7 @@ public class TimeKeeper implements Runnable {
 
 	private boolean paused; // if this timekeeper is paused or not
 	private boolean saving;
+	private boolean running;
 	private long timeDiffNano;
 
 
@@ -30,7 +31,13 @@ public class TimeKeeper implements Runnable {
 	}
 
 	public void start() {
+		running = true;
 		timeKeeper.start();
+	}
+	
+	public void terminate() {
+		paused = false;
+		running = false;
 	}
 
 	/**
@@ -55,7 +62,7 @@ public class TimeKeeper implements Runnable {
 		 * The entire simulation is executed from within this while loop:
 		 */
 
-		while (true) {
+		while (running) {
 
 			beforeTime = System.nanoTime();
 
@@ -96,7 +103,7 @@ public class TimeKeeper implements Runnable {
 			}
 
 		}
-
+		System.out.println("Thread shutting down");
 	}
 
 	public long getStep() {

@@ -12,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 public class Tile {
 
 	int upperLeftX, upperLeftY;
-	static int tileSize = ConfigSingleton.INSTANCE.tileSize;
+	static int tileSize;
 	boolean isWaterTile;
 
 	transient Rectangle2D tileRect = new Rectangle2D.Double();
