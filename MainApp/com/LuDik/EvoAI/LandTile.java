@@ -15,8 +15,8 @@ public class LandTile extends Tile {
 	private double foodColor; // the green component of the tileColor, which is determined by the foodvalue
 	private double tileMaxFoodValue; // the maximum value of foodvalue
 	
-	private static double GLOBAL_MAX_FOOD = ConfigSingleton.INSTANCE.maxFood;
-	private static double GLOBAL_FERTILITY = ConfigSingleton.INSTANCE.maxFertility;
+	private static double GLOBAL_MAX_FOOD;
+	private static double GLOBAL_FERTILITY;
 
 	/**
 	 * This method initializes a LandTile with the given variables 
@@ -27,6 +27,10 @@ public class LandTile extends Tile {
 	
 	public LandTile(int upperLeftCornerX, int upperLeftCornerY, float fertility) {
 
+		tileSize = ConfigSingleton.INSTANCE.tileSize;
+		GLOBAL_MAX_FOOD = ConfigSingleton.INSTANCE.maxFood;
+		GLOBAL_FERTILITY = ConfigSingleton.INSTANCE.maxFertility;
+		
 		isWaterTile = false;
 		this.fertility = fertility;
 		tileMaxFoodValue = (double) (fertility * GLOBAL_MAX_FOOD);

@@ -48,8 +48,6 @@ public class DARWIN extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 	}
-	
-	
 
 	public CameraPanel getCameraPanel() {
 		return cameraPanel;

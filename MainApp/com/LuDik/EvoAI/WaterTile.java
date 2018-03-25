@@ -18,6 +18,7 @@ public class WaterTile extends Tile {
 		tileColor = new Color(0f, 0f, 1f);
 		setShapeAndPosition(upperLeftCornerX, upperLeftCornerY);
 		isActive = ConfigSingleton.INSTANCE.needDrinking;
+		tileSize = ConfigSingleton.INSTANCE.tileSize;
 	}
 
 	/**
