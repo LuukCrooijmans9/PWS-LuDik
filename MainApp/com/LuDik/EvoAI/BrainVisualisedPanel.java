@@ -18,10 +18,10 @@ import java.awt.event.MouseEvent;
 public class BrainVisualisedPanel extends JPanel {
 
 	private double gridSize;
-	private static int inputLayerHeight = ConfigSingleton.INSTANCE.inputLayerHeight;
-	private static int hiddenLayerHeight = ConfigSingleton.INSTANCE.hiddenLayerHeight;
-	private static int brainWidth = ConfigSingleton.INSTANCE.brainWidth + 1;
-	private static int heighestLayer;
+	private int inputLayerHeight;
+	private int hiddenLayerHeight;
+	private int brainWidth;
+	private int heighestLayer;
 
 	private static float maxWidthLine = 4;
 	private static float dimmedAlpha = 0.1f;
@@ -40,6 +40,11 @@ public class BrainVisualisedPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public BrainVisualisedPanel(CameraPanel cameraPanel) {
+		
+		inputLayerHeight = ConfigSingleton.INSTANCE.inputLayerHeight;
+		hiddenLayerHeight = ConfigSingleton.INSTANCE.hiddenLayerHeight;
+		brainWidth = ConfigSingleton.INSTANCE.brainWidth + 1;
+		
 		BrainVisualisedPanel panel = this;
 		addMouseListener(new MouseAdapter() {
 

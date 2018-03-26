@@ -56,6 +56,7 @@ public class Board {
 	private int amountOfRandomCreaturesAddedInLastPeriod;
 	private int totalFoodEatenInLastPeriod;
 	private int amountOfCreaturesDiedInLastPeriod;
+	private Statistics boardStats;
 	/**
 	 * Constants determined by the ConfigSingleton.INSTANCE enumeration:
 	 */
@@ -116,6 +117,8 @@ public class Board {
 		setAverageTotalFoodEatenArray(new ArrayList<Double>());
 		accomplishmentsOfTheDead = new ArrayList<double[]>();
 		foodValues = new ArrayList<Double>();
+		
+		boardStats = new Statistics(this);
 
 		amountOfCreaturesBornInLastPeriod = 0;
 		amountOfRandomCreaturesAddedInLastPeriod = 0;
@@ -137,7 +140,7 @@ public class Board {
 
 		for (int i = 0; i < creaturesToSpawn; i++) {
 			Point2D point = availableSpawnPoints.get((int) ((availableSpawnPoints.size() - 1) * randomDouble() + 0.5));
-			Creature nextCreature = new Creature(point.getX(), point.getY(), this, i);
+			Creature nextCreature = spawnRandomCreature(i);
 			livingCreatures.add(nextCreature);
 			allCreaturesOfCurrentPeriod.add(nextCreature);
 			availableSpawnPoints.remove(point); // makes sure that no creatures are spawned in the same location.
@@ -321,6 +324,7 @@ public class Board {
 				accomplishmentsOfTheDead.add(crtr.funeral());
 				livingCreatures.remove(crtr);
 				deadCreaturesOfCurrentPeriod.add(crtr);
+				boardStats.getDeadCreaturesOfCurrentPeriod().add(crtr);
 				amountOfCreaturesDiedInLastPeriod++;
 			}
 		}
@@ -370,9 +374,6 @@ public class Board {
 		int amountOfCreaturesBorn = amountOfCreaturesBornInLastPeriod;
 		int amountOfRandomCreaturesAdded = amountOfRandomCreaturesAddedInLastPeriod;
 		int amountOfDeadCreatures = amountOfCreaturesDiedInLastPeriod;
-		amountOfCreaturesBornInLastPeriod = 0;
-		amountOfRandomCreaturesAddedInLastPeriod = 0;
-		amountOfCreaturesDiedInLastPeriod = 0;
 
 		System.out.println("Born Creatures: " + amountOfCreaturesBorn);
 		System.out.println("Random Creatures: " + amountOfRandomCreaturesAdded);
@@ -420,8 +421,38 @@ public class Board {
 		}
 		deadCreaturesOfCurrentPeriod.clear();
 
+		boardStats.update();
+		
+		amountOfCreaturesBornInLastPeriod = 0;
+		amountOfRandomCreaturesAddedInLastPeriod = 0;
+		amountOfCreaturesDiedInLastPeriod = 0;
+		
 		period++;
 
+	}
+
+	public int getAmountOfCreaturesBornInLastPeriod() {
+		return amountOfCreaturesBornInLastPeriod;
+	}
+
+	public void setAmountOfCreaturesBornInLastPeriod(int amountOfCreaturesBornInLastPeriod) {
+		this.amountOfCreaturesBornInLastPeriod = amountOfCreaturesBornInLastPeriod;
+	}
+
+	public int getAmountOfRandomCreaturesAddedInLastPeriod() {
+		return amountOfRandomCreaturesAddedInLastPeriod;
+	}
+
+	public void setAmountOfRandomCreaturesAddedInLastPeriod(int amountOfRandomCreaturesAddedInLastPeriod) {
+		this.amountOfRandomCreaturesAddedInLastPeriod = amountOfRandomCreaturesAddedInLastPeriod;
+	}
+
+	public int getAmountOfCreaturesDiedInLastPeriod() {
+		return amountOfCreaturesDiedInLastPeriod;
+	}
+
+	public void setAmountOfCreaturesDiedInLastPeriod(int amountOfCreaturesDiedInLastPeriod) {
+		this.amountOfCreaturesDiedInLastPeriod = amountOfCreaturesDiedInLastPeriod;
 	}
 
 	/**

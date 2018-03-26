@@ -18,15 +18,15 @@ import java.util.ArrayList;
 public class Creature {
 
 	// Copied from ConfigSingleton.INSTANCE
-	private static final double EAT_EFFICIENCY_STEEPNESS = ConfigSingleton.INSTANCE.eatEfficiencySteepness;
-	private static final double WEIGHT_PER_FAT = ConfigSingleton.INSTANCE.weightPerFat;
-	private static final double WEIGHT_PER_WATER = ConfigSingleton.INSTANCE.weightPerWater;
-	private static final double BASE_FAT_CONSUMPTION = ConfigSingleton.INSTANCE.baseFatConsumption;
-	private static final double DEFAULT_MAX_FOOD_IN_MOUTH = ConfigSingleton.INSTANCE.maxFoodInMouth;
-	private static final int DEFAULT_BRAIN_WIDTH = ConfigSingleton.INSTANCE.brainWidth;
-	private static final int DEFAULT_INPUT_HEIGHT = ConfigSingleton.INSTANCE.inputLayerHeight;
-	private static final int DEFAULT_HIDDEN_HEIGHT = ConfigSingleton.INSTANCE.hiddenLayerHeight;
-	private static final double BASE_WATER_CONSUMPTION = ConfigSingleton.INSTANCE.baseWaterConsumption;
+	private final double EAT_EFFICIENCY_STEEPNESS;
+	private final double WEIGHT_PER_FAT;
+	private final double WEIGHT_PER_WATER;
+	private final double BASE_FAT_CONSUMPTION;
+	private final double DEFAULT_MAX_FOOD_IN_MOUTH;
+	private final int DEFAULT_BRAIN_WIDTH;
+	private final int DEFAULT_INPUT_HEIGHT;
+	private final int DEFAULT_HIDDEN_HEIGHT;
+	private final double BASE_WATER_CONSUMPTION;
 
 	private final long creatureID;
 	transient private Creature parent;
@@ -50,6 +50,9 @@ public class Creature {
 	private double speed, maxSpeed;
 	private double deltaDirection, deltaSpeed;
 	private double totalDistanceTravelled;
+	
+	private double startXPos, startYPos;
+	private double nettoDistanceTravelled;
 
 	private double creatureSize;
 	private int xTile, yTile;
@@ -89,12 +92,24 @@ public class Creature {
 	// Totally random creature
 	Creature(double x, double y, Board brd, int creatureNumber) {
 
+		EAT_EFFICIENCY_STEEPNESS = ConfigSingleton.INSTANCE.eatEfficiencySteepness;
+		WEIGHT_PER_FAT = ConfigSingleton.INSTANCE.weightPerFat;
+		WEIGHT_PER_WATER = ConfigSingleton.INSTANCE.weightPerWater;
+		BASE_FAT_CONSUMPTION = ConfigSingleton.INSTANCE.baseFatConsumption;
+		DEFAULT_MAX_FOOD_IN_MOUTH = ConfigSingleton.INSTANCE.maxFoodInMouth;
+		DEFAULT_BRAIN_WIDTH = ConfigSingleton.INSTANCE.brainWidth;
+		DEFAULT_INPUT_HEIGHT = ConfigSingleton.INSTANCE.inputLayerHeight;
+		DEFAULT_HIDDEN_HEIGHT = ConfigSingleton.INSTANCE.hiddenLayerHeight;
+		BASE_WATER_CONSUMPTION = ConfigSingleton.INSTANCE.baseWaterConsumption;
+		
 		board = brd;
 
 		creatureID = creatureNumber;
 
 		setXPos(x);
 		setYPos(y);
+		startXPos = x;
+		startYPos = y;
 		direction = board.randomDouble() * 360;
 
 		age = 0;
@@ -115,6 +130,17 @@ public class Creature {
 
 	// Creature based of 1 parent
 	Creature(Creature parentCreature, double x, double y, int creatureNumber, double deviation) {
+		
+		EAT_EFFICIENCY_STEEPNESS = ConfigSingleton.INSTANCE.eatEfficiencySteepness;
+		WEIGHT_PER_FAT = ConfigSingleton.INSTANCE.weightPerFat;
+		WEIGHT_PER_WATER = ConfigSingleton.INSTANCE.weightPerWater;
+		BASE_FAT_CONSUMPTION = ConfigSingleton.INSTANCE.baseFatConsumption;
+		DEFAULT_MAX_FOOD_IN_MOUTH = ConfigSingleton.INSTANCE.maxFoodInMouth;
+		DEFAULT_BRAIN_WIDTH = ConfigSingleton.INSTANCE.brainWidth;
+		DEFAULT_INPUT_HEIGHT = ConfigSingleton.INSTANCE.inputLayerHeight;
+		DEFAULT_HIDDEN_HEIGHT = ConfigSingleton.INSTANCE.hiddenLayerHeight;
+		BASE_WATER_CONSUMPTION = ConfigSingleton.INSTANCE.baseWaterConsumption;
+		
 		parent = parentCreature;
 		board = parent.getBoard();
 		generation = parent.getGeneration();
@@ -124,6 +150,8 @@ public class Creature {
 
 		setXPos(x);
 		setYPos(y);
+		startXPos = x;
+		startYPos = y;
 		direction = board.randomDouble() * 360;
 
 		age = 0;
@@ -738,6 +766,14 @@ public class Creature {
 
 	public void setGeneration(int generation) {
 		this.generation = generation;
+	}
+
+	public double getNettoDistanceTravelled() {
+		return nettoDistanceTravelled;
+	}
+
+	public void setNettoDistanceTravelled(double nettoDistanceTravelled) {
+		this.nettoDistanceTravelled = nettoDistanceTravelled;
 	}
 
 }
