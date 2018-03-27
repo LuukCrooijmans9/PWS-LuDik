@@ -123,7 +123,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_mainSeed.setPreferredSize(new Dimension(100, 20));
-		spinner_mainSeed.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.mainSeed, Long.MIN_VALUE, Long.MAX_VALUE, (long) 1));
+		spinner_mainSeed.setModel(new SpinnerNumberModel(new Long(ConfigSingleton.INSTANCE.mainSeed), new Long(Long.MIN_VALUE), new Long(Long.MAX_VALUE), new Long(1)));
 
 		JPanel panel_mainSeed = new JPanel();
 		panel_mainSeed.add(lbl_mainSeed);
@@ -144,7 +144,7 @@ public class DARWINLauncher extends JFrame {
 		});
 
 		spinner_mapGenSeed.setPreferredSize(new Dimension(100, 20));
-		spinner_mapGenSeed.setModel(new SpinnerNumberModel(ConfigSingleton.INSTANCE.mapGenSeed, Long.MIN_VALUE, Long.MAX_VALUE, (long) 1));
+		spinner_mapGenSeed.setModel(new SpinnerNumberModel(new Long(ConfigSingleton.INSTANCE.mapGenSeed), new Long(Long.MIN_VALUE), new Long(Long.MAX_VALUE), new Long(1)));
 
 		JPanel panel_mapGenSeed = new JPanel();
 		panel_mapGenSeed.add(lbl_mapGenSeed);
