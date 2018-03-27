@@ -18,6 +18,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -87,8 +88,7 @@ public class InfoPanel extends JPanel {
 //		singleLineInfoPanel.setLayout(new BoxLayout(singleLineInfoPanel, BoxLayout.PAGE_AXIS));
 		listPanel = new JPanel();
 		listPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/200));
-
-
+		
 		graphPanel = new JPanel();
 		graphPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/2));
 
@@ -126,9 +126,6 @@ public class InfoPanel extends JPanel {
 			}
 		});
 		
-		fitnessLineChartPanel = new LineChartPanel(this, "Fitness in relation to Period", "Period", "Fitness");
-		ageLineChartPanel = new LineChartPanel(this, "Age in relation to Period", "Period", "Age");
-		totalFoodEatenLineChartPanel = new LineChartPanel(this, "TotalFoodEaten in relation to Period", "Period", "TotalFoodEaten");
 
 		singleLineInfoPanel.add(stepLbl);
 		singleLineInfoPanel.add(timePerStepLbl);
@@ -140,6 +137,11 @@ public class InfoPanel extends JPanel {
 		singleLineInfoPanel.add(mapSeed);
 		
 		listPanel.add(creaturesList);
+		
+		fitnessLineChartPanel = new LineChartPanel(this, "Fitness in relation to Period", "Period", "Fitness");
+		ageLineChartPanel = new LineChartPanel(this, "Age in relation to Period", "Period", "Age");
+		totalFoodEatenLineChartPanel = new LineChartPanel(this, "TotalFoodEaten in relation to Period", "Period", "TotalFoodEaten");
+		
 		graphPanel.add(fitnessLineChartPanel);
 		graphPanel.add(ageLineChartPanel);
 		graphPanel.add(totalFoodEatenLineChartPanel);
@@ -164,9 +166,9 @@ public class InfoPanel extends JPanel {
 		
 		if (currentPeriod != board.getPeriod()) {
 			
-			XYSeries averageFitnessSeries = convertArrayListToXYSeries(board.getAverageFitnessArray(), "averageFitness");
-			XYSeries averageAgeSeries = convertArrayListToXYSeries(board.getAverageAgeArray(), "averageAge");
-			XYSeries averageTotalFoodEatenSeries = convertArrayListToXYSeries(board.getAverageTotalFoodEatenArray(), "averageTotalFoodEaten");
+			XYSeries averageFitnessSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgFitnessArray(), "averageFitness");
+			XYSeries averageAgeSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgAgeArray(), "averageAge");
+			XYSeries averageTotalFoodEatenSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgTotalFoodEatenArray(), "averageTotalFoodEaten");
 			fitnessLineChartPanel.updateDataset(averageFitnessSeries);
 			ageLineChartPanel.updateDataset(averageAgeSeries);
 			totalFoodEatenLineChartPanel.updateDataset(averageTotalFoodEatenSeries);
@@ -260,6 +262,19 @@ public class InfoPanel extends JPanel {
 		return xySeries;
 	}
 
+	private XYSeries convertFloatArrayListToXYSeries(ArrayList<Float> arrayList, Comparable comparable) {		
+		
+		XYSeries xySeries = new XYSeries(comparable);
+		
+		for (int i = 0; i < arrayList.size(); i++) {
+			xySeries.add(
+					Float.valueOf(i), 
+					Float.valueOf(arrayList.get(i)));
+		}
+		
+		return xySeries;
+	}
+	
 	public void setTimeKeeper(TimeKeeper tmkpr) {
 		timeKeeper = tmkpr;
 		

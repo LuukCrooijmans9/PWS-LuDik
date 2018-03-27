@@ -363,58 +363,6 @@ public class Board {
 		if (pStep < 0) {
 			return;
 		}
-		/**
-		 * The code below calculates the average age, fitness and totalfoodeaten of all
-		 * creatures of the period that has now ended, and puts it in arrays.
-		 */
-
-		double averageFitness = 0.00001;
-		double averageAge = 0.00001;
-		double averageTotalFoodEaten = 0.00001;
-		int amountOfCreaturesBorn = amountOfCreaturesBornInLastPeriod;
-		int amountOfRandomCreaturesAdded = amountOfRandomCreaturesAddedInLastPeriod;
-		int amountOfDeadCreatures = amountOfCreaturesDiedInLastPeriod;
-
-		System.out.println("Born Creatures: " + amountOfCreaturesBorn);
-		System.out.println("Random Creatures: " + amountOfRandomCreaturesAdded);
-		System.out.println("Died Creatures: " + amountOfDeadCreatures);
-
-		if (amountOfDeadCreatures != 0) {
-
-			for (int i = 0; i < amountOfDeadCreatures; i++) {
-				averageFitness += deadCreaturesOfCurrentPeriod.get(i).getFitness();
-				averageAge += deadCreaturesOfCurrentPeriod.get(i).getAge();
-				averageTotalFoodEaten += deadCreaturesOfCurrentPeriod.get(i).getTotalFoodEaten();
-			}
-
-			averageFitness /= amountOfDeadCreatures;
-			averageAge /= amountOfDeadCreatures;
-			averageTotalFoodEaten /= amountOfDeadCreatures;
-		}
-
-		this.getAverageFitnessArray().add(averageFitness);
-		this.getAverageAgeArray().add(averageAge);
-		this.getAverageTotalFoodEatenArray().add(averageTotalFoodEaten);
-
-		infoPanel.setAverageFitnessOfPreviousPeriod(averageFitness); // updates infoPanel
-		System.out.println("averageFitness: " + (int) averageFitness);
-
-		/**
-		 * The code below calculates the improvement in fitness and indexes the fitness
-		 * score of the last period.
-		 */
-
-		if (pStep > 2) {
-			double improvement = (double) this.getAverageFitnessArray().get(pStep)
-					- (double) this.getAverageFitnessArray().get(pStep - 1);
-			System.out.println("improvement: " + (int) improvement);
-			improvement = (double) this.getAverageFitnessArray().get(pStep)
-					- (double) this.getAverageFitnessArray().get(0);
-			System.out.println("Total improvement: " + (int) improvement);
-			System.out.println("Index: "
-					+ ((this.getAverageFitnessArray().get(pStep) / this.getAverageFitnessArray().get(0)) * 100));
-
-		}
 
 		for (Creature crtr : deadCreaturesOfCurrentPeriod) {
 			allCreaturesOfCurrentPeriod.remove(crtr);
@@ -644,6 +592,14 @@ public class Board {
 
 	public void setMapGenSeed(long mapGenSeed) {
 		this.mapGenSeed = mapGenSeed;
+	}
+
+	public Statistics getBoardStats() {
+		return boardStats;
+	}
+
+	public void setBoardStats(Statistics boardStats) {
+		this.boardStats = boardStats;
 	}
 
 }

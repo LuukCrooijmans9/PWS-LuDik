@@ -188,5 +188,75 @@ public class Statistics {
 	public void setDeadCreaturesOfCurrentPeriod(ArrayList<Creature> deadCreaturesOfCurrentPeriod) {
 		this.deadCreaturesOfCurrentPeriod = deadCreaturesOfCurrentPeriod;
 	}
+
+
+	public ArrayList<Float> getAvgFitnessArray() {
+		return avgFitnessArray;
+	}
+
+
+	public void setAvgFitnessArray(ArrayList<Float> avgFitnessArray) {
+		this.avgFitnessArray = avgFitnessArray;
+	}
+
+
+	public ArrayList<Float> getAvgAgeArray() {
+		return avgAgeArray;
+	}
+
+
+	public void setAvgAgeArray(ArrayList<Float> avgAgeArray) {
+		this.avgAgeArray = avgAgeArray;
+	}
+
+
+	public ArrayList<Float> getAvgTotalDistanceTravelledArray() {
+		return avgTotalDistanceTravelledArray;
+	}
+
+
+	public void setAvgTotalDistanceTravelledArray(ArrayList<Float> avgTotalDistanceTravelledArray) {
+		this.avgTotalDistanceTravelledArray = avgTotalDistanceTravelledArray;
+	}
+
+
+	public ArrayList<Float> getAvgNettoDistanceTravelledArray() {
+		return avgNettoDistanceTravelledArray;
+	}
+
+
+	public void setAvgNettoDistanceTravelledArray(ArrayList<Float> avgNettoDistanceTravelledArray) {
+		this.avgNettoDistanceTravelledArray = avgNettoDistanceTravelledArray;
+	}
+
+
+	public ArrayList<Float> getAvgTotalFoodEatenArray() {
+		return avgTotalFoodEatenArray;
+	}
+
+
+	public void setAvgTotalFoodEatenArray(ArrayList<Float> avgTotalFoodEatenArray) {
+		this.avgTotalFoodEatenArray = avgTotalFoodEatenArray;
+	}
+
+
+	public ArrayList<Integer> getCreaturesBornArray() {
+		return creaturesBornArray;
+	}
+
+
+	public void setCreaturesBornArray(ArrayList<Integer> creaturesBornArray) {
+		this.creaturesBornArray = creaturesBornArray;
+	}
+
+
+	public ArrayList<Integer> getCreaturesSpawnedArray() {
+		return creaturesSpawnedArray;
+	}
+
+
+	public void setCreaturesSpawnedArray(ArrayList<Integer> creaturesSpawnedArray) {
+		this.creaturesSpawnedArray = creaturesSpawnedArray;
+	}
 	
 }
