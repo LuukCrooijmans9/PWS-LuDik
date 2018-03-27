@@ -1,6 +1,7 @@
 package com.LuDik.EvoAI;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
@@ -39,7 +40,8 @@ public class Saver {
 	
 	public static void savePathObject(Object object, String PathString, String fileName) {
 		// 1. Convert object to JSON string
-		Gson gson = new Gson();
+//		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		// String json = gson.toJson(object);
 		System.out.println(object.getClass());
 		File file = new File(PathString + File.separator + fileName + ".json");

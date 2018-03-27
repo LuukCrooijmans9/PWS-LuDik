@@ -82,7 +82,8 @@ public class DARWINAutoTester {
 	}
 
 	private void endRun() {
-		Saver.savePathObject(ConfigSingleton.INSTANCE, currentRunDirectory.getPath(), "ConfigSingleton");
+		
+		Saver.savePathObject(new CheatyConfig(), currentRunDirectory.getPath(), "ConfigSingleton");
 		
 		for(LineChartPanel lcp : LineChartPanel.getLineChartPanels()) {
 			Saver.savePNG(lcp.getBufferedImageOfChart(400, 200), currentGraphDirectory.getPath(), lcp.getChartTitle());
