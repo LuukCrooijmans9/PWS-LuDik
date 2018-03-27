@@ -473,4 +473,184 @@ public class ActionPanel extends JPanel {
 		this.controlCrtr = controlCrtr;
 		controlCrtrBtn.setLabel("controlCreature: " + isControlCrtr());
 	}
+
+	public DARWIN getMainFrame() {
+		return mainFrame;
+	}
+
+	public void setMainFrame(DARWIN mainFrame) {
+		this.mainFrame = mainFrame;
+	}
+
+	public CameraPanel getCameraPanel() {
+		return cameraPanel;
+	}
+
+	public void setCameraPanel(CameraPanel cameraPanel) {
+		this.cameraPanel = cameraPanel;
+	}
+
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
+
+	public void setInfoPanel(InfoPanel infoPanel) {
+		this.infoPanel = infoPanel;
+	}
+
+	public static int getAPHeight() {
+		return APHeight;
+	}
+
+	public static void setAPHeight(int aPHeight) {
+		APHeight = aPHeight;
+	}
+
+	public Button getStartBoardBtn() {
+		return startBoardBtn;
+	}
+
+	public void setStartBoardBtn(Button startBoardBtn) {
+		this.startBoardBtn = startBoardBtn;
+	}
+
+	public Button getSaveBtn() {
+		return saveBtn;
+	}
+
+	public void setSaveBtn(Button saveBtn) {
+		this.saveBtn = saveBtn;
+	}
+
+	public Button getLoadBtn() {
+		return loadBtn;
+	}
+
+	public void setLoadBtn(Button loadBtn) {
+		this.loadBtn = loadBtn;
+	}
+
+	public Button getPauseBtn() {
+		return pauseBtn;
+	}
+
+	public void setPauseBtn(Button pauseBtn) {
+		this.pauseBtn = pauseBtn;
+	}
+
+	public Button getFollowCrtrBtn() {
+		return followCrtrBtn;
+	}
+
+	public void setFollowCrtrBtn(Button followCrtrBtn) {
+		this.followCrtrBtn = followCrtrBtn;
+	}
+
+	public Button getControlCrtrBtn() {
+		return controlCrtrBtn;
+	}
+
+	public void setControlCrtrBtn(Button controlCrtrBtn) {
+		this.controlCrtrBtn = controlCrtrBtn;
+	}
+
+	public Button getDisplayBoardBtn() {
+		return displayBoardBtn;
+	}
+
+	public void setDisplayBoardBtn(Button displayBoardBtn) {
+		this.displayBoardBtn = displayBoardBtn;
+	}
+
+	public Button getShowBrainBtn() {
+		return showBrainBtn;
+	}
+
+	public void setShowBrainBtn(Button showBrainBtn) {
+		this.showBrainBtn = showBrainBtn;
+	}
+
+	public Button getTakeImageBtn() {
+		return takeImageBtn;
+	}
+
+	public void setTakeImageBtn(Button takeImageBtn) {
+		this.takeImageBtn = takeImageBtn;
+	}
+
+	public JSlider getDelaySlider() {
+		return delaySlider;
+	}
+
+	public void setDelaySlider(JSlider delaySlider) {
+		this.delaySlider = delaySlider;
+	}
+
+	public JLabel getDelaySliderLbl() {
+		return delaySliderLbl;
+	}
+
+	public void setDelaySliderLbl(JLabel delaySliderLbl) {
+		this.delaySliderLbl = delaySliderLbl;
+	}
+
+	public boolean isPaused() {
+		return paused;
+	}
+
+	public void setPaused(boolean paused) {
+		this.paused = paused;
+	}
+
+	public boolean isFollowCrtr() {
+		return followCrtr;
+	}
+
+	public void setFollowCrtr(boolean followCrtr) {
+		this.followCrtr = followCrtr;
+	}
+
+	public boolean isDisplayBoard() {
+		return displayBoard;
+	}
+
+	public void setDisplayBoard(boolean displayBoard) {
+		this.displayBoard = displayBoard;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public static int getDelaySliderStartvalue() {
+		return DELAY_SLIDER_STARTVALUE;
+	}
+
+	public static int getDelaySliderMinvalue() {
+		return DELAY_SLIDER_MINVALUE;
+	}
+
+	public static int getDelaySliderMaxvalue() {
+		return DELAY_SLIDER_MAXVALUE;
+	}
+
+	public static int getDelaySliderTickingspace() {
+		return DELAY_SLIDER_TICKINGSPACE;
+	}
+
+	public static int getApwidth() {
+		return APWidth;
+	}
+
+	public void setBrainDialog(BrainVisualisedWindow brainDialog) {
+		this.brainDialog = brainDialog;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public void setTimeKeeper(TimeKeeper timeKeeper) {
+		this.timeKeeper = timeKeeper;
+	}
 }
