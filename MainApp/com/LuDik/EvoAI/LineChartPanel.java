@@ -1,6 +1,8 @@
 package com.LuDik.EvoAI;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -14,6 +16,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChartPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private static ArrayList<LineChartPanel> lineChartPanels;
 	
 	private JFreeChart chart;
 	private ChartPanel chartPanel;
@@ -30,6 +34,8 @@ public class LineChartPanel extends JPanel {
         chartPanel.setPreferredSize(new Dimension((int) container.getPreferredSize().getWidth(), (int) (container.getPreferredSize().getHeight() / 6)));
         add(chartPanel);
         
+        if(getLineChartPanels() == null)  setLineChartPanels(new ArrayList<LineChartPanel>());
+        getLineChartPanels().add(this);
 	}
 	
 	private JFreeChart createChart(XYSeriesCollection dataset, String title, String xLabel, String yLabel) {
@@ -47,6 +53,22 @@ public class LineChartPanel extends JPanel {
 	public void updateDataset(XYSeries series) {
 		dataset.removeAllSeries();
 		dataset.addSeries(series);
+	}
+	
+	public BufferedImage getBufferedImageOfChart(int width, int height) {
+		return chart.createBufferedImage(width, height);
+	}
+	
+	public String getChartTitle() {
+		return chart.getTitle().getText();
+	}
+
+	public static ArrayList<LineChartPanel> getLineChartPanels() {
+		return lineChartPanels;
+	}
+
+	public static void setLineChartPanels(ArrayList<LineChartPanel> lineChartPanels) {
+		LineChartPanel.lineChartPanels = lineChartPanels;
 	}
 
 }

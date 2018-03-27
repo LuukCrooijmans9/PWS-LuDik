@@ -744,6 +744,29 @@ public class DARWINLauncher extends JFrame {
 			}
 		});
 		panel_2.add(btnStart);
+		
+		JButton btnAutoTester = new JButton("Start AutoTester ");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						setVisible(false);
+						dispose();
+						try {
+							ConfigSingleton.INSTANCE.finalizeVariables();
+							new DARWIN().setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+			}
+		});
+		panel_2.add(btnAutoTester);
 	}
 
 }

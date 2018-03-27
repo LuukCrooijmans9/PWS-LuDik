@@ -152,65 +152,65 @@ public class Board {
 	/**
 	 * This method
 	 */
-	public void spawnCreatures() {
-		int evolvingCreatures = 0;
-		int randomCreatures = 0;
-		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
-		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
-		ArrayList<Creature> newAllCreaturesOfPeriod = new ArrayList<Creature>();
-		ArrayList<Creature> sortedCreaturesOfPeriod = new ArrayList<Creature>(infoPanel.getCreatures());
+//	public void spawnCreatures() {
+//		int evolvingCreatures = 0;
+//		int randomCreatures = 0;
+//		ArrayList<Point2D> availableSpawnPoints = spawnPoints;
+//		ArrayList<Creature> parentCreatures = new ArrayList<Creature>();
+//		ArrayList<Creature> newAllCreaturesOfPeriod = new ArrayList<Creature>();
+//		ArrayList<Creature> sortedCreaturesOfPeriod = new ArrayList<Creature>(infoPanel.getCreatures());
+//
+//		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
+//
+//		/**
+//		 * The code below selects the parentCreatures, the creatures with the highest
+//		 * fitness of the previous Period. The number of parent creatures is dependent
+//		 * upon creaturesToSpawn and RATIO_CHILDS_PER_PARENT.
+//		 */
+//
+//		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT; i++) {
+//			Creature parentCreature = sortedCreaturesOfPeriod.get(i);
+//			parentCreatures.add(parentCreature);
+//		}
+//
+//		allCreaturesOfCurrentPeriod.clear();
+//
+//		/**
+//		 * The code below spawns a number of creatures for each parent. This number is
+//		 * determined by RATIO_CHILDS_PER_PARENT. The spawned creatures are based upon
+//		 * their parent.
+//		 */
+//
+//		for (int i = 0; i < (creaturesToSpawn - AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION)
+//				/ RATIO_CHILDS_PER_PARENT; i++) {
+//			Creature parentCreature = parentCreatures.get(i);
+//			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
+//				// Point2D point = availableSpawnPoints
+//				// .get((int) ((availableSpawnPoints.size() - 1) * randomDouble() + 0.5));
+//				Creature nextCreature = spawnSingleParentCreature(parentCreature, EVOLUTION_FACTOR);
+//				// livingCreatures.add(nextCreature);
+//				newAllCreaturesOfPeriod.add(nextCreature);
+//				evolvingCreatures++;
+//			}
+//		}
 
-		int creaturesToSpawn = Math.min(BEGIN_AMOUNT_CREATURES, spawnPoints.size());
-
-		/**
-		 * The code below selects the parentCreatures, the creatures with the highest
-		 * fitness of the previous Period. The number of parent creatures is dependent
-		 * upon creaturesToSpawn and RATIO_CHILDS_PER_PARENT.
-		 */
-
-		for (int i = 0; i < creaturesToSpawn / RATIO_CHILDS_PER_PARENT; i++) {
-			Creature parentCreature = sortedCreaturesOfPeriod.get(i);
-			parentCreatures.add(parentCreature);
-		}
-
-		allCreaturesOfCurrentPeriod.clear();
-
-		/**
-		 * The code below spawns a number of creatures for each parent. This number is
-		 * determined by RATIO_CHILDS_PER_PARENT. The spawned creatures are based upon
-		 * their parent.
-		 */
-
-		for (int i = 0; i < (creaturesToSpawn - AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION)
-				/ RATIO_CHILDS_PER_PARENT; i++) {
-			Creature parentCreature = parentCreatures.get(i);
-			for (int j = 0; j < RATIO_CHILDS_PER_PARENT; j++) {
-				// Point2D point = availableSpawnPoints
-				// .get((int) ((availableSpawnPoints.size() - 1) * randomDouble() + 0.5));
-				Creature nextCreature = spawnSingleParentCreature(parentCreature, EVOLUTION_FACTOR);
-				// livingCreatures.add(nextCreature);
-				newAllCreaturesOfPeriod.add(nextCreature);
-				evolvingCreatures++;
-			}
-		}
-
-		/**
-		 * The code below adds newAllcreaturesOfPeriod to the cleared
-		 * allCreaturesOfPeriod arraylist, and spawns a number of random creatures,
-		 * determined by the AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION constant.
-		 */
-
-		// for (int i = 0; i < newAllCreaturesOfPeriod.size(); i++) {
-		// allCreaturesOfPeriod.add(newAllCreaturesOfPeriod.get(i));
-		// }
-		for (int i = newAllCreaturesOfPeriod.size(); i < creaturesToSpawn; i++) {
-			spawnRandomCreature(i);
-		}
-
-		period++;
-		System.out.println(" ");
-		System.out.println("Period: " + period + " spawned!");
-	}
+//		/**
+//		 * The code below adds newAllcreaturesOfPeriod to the cleared
+//		 * allCreaturesOfPeriod arraylist, and spawns a number of random creatures,
+//		 * determined by the AMOUNT_OF_RANDOM_CREATURES_PER_GENERATION constant.
+//		 */
+//
+//		// for (int i = 0; i < newAllCreaturesOfPeriod.size(); i++) {
+//		// allCreaturesOfPeriod.add(newAllCreaturesOfPeriod.get(i));
+//		// }
+//		for (int i = newAllCreaturesOfPeriod.size(); i < creaturesToSpawn; i++) {
+//			spawnRandomCreature(i);
+//		}
+//
+//		period++;
+//		System.out.println(" ");
+//		System.out.println("Period: " + period + " spawned!");
+//	}
 
 	/**
 	 * This method creates a creature with the given id that is not based on another
@@ -292,15 +292,15 @@ public class Board {
 		 * old period to new period.
 		 */
 		
-		if (livingCreatures.size() == 0) {
-			// this.updateStatistics((long) generation);
-		
-
-			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets
-									// them.
-
-			this.spawnCreatures(); // spawns a new generation of creatures based off of the old generation.
-		}
+//		if (livingCreatures.size() == 0) {
+//			// this.updateStatistics((long) generation);
+//		
+//
+//			map.refillLandTiles(); // makes sure that all landTiles have the maximum amount of food, it resets
+//									// them.
+//
+//			this.spawnCreatures(); // spawns a new generation of creatures based off of the old generation.
+//		}
 	
 		if (livingCreatures.size() < ConfigSingleton.INSTANCE.minAmountCreatures) {
 			spawnRandomCreature((int) randomLong());

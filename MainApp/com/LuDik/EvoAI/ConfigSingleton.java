@@ -88,7 +88,7 @@ public enum ConfigSingleton {
 	/**
 	 * Variables that determine statistics
 	 */
-	public int periodLength = 1000; // At which interval statistics happen
+	public int periodLength = 500; // At which interval statistics happen
 
 	/**
 	 * This method ensures that all values are ready to start the simulation. It

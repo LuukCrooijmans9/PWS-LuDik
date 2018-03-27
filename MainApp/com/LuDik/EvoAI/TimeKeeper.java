@@ -22,6 +22,8 @@ public class TimeKeeper implements Runnable {
 	private boolean running;
 	private long timeDiffNano;
 
+	private DARWINAutoTester DARWINAutoTester;
+	
 
 	public TimeKeeper(Board board) {
 
@@ -41,8 +43,8 @@ public class TimeKeeper implements Runnable {
 	}
 
 	/**
-	 * This method notifies the board and the infoPanel object so that they execute
-	 * their code.
+	 * This method notifies the board and the infoPanel object and, if it exist, the
+	 * DARWINAutoTester so that they execute their code.
 	 */
 
 	private void makeStep() {
@@ -51,6 +53,11 @@ public class TimeKeeper implements Runnable {
 		if (step % ConfigSingleton.INSTANCE.periodLength == 0) {
 			board.doStatistics(step);
 		}
+		
+		if (DARWINAutoTester != null) {
+			DARWINAutoTester.doStep(step);
+		}
+		
 	}
 
 	@Override
@@ -144,6 +151,14 @@ public class TimeKeeper implements Runnable {
 
 	public long getTimeDiffNano() {
 		return timeDiffNano;
+	}
+
+	public DARWINAutoTester getDARWINAutoTester() {
+		return DARWINAutoTester;
+	}
+
+	public void setDARWINAutoTester(DARWINAutoTester dARWINAutoTester) {
+		DARWINAutoTester = dARWINAutoTester;
 	}
 
 }
