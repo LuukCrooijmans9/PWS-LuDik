@@ -26,7 +26,7 @@ public enum ConfigSingleton {
 	 * Variables that determine the spawning of the creatures
 	 */
 
-	public int beginAmountCreatures = 400; // how many creatures are spawned at the start of each generation
+	public int beginAmountCreatures = 100; // how many creatures are spawned at the start of each generation
 	public int ratioChildrenPerParent = 2; // how many children a chosen creature gets
 	public int randomCreaturesPerGeneration = 5; // how many random creatures are added each generation
 	public int minAmountCreatures = 100; // The minimal amount of creatures there should be on the world

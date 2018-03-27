@@ -49,7 +49,10 @@ public class InfoPanel extends JPanel {
 	
 	private JPanel singleLineInfoPanel;
 	private JPanel listPanel;
-	private JPanel graphPanel;
+	
+	private JTabbedPane graphTP;
+	private JPanel fitnessPanel;
+	private JPanel populationPanel;
 	
 	private LineChartPanel fitnessLineChartPanel;
 	private LineChartPanel ageLineChartPanel;
@@ -67,6 +70,8 @@ public class InfoPanel extends JPanel {
 	private JList<String> creaturesList;
 	private ArrayList<Long> timeDiffArray;
 	private double timeDiff;
+	private LineChartPanel creaturesBornLineChartPanel;
+	private LineChartPanel creaturesSpawnedLineChartPanel;
 
 	
 
@@ -85,25 +90,12 @@ public class InfoPanel extends JPanel {
 		singleLineInfoPanel = new JPanel();
 		singleLineInfoPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/200));
 		
-//		singleLineInfoPanel.setLayout(new BoxLayout(singleLineInfoPanel, BoxLayout.PAGE_AXIS));
 		listPanel = new JPanel();
 		listPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/200));
 		
-		graphPanel = new JPanel();
-		graphPanel.setPreferredSize(new Dimension(IPWidth, IPHeight/2));
-
-//		singleLineInfoPanel.setBackground(Color.blue);
-//		listPanel.setBackground(Color.red);
-//		graphPanel.setBackground(Color.green);
-
-//		listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
-
-		
-		
-		
 		add(singleLineInfoPanel);
 		add(listPanel);
-		add(graphPanel);
+		
 		
 
 		stepLbl = new JLabel("Step: " + 0);
@@ -138,13 +130,37 @@ public class InfoPanel extends JPanel {
 		
 		listPanel.add(creaturesList);
 		
+		/**
+		 * Graphs and their components are created here:
+		 */
+		
+		graphTP = new JTabbedPane();
+		graphTP.setPreferredSize(new Dimension(IPWidth, IPHeight/2));
+		add(graphTP);
+		
+		fitnessPanel = new JPanel();
+		graphTP.add(fitnessPanel, "Fitness");
+		
+		
 		fitnessLineChartPanel = new LineChartPanel(this, "Fitness in relation to Period", "Period", "Fitness");
 		ageLineChartPanel = new LineChartPanel(this, "Age in relation to Period", "Period", "Age");
 		totalFoodEatenLineChartPanel = new LineChartPanel(this, "TotalFoodEaten in relation to Period", "Period", "TotalFoodEaten");
 		
-		graphPanel.add(fitnessLineChartPanel);
-		graphPanel.add(ageLineChartPanel);
-		graphPanel.add(totalFoodEatenLineChartPanel);
+		fitnessPanel.add(fitnessLineChartPanel);		
+		fitnessPanel.add(ageLineChartPanel);
+		fitnessPanel.add(totalFoodEatenLineChartPanel);
+		
+		populationPanel = new JPanel();
+		graphTP.add(populationPanel, "Population");
+		
+		creaturesBornLineChartPanel = new LineChartPanel(this, "Amount of creatures born in relation to Period", "Period", "Born Creatures");
+		creaturesSpawnedLineChartPanel = new LineChartPanel(this, "Amount of creatures spawned in relation to Period", "Period", "Spawned Creatures");
+
+		populationPanel.add(creaturesBornLineChartPanel);
+		populationPanel.add(creaturesSpawnedLineChartPanel);
+		
+//		add(graphPanel);
+		
 		
 		timeDiffArray = new ArrayList<Long>();
 		
@@ -166,12 +182,19 @@ public class InfoPanel extends JPanel {
 		
 		if (currentPeriod != board.getPeriod()) {
 			
-			XYSeries averageFitnessSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgFitnessArray(), "averageFitness");
-			XYSeries averageAgeSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgAgeArray(), "averageAge");
-			XYSeries averageTotalFoodEatenSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgTotalFoodEatenArray(), "averageTotalFoodEaten");
-			fitnessLineChartPanel.updateDataset(averageFitnessSeries);
-			ageLineChartPanel.updateDataset(averageAgeSeries);
-			totalFoodEatenLineChartPanel.updateDataset(averageTotalFoodEatenSeries);
+			XYSeries avgFitnessSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgFitnessArray(), "averageFitness");
+			XYSeries avgAgeSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgAgeArray(), "averageAge");
+			XYSeries avgTotalFoodEatenSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgTotalFoodEatenArray(), "averageTotalFoodEaten");
+			fitnessLineChartPanel.updateDataset(avgFitnessSeries);
+			ageLineChartPanel.updateDataset(avgAgeSeries);
+			totalFoodEatenLineChartPanel.updateDataset(avgTotalFoodEatenSeries);
+			
+			XYSeries creaturesBornSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesBornArray(), "averageFitness");
+			XYSeries creaturesSpawnedSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesSpawnedArray(), "averageFitness");
+			
+			creaturesBornLineChartPanel.updateDataset(creaturesBornSeries);
+			creaturesSpawnedLineChartPanel.updateDataset(creaturesSpawnedSeries);
+
 			
 			currentPeriod = board.getPeriod();
 		}
@@ -270,6 +293,19 @@ public class InfoPanel extends JPanel {
 			xySeries.add(
 					Float.valueOf(i), 
 					Float.valueOf(arrayList.get(i)));
+		}
+		
+		return xySeries;
+	}
+	
+	private XYSeries convertIntegerArrayListToXYSeries(ArrayList<Integer> arrayList, Comparable comparable) {		
+		
+		XYSeries xySeries = new XYSeries(comparable);
+		
+		for (int i = 0; i < arrayList.size(); i++) {
+			xySeries.add(
+					Integer.valueOf(i), 
+					Integer.valueOf(arrayList.get(i)));
 		}
 		
 		return xySeries;
