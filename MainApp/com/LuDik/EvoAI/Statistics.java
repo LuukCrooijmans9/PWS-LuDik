@@ -17,12 +17,17 @@ public class Statistics {
 
 	private ArrayList<Float> avgFitnessArray;
 	private ArrayList<Float> avgAgeArray;
+	private ArrayList<Float> avgTotalFoodEatenArray;
 	private ArrayList<Float> avgTotalDistanceTravelledArray;
 	private ArrayList<Float> avgNettoDistanceTravelledArray;
-	private ArrayList<Float> avgTotalFoodEatenArray;
 
 	private ArrayList<Integer> creaturesBornArray;
 	private ArrayList<Integer> creaturesSpawnedArray;
+	private ArrayList<Integer> creaturesAliveArray;
+
+	private ArrayList<Float> realTimePerPeriodArray;
+
+	private long lastNanoTime;
 
 
 	public Statistics(Board board) {
@@ -43,6 +48,9 @@ public class Statistics {
 		
 		creaturesBornArray = new ArrayList<Integer>();
 		creaturesSpawnedArray = new ArrayList<Integer>();
+		creaturesAliveArray = new ArrayList<Integer>();
+		
+		realTimePerPeriodArray = new ArrayList<Float>();
 		
 	}
 	
@@ -68,13 +76,26 @@ public class Statistics {
 		
 		totalCreaturesBorn += board.getAmountOfCreaturesBornInLastPeriod();
 		creaturesBornArray.add(board.getAmountOfCreaturesBornInLastPeriod());
+
+		creaturesAliveArray.add(board.getLivingCreatures().size());
 		
 		totalCreatures += totalCreaturesBorn + totalCreaturesSpawned;
 		
 		deadCreaturesOfCurrentPeriod.clear();
 		
-		System.out.println("Statistics updated, totalCreaturesSpawned = " + totalCreaturesSpawned
-				+ " totalCreaturesBorn = " + totalCreaturesBorn);
+		/**
+		 * Calculation and updating of time passsed
+		 */
+		
+		long currentNanoTime = System.nanoTime();
+		float miliSecondsPerPeriod = (currentNanoTime - lastNanoTime) / 1000000f; // to convert nanoseconds to miliseconds, divide bu 1000000
+		
+		if(lastNanoTime == 0) miliSecondsPerPeriod = 0;
+		
+		
+		realTimePerPeriodArray.add(miliSecondsPerPeriod);
+		
+		lastNanoTime = currentNanoTime;
 		
 	}
 
@@ -257,6 +278,26 @@ public class Statistics {
 
 	public void setCreaturesSpawnedArray(ArrayList<Integer> creaturesSpawnedArray) {
 		this.creaturesSpawnedArray = creaturesSpawnedArray;
+	}
+
+
+	public ArrayList<Float> getRealTimePerPeriodArray() {
+		return realTimePerPeriodArray;
+	}
+
+
+	public void setRealTimePerPeriodArray(ArrayList<Float> realTimePerPeriodArray) {
+		this.realTimePerPeriodArray = realTimePerPeriodArray;
+	}
+
+
+	public ArrayList<Integer> getCreaturesAliveArray() {
+		return creaturesAliveArray;
+	}
+
+
+	public void setCreaturesAliveArray(ArrayList<Integer> creaturesAliveArray) {
+		this.creaturesAliveArray = creaturesAliveArray;
 	}
 	
 }

@@ -57,6 +57,12 @@ public class InfoPanel extends JPanel {
 	private LineChartPanel fitnessLineChartPanel;
 	private LineChartPanel ageLineChartPanel;
 	private LineChartPanel totalFoodEatenLineChartPanel;
+
+	private LineChartPanel creaturesBornLineChartPanel;
+	private LineChartPanel creaturesSpawnedLineChartPanel;
+	
+	private LineChartPanel avgTotalDistanceTravelledLineChartPanel;
+	private LineChartPanel avgNettoDistanceTravelledLineChartPanel;
 	
 	private JLabel stepLbl;
 	private JLabel timePerStepLbl;
@@ -70,8 +76,10 @@ public class InfoPanel extends JPanel {
 	private JList<String> creaturesList;
 	private ArrayList<Long> timeDiffArray;
 	private double timeDiff;
-	private LineChartPanel creaturesBornLineChartPanel;
-	private LineChartPanel creaturesSpawnedLineChartPanel;
+	private JPanel distancePanel;
+	private JPanel metaPanel;
+	private LineChartPanel realTimePerPeriodLineChartPanel;
+	private LineChartPanel creaturesAliveLineChartPanel;
 
 	
 
@@ -155,12 +163,27 @@ public class InfoPanel extends JPanel {
 		
 		creaturesBornLineChartPanel = new LineChartPanel(this, "Amount of creatures born in relation to Period", "Period", "Born Creatures");
 		creaturesSpawnedLineChartPanel = new LineChartPanel(this, "Amount of creatures spawned in relation to Period", "Period", "Spawned Creatures");
+		creaturesAliveLineChartPanel = new LineChartPanel(this, "Amount of creatures Alive in relation to Period", "Period", "Alive Creatures");
 
 		populationPanel.add(creaturesBornLineChartPanel);
 		populationPanel.add(creaturesSpawnedLineChartPanel);
+		populationPanel.add(creaturesAliveLineChartPanel);
 		
-//		add(graphPanel);
+		distancePanel = new JPanel();
+		graphTP.add(distancePanel, "Distance");
 		
+		avgTotalDistanceTravelledLineChartPanel = new LineChartPanel(this, "avgTotalDistanceTravelled in relation to Period", "Period", "avgTotalDistanceTravelled");
+		avgNettoDistanceTravelledLineChartPanel = new LineChartPanel(this, "avgNettoDistanceTravelled in relation to Period", "Period", "avgNettoDistanceTravelled");
+		
+		distancePanel.add(avgTotalDistanceTravelledLineChartPanel);
+		distancePanel.add(avgNettoDistanceTravelledLineChartPanel);;
+		
+		metaPanel = new JPanel();
+		graphTP.add(metaPanel, "Meta");
+		
+		realTimePerPeriodLineChartPanel = new LineChartPanel(this, "realTimePerPeriod (ms) in relation to Period", "Period", "realTimePerPeriod");
+
+		metaPanel.add(realTimePerPeriodLineChartPanel);
 		
 		timeDiffArray = new ArrayList<Long>();
 		
@@ -189,12 +212,23 @@ public class InfoPanel extends JPanel {
 			ageLineChartPanel.updateDataset(avgAgeSeries);
 			totalFoodEatenLineChartPanel.updateDataset(avgTotalFoodEatenSeries);
 			
-			XYSeries creaturesBornSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesBornArray(), "averageFitness");
-			XYSeries creaturesSpawnedSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesSpawnedArray(), "averageFitness");
+			XYSeries creaturesBornSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesBornArray(), "CreaturesBorn");
+			XYSeries creaturesSpawnedSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesSpawnedArray(), "CreaturesSpawned");
+			XYSeries creaturesAliveSeries = convertIntegerArrayListToXYSeries(board.getBoardStats().getCreaturesAliveArray(), "CreaturesAlive");
 			
 			creaturesBornLineChartPanel.updateDataset(creaturesBornSeries);
 			creaturesSpawnedLineChartPanel.updateDataset(creaturesSpawnedSeries);
+			creaturesAliveLineChartPanel.updateDataset(creaturesAliveSeries);
 
+			XYSeries avgTotalDistanceTravelledSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgTotalDistanceTravelledArray(), "avgTotalDistanceTravelled");
+			XYSeries avgNettoDistanceTravelledSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getAvgNettoDistanceTravelledArray(), "avgNettoDistanceTravelled");
+
+			avgTotalDistanceTravelledLineChartPanel.updateDataset(avgTotalDistanceTravelledSeries);
+			avgNettoDistanceTravelledLineChartPanel.updateDataset(avgNettoDistanceTravelledSeries);
+
+			XYSeries realTimePerPeriodSeries = convertFloatArrayListToXYSeries(board.getBoardStats().getRealTimePerPeriodArray(), "avgTotalDistanceTravelled");
+			realTimePerPeriodLineChartPanel.updateDataset(realTimePerPeriodSeries);
+			
 			
 			currentPeriod = board.getPeriod();
 		}

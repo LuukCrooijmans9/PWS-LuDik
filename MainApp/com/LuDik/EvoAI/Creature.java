@@ -324,6 +324,7 @@ public class Creature {
 		}
 		if (fat <= 0) {
 			isDead = true; // He was a loving Father to us all
+			nettoDistanceTravelled = Math.sqrt((xPos-startXPos) * (xPos-startXPos) + (yPos-startYPos) * (yPos-startYPos));
 		} else {
 			age += ConfigSingleton.INSTANCE.agePerStep;
 		}
